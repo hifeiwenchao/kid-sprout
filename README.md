@@ -11,6 +11,38 @@ npm run dev
 
 打开终端输出的本地网址。生产构建：`npm run build`；预览构建：`npm run preview`。
 
+## Docker 运行
+
+安装并启动 Docker（需包含 Docker Compose），在项目目录执行：
+
+```sh
+docker compose up -d --build
+```
+
+打开 [http://localhost:8080](http://localhost:8080)。镜像使用 Node.js 22 构建页面，再由 Nginx 提供静态文件，无需在本机安装 Node.js。
+
+如需更换端口，例如使用 `3000`：
+
+```sh
+KID_SPROUT_PORT=3000 docker compose up -d --build
+```
+
+查看日志与停止服务：
+
+```sh
+docker compose logs -f
+docker compose down
+```
+
+修改源码后，重新执行启动命令即可构建并更新容器。学习记录仍保存在浏览器中；更换访问地址或端口会使用独立的浏览器存储。
+
+也可以直接使用 Docker：
+
+```sh
+docker build -t kid-sprout:local .
+docker run -d --name kid-sprout -p 8080:80 kid-sprout:local
+```
+
 ## 功能
 
 - 1–10 数字卡片：中文点读、数量对应、逐个点击数数。

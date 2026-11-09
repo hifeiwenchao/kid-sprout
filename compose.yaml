@@ -1,0 +1,7 @@
+services:
+  web:
+    build: .
+    image: kid-sprout:local
+    ports:
+      - "${KID_SPROUT_PORT:-8080}:80"
+    restart: unless-stopped
