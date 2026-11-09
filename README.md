@@ -16,6 +16,7 @@ npm run dev
 安装并启动 Docker（需包含 Docker Compose），在项目目录执行：
 
 ```sh
+docker network create depends_proxy 2>/dev/null || true
 docker compose up -d --build
 ```
 
@@ -35,6 +36,8 @@ docker compose down
 ```
 
 修改源码后，重新执行启动命令即可构建并更新容器。学习记录仍保存在浏览器中；更换访问地址或端口会使用独立的浏览器存储。
+
+项目服务同时加入 `depends_proxy` Docker 网络，供外部 Nginx 容器通过 `kid-sprout-web:80` 代理访问。使用项目自带的 [deploy/nginx/kid-sprout.conf](deploy/nginx/kid-sprout.conf) 时，将配置复制到 Nginx 的 `conf.d` 目录并重载 Nginx。
 
 也可以直接使用 Docker：
 

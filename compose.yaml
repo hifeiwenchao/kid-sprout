@@ -4,4 +4,14 @@ services:
     image: kid-sprout:local
     ports:
       - "${KID_SPROUT_PORT:-8080}:80"
+    networks:
+      default:
+      depends_proxy:
+        aliases:
+          - kid-sprout-web
     restart: unless-stopped
+
+networks:
+  depends_proxy:
+    name: depends_proxy
+    external: true
