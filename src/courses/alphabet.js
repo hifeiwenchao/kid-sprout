@@ -1,3 +1,4 @@
+import { renderSubjectGames } from '../game-cards.js';
 import { ALPHABET, ALPHABET_GROUPS, getAlphabetLesson, createAlphabetRounds, createAlphabetSession } from './alphabet-data.js';
 
 const lettersById = new Map(ALPHABET.map(letter => [letter.id, letter]));
@@ -30,14 +31,7 @@ export function renderAlphabetPage() {
       ${ALPHABET_GROUPS.map((group, index) => `<div class="alphabet-card-grid" data-alphabet-panel="${group.id}" role="group" aria-label="${group.label} 字母卡片" ${index ? 'hidden' : ''}>${group.letters.map(id => cardMarkup(lettersById.get(id))).join('')}</div>`).join('')}
       <p class="alphabet-study-note"><span aria-hidden="true">💡</span> 大写和小写，都是同一位字母朋友的名字。先看模样，再跟着读。</p>
     </section>
-    <section class="alphabet-play" aria-labelledby="alphabet-games-title">
-      <div class="alphabet-section-heading"><div><span class="alphabet-eyebrow">LEARN THROUGH PLAY</span><h2 id="alphabet-games-title">字母朋友，陪你玩一会儿</h2><p>每次 5 小关，慢慢想，答错也没关系</p></div><span class="alphabet-play-decoration" aria-hidden="true">✧</span></div>
-      <div class="alphabet-game-grid">
-        <button class="alphabet-game-card alphabet-match-card" data-alphabet-game="match"><span class="alphabet-game-art alphabet-match-art" aria-hidden="true"><b>A</b><i>↔</i><span>a</span></span><span class="alphabet-game-copy"><small>观察 · 认知</small><strong>大小写找朋友</strong><span>帮大字母找到小写伙伴</span></span><span class="alphabet-game-arrow" aria-hidden="true">↗</span></button>
-        <button class="alphabet-game-card alphabet-listen-card" data-alphabet-game="listen"><span class="alphabet-game-art alphabet-listen-art" aria-hidden="true"><i>♫</i><b>B</b><span>♪</span></span><span class="alphabet-game-copy"><small>倾听 · 辨认</small><strong>小耳朵找字母</strong><span>听听谁在和你打招呼</span></span><span class="alphabet-game-arrow" aria-hidden="true">↗</span></button>
-        <button class="alphabet-game-card alphabet-order-card" data-alphabet-game="order"><span class="alphabet-game-art alphabet-order-art" aria-hidden="true"><b>A</b><i>?</i><b>C</b></span><span class="alphabet-game-copy"><small>顺序 · 思考</small><strong>字母排排队</strong><span>补上空位，让字母排好队</span></span><span class="alphabet-game-arrow" aria-hidden="true">↗</span></button>
-      </div>
-    </section>`;
+    ${renderSubjectGames('alphabet')}`;
 }
 
 export function createAlphabetCourse(env) {

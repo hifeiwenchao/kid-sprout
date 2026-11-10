@@ -6,7 +6,13 @@ import { createBalloonParty } from './games/balloon-party.js';
 import { createBearPicnic } from './games/bear-picnic.js';
 import { createLittleDrum } from './games/little-drum.js';
 import './games/new-game-cards.css';
-import { renderLearningHub, GAME_CATALOG } from './learning-hub.js';
+import { renderLearningHub } from './learning-hub.js';
+import { filterGames } from './game-catalog.js';
+import { renderSubjectGames } from './game-cards.js';
+import { NUMBER_EXTRA_GAMES, buildNumberExtraRounds } from './games/number-extras.js';
+import { PINYIN_EXTRA_GAMES, buildPinyinExtraRounds } from './courses/pinyin-extras.js';
+import { ALPHABET_EXTRA_GAMES, buildAlphabetExtraRounds } from './courses/alphabet-extras.js';
+import { playActivity } from './games/activity-player.js';
 import { restoreLearningProgress, serializeLearningProgress, viewFromHash } from './hub-state.js';
 import { renderPinyinPage, createPinyinCourse, PINYIN_PROGRESS_IDS } from './courses/pinyin.js';
 import { renderAlphabetPage, createAlphabetCourse } from './courses/alphabet.js';
@@ -86,20 +92,7 @@ const numbersPage = `<header class="hub-page-heading"><span class="hub-eyebrow">
       <div class="number-grid">${Array.from({length: 10}, (_, i) => `<button class="number-card color-${i}" data-number="${i + 1}" aria-label="认识数字 ${i + 1}，${names[i]}"><span class="card-top"><span class="chinese-number">${names[i]}</span><span class="card-speaker">${icon('sound', 16)}</span></span><span class="big-number">${i + 1}</span><span class="counting-icons">${Array.from({length: i + 1}, () => fruitIcon(i)).join('')}</span><span class="learned-indicator" aria-label="已认识">${icon('check', 11)}</span></button>`).join('')}</div>
       <div class="learning-progress"><span class="progress-star">${icon('star', 17)}</span><span id="learning-message"></span><div class="progress-dots">${Array.from({length:10}, (_, i) => `<span data-progress="${i + 1}"></span>`).join('')}</div><span id="progress-count"></span></div>
     </section>
-    <section id="number-games" class="games-section" aria-labelledby="games-title">
-      <div class="section-heading"><div><h2 id="games-title"><span class="heading-icon game-heading">${icon('game', 22)}</span>玩一玩，更会数</h2><p>9 种趣味玩法，把数字变成小小的快乐</p></div><span class="section-aside">边玩边学，真有趣 ${icon('arrow', 16)}</span></div>
-      <div class="game-grid">
-        <button class="game-card fruit-game" data-action="count"><span class="game-illustration fruit-illustration">${fruitIcon(0)}${fruitIcon(1)}${fruitIcon(2)}<i>?</i></span><span class="game-copy"><span class="game-label">观察与数数</span><strong>数一数水果</strong><small>水果篮里有几个小伙伴？</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card find-game" data-action="find"><span class="game-illustration find-illustration"><i>2</i><i>5</i><span>✧</span></span><span class="game-copy"><span class="game-label">认知与记忆</span><strong>数字捉迷藏</strong><small>找一找，数字躲在哪里？</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card trace-game" data-action="trace"><span class="game-illustration trace-illustration"><span>3</span>${icon('pencil', 35)}</span><span class="game-copy"><span class="game-label">动手与探索</span><strong>小手描数字</strong><small>画一画，记住数字的模样</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card train-game" data-action="train"><span class="game-illustration train-illustration" aria-hidden="true"><span class="card-train-cloud">☁</span><i>1</i><i>?</i><i>3</i></span><span class="game-copy"><span class="game-label">顺序与逻辑</span><strong>数字小火车</strong><small>补上数字，让小火车出发</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card carrot-game" data-action="compare"><span class="game-illustration carrot-illustration" aria-hidden="true"><span class="card-rabbit">🐰</span>${fruitIcon(7)}${fruitIcon(7)}</span><span class="game-copy"><span class="game-label">数量与比较</span><strong>小兔分胡萝卜</strong><small>比一比，哪一篮胡萝卜更多？</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card memory-game" data-action="memory"><span class="game-illustration memory-illustration" aria-hidden="true"><i>2</i><i>★<small>★</small></i></span><span class="game-copy"><span class="game-label">记忆与配对</span><strong>记忆翻翻乐</strong><small>翻一翻，数字和星星找朋友</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card balloon-game" data-action="balloons"><span class="game-illustration party-card-art" aria-hidden="true"><i>1</i><i>2</i><i>3</i></span><span class="game-copy"><span class="game-label">顺序与专注<span class="game-new">新</span></span><strong>数字气球派对</strong><small>按顺序点气球，啵啵真开心</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card picnic-game" data-action="picnic"><span class="game-illustration picnic-card-art" aria-hidden="true"><span>🐻</span><i></i><i></i></span><span class="game-copy"><span class="game-label">动手与数量<span class="game-new">新</span></span><strong>小熊点心铺</strong><small>装好小饼干，送给小熊吧</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-        <button class="game-card drum-game" data-action="drum"><span class="game-illustration drum-card-art" aria-hidden="true"><span>🥁</span><i>♪</i></span><span class="game-copy"><span class="game-label">聆听与数数<span class="game-new">新</span></span><strong>小耳朵听听</strong><small>咚咚咚，小鼓敲了几下？</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
-      </div>
-    </section>
+    ${renderSubjectGames('numbers', icon)}
 `;
 document.querySelector('#app').innerHTML = renderLearningHub({ icon, visits: state.visits, numbersPage, pinyinPage: renderPinyinPage(), alphabetPage: renderAlphabetPage() });
 
@@ -415,20 +408,36 @@ document.querySelectorAll('[data-continue]').forEach(button => button.onclick = 
 });
 document.querySelectorAll('[data-play]').forEach(button => button.onclick = () => {
   const [subject, type] = button.dataset.play.split(':');
+  const builders = { numbers: buildNumberExtraRounds, pinyin: buildPinyinExtraRounds, alphabet: buildAlphabetExtraRounds };
+  const extraGames = { numbers: NUMBER_EXTRA_GAMES, pinyin: PINYIN_EXTRA_GAMES, alphabet: ALPHABET_EXTRA_GAMES };
+  const extra = extraGames[subject]?.find(game => game.type === type);
+  if (extra) return playActivity({ ...extraGameEnvironment, speakEnglish: (text, onend) => speak(text, onend, 'en-US') }, extra, builders[subject]);
   if (subject === 'numbers') actions[type]?.();
   if (subject === 'pinyin') pinyinCourse.startGame(type);
   if (subject === 'alphabet') alphabetCourse.startGame(type);
 });
-document.querySelectorAll('[data-game-filter]').forEach(button => button.onclick = () => {
-  const filter = button.dataset.gameFilter;
-  document.querySelectorAll('[data-game-filter]').forEach(el => {
-    el.classList.toggle('selected', el === button);
-    el.setAttribute('aria-pressed', String(el === button));
+let gameSubject = 'all';
+function updateGameFilters() {
+  const filtered = new Set(filterGames({ subject: gameSubject, category: document.querySelector('#game-goal').value, query: document.querySelector('#game-search').value }).map(game => `${game.subject}:${game.type}`));
+  document.querySelectorAll('#games [data-play]').forEach(button => { button.hidden = !filtered.has(button.dataset.play); });
+  document.querySelectorAll('[data-game-filter]').forEach(button => {
+    const selected = button.dataset.gameFilter === gameSubject;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
   });
-  document.querySelectorAll('#games [data-game-subject]').forEach(el => { el.hidden = filter !== 'all' && el.dataset.gameSubject !== filter; });
-  const count = GAME_CATALOG.filter(game => filter === 'all' || game.subject === filter).length;
-  document.querySelector('#game-filter-status').textContent = `${count} 个游戏，选一个开始吧`;
-});
+  document.querySelector('#game-filter-status').textContent = `${filtered.size} 个游戏，选一个开始吧`;
+  document.querySelector('#game-empty').hidden = filtered.size !== 0;
+}
+document.querySelectorAll('[data-game-filter]').forEach(button => button.onclick = () => { gameSubject = button.dataset.gameFilter; updateGameFilters(); });
+document.querySelector('#game-search').addEventListener('input', updateGameFilters);
+document.querySelector('#game-goal').addEventListener('change', updateGameFilters);
+document.querySelector('#game-filter-clear').onclick = () => {
+  gameSubject = 'all';
+  document.querySelector('#game-search').value = '';
+  document.querySelector('#game-goal').value = 'all';
+  updateGameFilters();
+  document.querySelector('#game-search').focus();
+};
 document.querySelector('#sound-toggle').onclick = () => { state.sound=!state.sound; if (!state.sound) stopActivity(); updateProgress(); toast(state.sound?'声音已开启，听听新朋友的声音吧':'声音已关闭'); };
 updateProgress();
 showView(viewFromHash(location.hash), false);

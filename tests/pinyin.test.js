@@ -62,10 +62,10 @@ test('三个游戏都生成5关唯一正确选项，固定随机源可重复且�
   assert.throws(() => buildPinyinRounds('unknown'), /Unknown/);
 });
 
-test('学习页渲染14个可操作课次和3种游戏，并公开约定接口', () => {
+test('学习页渲染14个可操作课次和20种游戏，并公开约定接口', () => {
   const html = renderPinyinPage();
   assert.equal((html.match(/data-pinyin-lesson="lesson-/g) || []).length, 14);
-  assert.equal((html.match(/data-pinyin-game=/g) || []).length, 3);
+  assert.equal((html.match(/data-play="pinyin:/g) || []).length, 20);
   assert.match(html, /2024/);
   assert.match(html, /例字读音参考/);
   const course = createPinyinCourse({ learned: new Set() });
