@@ -7,7 +7,7 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
   return `
     <a class="skip-link" href="#main-content">跳到学习内容</a>
     <aside class="sidebar hub-sidebar">
-      <a class="brand" href="#home" aria-label="小芽学习乐园首页"><span class="hub-brand-mark">${icon('leaf', 27)}</span><span><strong>小芽学习乐园</strong><small>让好奇心，慢慢发芽</small></span></a>
+      <a class="brand" href="#home" aria-label="萌芽启蒙首页"><span class="hub-brand-mark">${icon('leaf', 27)}</span><span><strong>萌芽启蒙</strong><small>让好奇心，慢慢发芽</small></span></a>
       <div class="nav-caption">我的学习地图</div>
       <nav class="navigation" aria-label="主要导航">
         <a class="nav-item active" href="#home" data-nav="home">${icon('home')}<span>探索首页</span></a>
@@ -23,7 +23,7 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
       </div>
     </aside>
     <main class="main hub-main" id="main-content" tabindex="-1">
-      <header class="topbar hub-topbar"><div class="hub-breadcrumb">学习乐园 <span>/</span> <b id="current-page-label">探索首页</b></div><div class="header-actions"><span class="streak">${icon('fire', 18)}<span>第 <b>${visits}</b> 天打卡</span></span><button id="sound-toggle" class="sound-toggle" aria-label="关闭声音" title="关闭声音"></button><button class="hub-achievements" data-action="achievements" aria-label="查看我的小成就">${icon('medal', 20)}<span>我的成就</span></button></div></header>
+      <header class="topbar hub-topbar"><div class="hub-breadcrumb">萌芽启蒙 <span>/</span> <b id="current-page-label">探索首页</b></div><div class="header-actions"><span class="streak">${icon('fire', 18)}<span>第 <b>${visits}</b> 天打卡</span></span><button id="sound-toggle" class="sound-toggle" aria-label="关闭声音" title="关闭声音"></button><button class="hub-achievements" data-action="achievements" aria-label="查看我的小成就">${icon('medal', 20)}<span>我的成就</span></button></div></header>
       <section id="home" class="subject-view home-page" data-page="home" aria-labelledby="home-title">
         <div class="hub-welcome"><div><span class="hub-eyebrow">HELLO, LITTLE EXPLORER</span><h1 id="home-title" tabindex="-1">嗨，小小探险家 <span>☀</span></h1><p>今天的小发现，会长成明天的大本领。</p></div><span class="hub-date-note">每天 5–10 分钟<br><b>陪伴，是最好的启蒙</b></span></div>
         <div class="hub-hero"><div class="hub-hero-copy"><span class="hub-hero-tag"><span>✦</span> 好奇的小脑袋，欢迎来到</span><h2>小小的你，<br>有大大的<span>探索力。</span></h2><p>认数字、学拼音、读字母。<br>把每一个「我会啦」，装进成长的小口袋。</p><a class="button primary" href="#numbers">开始今天的探索 ${icon('arrow', 18)}</a></div><div class="hub-hero-art" aria-hidden="true"><span class="hub-floating-label">一起，慢慢长大 <i>✧</i></span><span class="hub-art-letter">A<i>a</i></span><span class="hub-art-pinyin">ā</span><img src="/number-garden.svg" alt=""/><span class="hub-art-spark spark-one">✦</span><span class="hub-art-spark spark-two">✧</span></div></div>

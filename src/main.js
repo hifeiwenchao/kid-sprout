@@ -377,7 +377,7 @@ function showView(view, focus = true) {
     if (selected) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
   });
   document.querySelector('#current-page-label').textContent = pageNames[view];
-  document.title = `${pageNames[view]} · 小芽学习乐园`;
+  document.title = `${pageNames[view]} · 萌芽启蒙`;
   window.scrollTo({ top: 0, behavior: 'instant' });
   if (focus) {
     const heading = document.querySelector(`[data-page="${view}"] h1, [data-page="${view}"] h2`);
