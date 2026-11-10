@@ -1,0 +1,143 @@
+.alphabet-page{--alphabet-ink:#65442b;--alphabet-muted:#987a61;--alphabet-orange:#c76a31;--alphabet-border:#eadac1;color:var(--alphabet-ink)}
+.alphabet-page [hidden],.alphabet-modal [hidden]{display:none!important}
+.alphabet-page button,.alphabet-modal button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.alphabet-page button:focus-visible,.alphabet-modal button:focus-visible{outline:3px solid #a66733;outline-offset:5px}
+.alphabet-page .button.primary,.alphabet-modal .button.primary{background:#b96330;color:#fffaf0;border-color:#b96330;box-shadow:0 4px 0 #9b4d2620}
+.alphabet-page .button.primary:hover,.alphabet-modal .button.primary:hover{background:#a65426}
+.alphabet-modal .button.secondary{background:#f8f0e0;color:#876344;border:1px solid #e8d9be}
+.alphabet-modal .button:disabled{opacity:.45;cursor:default;transform:none}
+.alphabet-hero{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:350px;isolation:isolate;overflow:hidden;border-radius:28px;border:1px solid #ead4ad;background:#f8e9cb}
+.alphabet-hero-copy{position:relative;z-index:2;padding:38px 0 34px 39px}
+.alphabet-eyebrow{display:block;font-size:10px;line-height:1.5;font-weight:700;letter-spacing:1.8px;color:#a0784e}
+.alphabet-hero h1{font-size:clamp(33px,3.3vw,47px);line-height:1.35;letter-spacing:1.5px;margin:18px 0 12px;font-weight:800;color:#67482e}
+.alphabet-hero h1 em{font-family:'Nunito',sans-serif;font-style:normal;color:#b76434;letter-spacing:0}
+.alphabet-hero-copy>p{font-size:12px;line-height:1.95;color:#97785b;margin:0 0 22px}
+.alphabet-hero-copy>.button{font-size:12px;min-height:46px;gap:20px}
+.alphabet-hero-note{display:block;margin-top:15px;font-size:10px;color:#a68862}
+.alphabet-hero-art{position:relative;min-height:350px;align-self:stretch;pointer-events:none}
+.alphabet-hero-art::before{content:'';position:absolute;width:274px;height:274px;background:#efd19b;opacity:.45;border-radius:50%;top:49px;left:50%;transform:translateX(-51%)}
+.alphabet-art-block{position:absolute;display:flex;align-items:baseline;justify-content:center;gap:7px;border:2px solid #b75d2b3b;border-radius:22px;background:#e2a365;color:#fff2d3;font-family:'Nunito',sans-serif;font-size:95px;font-weight:900;line-height:1;padding:22px 15px 24px;box-shadow:0 10px 0 #b77a3d26;letter-spacing:-5px}
+.alphabet-art-block i{font-size:54px;font-style:normal;font-weight:700;letter-spacing:0}
+.alphabet-art-a{top:70px;left:9%;transform:rotate(-10deg);z-index:1}
+.alphabet-art-b{top:145px;right:5%;font-size:86px;background:#b99b62;border-color:#a18c553b;transform:rotate(12deg);padding:19px 17px 23px}
+.alphabet-art-b i{font-size:49px}
+.alphabet-art-apple{position:absolute;bottom:35px;left:14%;font-size:66px;transform:rotate(-14deg);z-index:2}
+.alphabet-art-bear{position:absolute;top:51px;right:9%;font-size:60px;transform:rotate(11deg)}
+.alphabet-art-spark{position:absolute;left:9%;top:28px;font-size:32px;color:#c48b46;transform:rotate(12deg)}
+.alphabet-art-cloud{position:absolute;left:52%;top:20px;font-size:62px;color:#fff8e9}
+.alphabet-art-flower{position:absolute;right:9%;bottom:20px;font-size:44px;color:#b9996c}
+.alphabet-art-word{position:absolute;left:22%;bottom:13px;font-size:12px;color:#ab8555;transform:rotate(-5deg);letter-spacing:1px;font-family:Georgia,serif;font-style:italic}
+.alphabet-study,.alphabet-play{margin-top:35px}
+.alphabet-section-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:21px}
+.alphabet-section-heading .alphabet-eyebrow{font-size:9px;letter-spacing:1.5px;margin-bottom:7px}
+.alphabet-section-heading h2{font-size:22px;font-weight:700;line-height:1.45;margin:0;color:#684c34;letter-spacing:.5px}
+.alphabet-section-heading p{font-size:11px;line-height:1.7;color:var(--alphabet-muted);margin:6px 0 0}
+.alphabet-progress{display:flex;align-items:center;gap:9px;flex-shrink:0;font-size:10px;line-height:1.7;color:#9a7a4e;padding:11px 15px;border-radius:13px;border:1px solid #e9dcc3;background:#fcf7ea}
+.alphabet-progress>span:first-child{font-size:23px;color:#bb8b43}
+.alphabet-progress b{display:block;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:#956b38}
+.alphabet-group-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;padding:7px;border:1px solid #ece1cf;border-radius:17px;background:#f8f3e9}
+.alphabet-group-picker>button{display:flex;align-items:center;justify-content:center;gap:13px;min-height:43px;border-radius:11px;background:transparent;color:#9a846b;border:1px solid transparent;transition:background .18s,color .18s}
+.alphabet-group-picker strong{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;white-space:nowrap}
+.alphabet-group-picker span{font-size:9px;color:#ad9a82;white-space:nowrap}
+.alphabet-group-picker button[aria-pressed=true]{background:#fffdf5;border-color:#ead8b8;color:#9d5e30;box-shadow:0 2px 5px #7b623008}
+.alphabet-group-picker button[aria-pressed=true] span{color:#b78956}
+.alphabet-card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.alphabet-card{position:relative;display:flex;align-items:center;flex-direction:column;min-width:0;min-height:234px;padding:15px 16px 19px;border:1px solid #e7dac4;border-radius:19px;background:#fffaf0;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s}
+.alphabet-card:nth-child(4n+2){background:#f4f3e4;border-color:#e1e1ca}
+.alphabet-card:nth-child(4n+3){background:#fbefdf;border-color:#ecd7be}
+.alphabet-card:nth-child(4n+4){background:#f5eee4;border-color:#e5d8ca}
+.alphabet-card:hover{transform:translateY(-4px);box-shadow:0 7px 18px #977b4a12;border-color:#c9a674}
+.alphabet-card-head{width:100%;display:flex;align-items:center;justify-content:space-between;color:#af997b;font-size:9px;line-height:1.4}
+.alphabet-card-head>span:last-child{color:#bb996b;font-size:16px}
+.alphabet-card-letters{display:flex;align-items:baseline;justify-content:center;gap:4px;font-family:'Nunito',sans-serif;line-height:1;margin:9px 0 5px;color:#a26334}
+.alphabet-card-letters>b{font-size:65px;font-weight:900;letter-spacing:-3px}
+.alphabet-card-letters>span{font-size:45px;font-weight:700;color:#9b704a}
+.alphabet-card:nth-child(4n+2) .alphabet-card-letters{color:#737b4e}
+.alphabet-card:nth-child(4n+2) .alphabet-card-letters>span{color:#737b4e}
+.alphabet-card:nth-child(4n+3) .alphabet-card-letters{color:#a1683e}
+.alphabet-card-picture{display:grid;place-items:center;font-size:38px;line-height:1.3;min-height:48px;margin-top:2px;filter:saturate(.78)}
+.alphabet-card-word{font:800 14px/1.5 'Nunito',sans-serif;color:#856344;margin-top:6px;overflow-wrap:anywhere}
+.alphabet-card-translation{font-size:10px;color:#aa9273;margin-top:1px}
+.alphabet-learned-marker{display:none;position:absolute;right:10px;bottom:9px;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:11px;background:#e0e7cc;color:#7d9260}
+.alphabet-is-learned .alphabet-learned-marker{display:flex}
+.alphabet-study-note{display:flex;align-items:flex-start;justify-content:center;gap:7px;font-size:10px;line-height:1.9;color:#ad9777;margin:15px 0 0}
+.alphabet-study-note>span{font-size:13px;filter:saturate(.6);flex-shrink:0}
+.alphabet-play{padding-top:6px}
+.alphabet-play-decoration{font-size:43px;line-height:1;color:#cfb078;padding-right:14px}
+.alphabet-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.alphabet-game-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0;min-height:228px;padding:20px 21px;border:1px solid #e6d6bb;background:#f6ebd8;border-radius:20px;color:#775438;transition:transform .2s,box-shadow .2s}
+.alphabet-game-card:hover{transform:translateY(-4px);box-shadow:0 7px 18px #977b4a12}
+.alphabet-listen-card{background:#f0f0df;border-color:#e0e1c7}
+.alphabet-order-card{background:#f7e9de;border-color:#ead5c6}
+.alphabet-game-art{position:relative;display:flex;align-items:center;gap:9px;height:88px;width:100%;font-family:'Nunito',sans-serif}
+.alphabet-match-art>b,.alphabet-match-art>span{display:grid;place-items:center;width:55px;height:63px;font-size:43px;font-weight:800;border-radius:12px;background:#dfb276;color:#fff7e3;transform:rotate(-9deg);box-shadow:0 4px 0 #c1935a26}
+.alphabet-match-art>span{background:#bca378;transform:rotate(9deg);font-size:38px}
+.alphabet-match-art>i{font-size:22px;color:#b08e5e;font-style:normal}
+.alphabet-listen-art{justify-content:center;max-width:180px}
+.alphabet-listen-art>b{font-size:71px;line-height:1;color:#9a9b69;transform:rotate(-7deg)}
+.alphabet-listen-art>i,.alphabet-listen-art>span{font-size:39px;line-height:1;color:#b5b688;font-style:normal;transform:rotate(-14deg)}
+.alphabet-listen-art>span{align-self:flex-start;font-size:27px;margin-top:14px;transform:rotate(14deg)}
+.alphabet-order-art{gap:5px}
+.alphabet-order-art>b,.alphabet-order-art>i{display:grid;place-items:center;width:45px;height:47px;font-size:29px;font-weight:800;background:#e7c4a4;color:#a46d44;border-radius:9px;transform:rotate(-6deg);font-style:normal}
+.alphabet-order-art>i{border:2px dashed #c69b75;background:transparent;color:#ba8d66;transform:rotate(5deg)}
+.alphabet-order-art>b:last-child{transform:rotate(7deg)}
+.alphabet-game-copy{display:flex;flex-direction:column;gap:6px;padding-top:9px}
+.alphabet-game-copy>small{font-size:9px;letter-spacing:1px;color:#a48b6a}
+.alphabet-game-copy>strong{font-size:17px;font-weight:700;line-height:1.5;color:#79583b;letter-spacing:.5px}
+.alphabet-game-copy>span{font-size:10px;line-height:1.6;color:#a38a6d}
+.alphabet-game-arrow{position:absolute;right:16px;top:15px;width:29px;height:29px;display:grid;place-items:center;border:1px solid #d9c5a8;border-radius:50%;color:#a08560;font-size:17px}
+.alphabet-modal{width:min(575px,calc(100% - 32px));color:#745436}
+.alphabet-modal .modal-kicker{color:#b18b60;font-size:10px}
+.alphabet-modal h2{color:#775132;font-size:26px}
+.alphabet-modal .modal-subtitle{color:#a48a6f;line-height:1.9}
+.alphabet-modal .round-indicator>span.current{background:#bd804e;color:#fff7e9}
+.alphabet-modal .round-indicator>span.done{background:#eee0c6;color:#ad814b}
+.alphabet-modal .game-feedback{min-height:25px;font-size:12px;line-height:1.8;color:#ad916f;margin:19px 0 15px}
+.alphabet-modal .game-feedback.success{color:#809355}
+.alphabet-lesson-pair{display:grid;grid-template-columns:1fr 1fr;gap:15px;max-width:330px;margin:21px auto 14px}
+.alphabet-lesson-pair>div{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 12px 9px;background:#f7ead1;border:1px solid #e7d5b4;border-radius:20px}
+.alphabet-lesson-pair>div:last-child{background:#f0f0df;border-color:#dedfc4}
+.alphabet-lesson-pair>div>span{font-size:10px;letter-spacing:1px;color:#a98a5d}
+.alphabet-lesson-pair strong{font:900 104px/1.1 'Nunito',sans-serif;color:#b67942}
+.alphabet-lesson-pair>div:last-child strong{color:#737c4e}
+.alphabet-speak-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;background:#fff6e4;border:1px solid #ebdab9;border-radius:12px;padding:8px 17px;font-size:12px;color:#aa7f46}
+.alphabet-speak-button>b{font-family:'Nunito',sans-serif;font-size:17px}
+.alphabet-word-friend{display:flex;align-items:center;text-align:left;gap:18px;max-width:370px;margin:22px auto 15px;padding:17px 20px;border:1px solid #e9deca;border-radius:19px;background:#fbf7eb}
+.alphabet-word-picture{font-size:47px;line-height:1;flex-shrink:0;filter:saturate(.8)}
+.alphabet-word-friend>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.alphabet-word-friend>div>span:first-child{font-size:9px;letter-spacing:.5px;color:#b29a7c}
+.alphabet-word-friend>div>strong{font:800 24px/1.35 'Nunito',sans-serif;color:#967148;overflow-wrap:anywhere}
+.alphabet-word-friend>div>span:last-child{font-size:11px;color:#a28a6d}
+.alphabet-word-friend>button{display:grid;place-items:center;flex-shrink:0;width:43px;height:43px;margin-left:auto;border-radius:50%;background:#f0e6cf;color:#b3905c}
+.alphabet-letter-hint{display:flex;justify-content:center;align-items:flex-start;gap:8px;font-size:12px;line-height:1.9;color:#9f8768;margin:18px auto 0;max-width:380px;text-align:left}
+.alphabet-letter-hint>span{font-size:19px;line-height:1.25;color:#bf9c68;flex-shrink:0}
+.alphabet-speech-note{font-size:9px;color:#b7a48c;line-height:1.8;margin:10px auto 22px;max-width:380px}
+.alphabet-lesson-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.alphabet-match-target{display:flex;flex-direction:column;align-items:center;gap:5px;max-width:190px;background:#f7ead1;border:1px solid #e5d0ab;border-radius:23px;margin:20px auto;padding:13px 20px}
+.alphabet-match-target>span{font-size:10px;color:#ae8a58}
+.alphabet-match-target>strong{font:900 104px/1.1 'Nunito',sans-serif;color:#b57942}
+.alphabet-answer-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;max-width:410px;margin:22px auto 0}
+.alphabet-answer{display:grid;place-items:center;min-width:0;min-height:88px;border:2px solid #e6d7bd;background:#fcf5e4;border-radius:16px;color:#9c6c3f;font:800 47px/1.2 'Nunito',sans-serif;transition:transform .18s,background .18s,border-color .18s}
+.alphabet-answer:nth-child(2){background:#f2f1df;border-color:#e0e2c4;color:#737c4e}
+.alphabet-answer:nth-child(3){background:#f9ecdc;border-color:#ecd9c1;color:#a1683e}
+.alphabet-answer:nth-child(4){background:#f1eadd;border-color:#e2d7c3;color:#806b47}
+.alphabet-answer:hover:not(:disabled){transform:translateY(-3px);border-color:#c7a579}
+.alphabet-answer:disabled{cursor:default;opacity:.55}
+.alphabet-answer.alphabet-answer-correct{background:#edf0d9;border-color:#aab880;color:#63793d;opacity:1;box-shadow:0 0 0 3px #aebd8321}
+.alphabet-listen-prompt{margin:24px auto 12px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.alphabet-listen-button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-width:150px;min-height:105px;background:#f6e9cd;border:1px solid #e4d0a8;border-radius:23px;padding:17px 23px;color:#b2874f;font-size:12px}
+.alphabet-hint-button{font-size:11px;min-height:35px;padding:6px 12px;color:#a28e6c;background:transparent;text-decoration:underline;text-underline-offset:4px}
+.alphabet-listen-hint{padding:8px 18px;border-radius:12px;background:#f3f0e2;color:#ac926b;font-size:12px}
+.alphabet-listen-hint>strong{font:800 23px/1.3 'Nunito',sans-serif;margin-left:6px;color:#9c794a}
+.alphabet-audio-note{font-size:10px;line-height:1.7;margin:0;color:#b29d80}
+.alphabet-order-line{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:390px;margin:30px auto}
+.alphabet-order-tile{display:grid;place-items:center;min-width:0;min-height:88px;border:1px solid #dfccaa;border-radius:16px;background:#f5e5c6;color:#946631;font:800 45px/1.2 'Nunito',sans-serif;position:relative}
+.alphabet-order-tile:not(:last-child)::after{content:'·';position:absolute;right:-8px;top:calc(50% - 9px);font:16px/1 serif;color:#ceb88e}
+.alphabet-order-gap{background:#fbf7eb;border:2px dashed #c7aa7b;color:#9d7d4a}
+.alphabet-order-filled{background:#edf0db;border:2px solid #adba85;color:#63793d}
+@media(min-width:1400px){.alphabet-card-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.alphabet-card{min-height:227px;padding:14px 12px 18px}.alphabet-card-letters>b{font-size:60px}.alphabet-card-letters>span{font-size:40px}}
+@media(max-width:1050px){.alphabet-hero{grid-template-columns:1.1fr 1fr;min-height:320px}.alphabet-hero-copy{padding:31px 0 30px 28px}.alphabet-hero h1{font-size:37px}.alphabet-hero-art{min-height:320px}.alphabet-art-a{font-size:76px;left:3%;top:82px;padding:20px 12px}.alphabet-art-a i{font-size:45px}.alphabet-art-b{font-size:67px;right:2%;top:156px;padding:17px 13px}.alphabet-art-b i{font-size:39px}.alphabet-art-apple{font-size:53px;left:6%;bottom:27px}.alphabet-art-bear{font-size:51px;top:55px;right:4%}.alphabet-hero-art::before{width:240px;height:240px;top:55px}.alphabet-art-word{font-size:10px;left:6%;bottom:9px}.alphabet-art-flower{font-size:35px;bottom:20px;right:2%}.alphabet-card-grid{gap:12px}.alphabet-card{min-height:218px;padding:13px 11px 17px}.alphabet-card-letters>b{font-size:58px}.alphabet-card-letters>span{font-size:40px}.alphabet-card-picture{font-size:34px;min-height:42px}.alphabet-game-grid{gap:12px}.alphabet-game-card{padding:17px 15px;min-height:220px}.alphabet-game-copy>strong{font-size:15px}.alphabet-game-copy>span{font-size:9px}.alphabet-match-art>b,.alphabet-match-art>span{width:45px;height:54px;font-size:36px}.alphabet-match-art>span{font-size:33px}.alphabet-match-art{gap:6px}.alphabet-order-art>b,.alphabet-order-art>i{width:36px;height:41px;font-size:26px}.alphabet-game-arrow{right:11px;top:11px;width:25px;height:25px;font-size:15px}}
+@media(max-width:760px){.alphabet-hero-copy{padding:29px 0 28px 25px}.alphabet-hero h1{font-size:34px}.alphabet-hero-copy>p{font-size:11px}.alphabet-eyebrow{font-size:9px;letter-spacing:1.3px}.alphabet-hero-copy>.button{font-size:11px;padding:11px 15px;gap:12px}.alphabet-hero-note{font-size:9px}.alphabet-art-a{left:0;font-size:70px}.alphabet-art-a i{font-size:40px}.alphabet-art-b{font-size:64px;right:-2%}.alphabet-art-b i{font-size:36px}.alphabet-art-cloud{left:50%;font-size:49px}.alphabet-art-bear{font-size:46px;right:0}.alphabet-section-heading h2{font-size:20px}.alphabet-progress{padding:8px 11px;font-size:9px;gap:6px}.alphabet-progress b{font-size:14px}.alphabet-card-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.alphabet-group-picker{gap:5px;padding:6px}.alphabet-group-picker>button{gap:7px}.alphabet-group-picker strong{font-size:15px}.alphabet-group-picker span{font-size:8px}.alphabet-game-grid{grid-template-columns:1fr}.alphabet-game-card{flex-direction:row;align-items:center;gap:20px;padding:17px 20px;min-height:123px}.alphabet-game-art{width:142px;flex-shrink:0;height:80px}.alphabet-game-copy{padding:0;gap:6px}.alphabet-game-copy>strong{font-size:17px}.alphabet-game-copy>span{font-size:10px}.alphabet-game-copy>small{font-size:9px}.alphabet-game-arrow{position:static;margin-left:auto;flex-shrink:0}.alphabet-listen-art{justify-content:flex-start}.alphabet-order-art{gap:6px}.alphabet-order-art>b,.alphabet-order-art>i{width:39px;height:43px}.alphabet-match-art>b,.alphabet-match-art>span{width:48px;height:56px}.alphabet-match-art{gap:9px}.alphabet-section-heading{margin-bottom:17px}.alphabet-study,.alphabet-play{margin-top:28px}}
+@media(max-width:580px){.alphabet-hero{grid-template-columns:1fr;min-height:346px;border-radius:22px}.alphabet-hero-copy{padding:25px 22px 28px}.alphabet-hero h1{font-size:34px;margin:14px 0 11px;letter-spacing:1px}.alphabet-hero-copy>p{font-size:10px;line-height:1.9;margin-bottom:21px;max-width:215px}.alphabet-hero-copy>.button{font-size:10px;min-height:43px;gap:12px;padding:10px 13px}.alphabet-hero-note{font-size:8px;margin-top:13px;max-width:190px}.alphabet-hero-art{position:absolute;width:180px;min-height:0;height:165px;right:-7px;bottom:5px;z-index:1}.alphabet-hero-art::before{width:179px;height:179px;top:28px;left:50%}.alphabet-art-a{font-size:56px;left:8px;top:36px;padding:15px 10px 17px;border-radius:15px;gap:4px;letter-spacing:-3px}.alphabet-art-a i{font-size:32px}.alphabet-art-b{font-size:48px;right:4px;top:84px;padding:13px 10px 16px;border-radius:14px;gap:3px;letter-spacing:-3px}.alphabet-art-b i{font-size:27px}.alphabet-art-bear{font-size:36px;top:10px;right:4px}.alphabet-art-apple{font-size:37px;bottom:9px;left:11px}.alphabet-art-cloud{left:79px;top:-4px;font-size:35px}.alphabet-art-spark{display:none}.alphabet-art-flower{font-size:23px;right:19px;bottom:2px}.alphabet-art-word{display:none}.alphabet-section-heading{gap:8px;margin-bottom:15px}.alphabet-section-heading h2{font-size:18px;letter-spacing:0}.alphabet-section-heading p{font-size:10px;line-height:1.75;margin-top:5px}.alphabet-section-heading .alphabet-eyebrow{font-size:8px;letter-spacing:1px;margin-bottom:5px}.alphabet-progress{padding:7px 9px;font-size:8px;border-radius:11px;gap:5px}.alphabet-progress>span:first-child{font-size:18px}.alphabet-progress b{font-size:13px}.alphabet-group-picker{margin-bottom:12px;border-radius:13px;padding:5px;gap:4px}.alphabet-group-picker>button{flex-direction:column;gap:3px;min-height:49px;border-radius:9px}.alphabet-group-picker strong{font-size:14px;line-height:1.2}.alphabet-group-picker span{font-size:8px}.alphabet-card-grid{gap:9px}.alphabet-card{min-height:190px;padding:11px 8px 15px;border-radius:15px}.alphabet-card-head{font-size:8px}.alphabet-card-head>span:last-child{font-size:13px}.alphabet-card-letters{gap:2px;margin-top:8px}.alphabet-card-letters>b{font-size:51px;letter-spacing:-2px}.alphabet-card-letters>span{font-size:34px}.alphabet-card-picture{font-size:29px;min-height:35px;margin-top:3px}.alphabet-card-word{font-size:12px;margin-top:5px}.alphabet-card-translation{font-size:9px}.alphabet-learned-marker{width:15px;height:15px;right:6px;bottom:6px;font-size:10px}.alphabet-study-note{font-size:9px;margin-top:12px;justify-content:flex-start;gap:5px}.alphabet-game-card{min-height:117px;padding:14px;gap:13px;border-radius:17px}.alphabet-game-art{width:100px;height:75px;gap:5px}.alphabet-game-copy{gap:4px}.alphabet-game-copy>strong{font-size:15px}.alphabet-game-copy>span{font-size:9px}.alphabet-game-copy>small{font-size:8px}.alphabet-match-art>b,.alphabet-match-art>span{width:38px;height:47px;border-radius:9px;font-size:31px}.alphabet-match-art>span{font-size:29px}.alphabet-match-art>i{font-size:17px}.alphabet-listen-art>b{font-size:59px}.alphabet-listen-art>i{font-size:27px}.alphabet-listen-art>span{font-size:21px;margin-top:13px}.alphabet-order-art{gap:4px}.alphabet-order-art>b,.alphabet-order-art>i{width:30px;height:35px;font-size:22px;border-radius:7px}.alphabet-game-arrow{width:23px;height:23px;font-size:14px}.alphabet-play-decoration{font-size:32px;padding-right:8px}.alphabet-modal{padding-left:19px;padding-right:19px}.alphabet-modal h2{font-size:21px}.alphabet-modal .modal-kicker{font-size:9px}.alphabet-modal .modal-subtitle{font-size:11px;margin-top:10px}.alphabet-lesson-pair{gap:12px;max-width:280px;margin-top:18px}.alphabet-lesson-pair>div{padding:11px 9px 8px;border-radius:17px}.alphabet-lesson-pair strong{font-size:88px}.alphabet-lesson-pair>div>span{font-size:9px}.alphabet-speak-button{font-size:11px;min-height:42px;padding:8px 14px}.alphabet-word-friend{padding:14px;gap:13px;margin-top:18px;border-radius:16px}.alphabet-word-picture{font-size:39px}.alphabet-word-friend>div>strong{font-size:21px}.alphabet-word-friend>div>span:first-child{font-size:8px}.alphabet-word-friend>div>span:last-child{font-size:10px}.alphabet-word-friend>button{width:40px;height:40px}.alphabet-letter-hint{font-size:11px;gap:6px}.alphabet-speech-note{font-size:9px;margin-bottom:19px}.alphabet-lesson-actions{gap:9px}.alphabet-lesson-actions>.button{font-size:10px;padding:11px 13px;gap:8px}.alphabet-answer-grid{gap:9px;margin-top:19px}.alphabet-answer{min-height:73px;border-radius:13px;font-size:40px}.alphabet-match-target{margin:18px auto;padding:12px 18px;border-radius:19px;max-width:165px}.alphabet-match-target>strong{font-size:88px}.alphabet-match-target>span{font-size:9px}.alphabet-modal .game-feedback{font-size:11px;margin:16px 0 12px;min-height:39px}.alphabet-listen-button{min-height:95px;min-width:145px;font-size:11px;padding:15px 21px}.alphabet-listen-prompt{margin-top:21px;gap:8px}.alphabet-listen-hint{font-size:11px}.alphabet-audio-note{font-size:9px}.alphabet-order-line{gap:8px;margin:25px auto}.alphabet-order-tile{min-height:75px;font-size:37px;border-radius:13px}.alphabet-order-tile:not(:last-child)::after{right:-7px}}
+@media(max-width:365px){.alphabet-hero-copy{padding-left:18px}.alphabet-hero h1{font-size:31px}.alphabet-hero-copy>p{font-size:9px;max-width:193px}.alphabet-hero-art{width:155px;right:-17px;bottom:9px;transform:scale(.9);transform-origin:right bottom}.alphabet-section-heading h2{font-size:16px}.alphabet-progress{padding:6px 7px}.alphabet-progress>span:first-child{display:none}.alphabet-card{min-height:180px;padding:10px 7px 14px}.alphabet-card-head{font-size:7px}.alphabet-card-letters>b{font-size:45px}.alphabet-card-letters>span{font-size:30px}.alphabet-card-word{font-size:11px}.alphabet-game-card{padding:12px;gap:10px}.alphabet-game-copy>strong{font-size:14px}.alphabet-game-copy>span{font-size:8px}.alphabet-game-arrow{display:none}.alphabet-answer-grid{gap:6px}.alphabet-answer{min-height:64px;font-size:36px}.alphabet-modal h2{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.alphabet-page *,.alphabet-modal *{animation:none!important;transition:none!important}.alphabet-card:hover,.alphabet-game-card:hover,.alphabet-answer:hover:not(:disabled){transform:none}}

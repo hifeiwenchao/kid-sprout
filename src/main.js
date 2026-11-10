@@ -6,6 +6,14 @@ import { createBalloonParty } from './games/balloon-party.js';
 import { createBearPicnic } from './games/bear-picnic.js';
 import { createLittleDrum } from './games/little-drum.js';
 import './games/new-game-cards.css';
+import { renderLearningHub, GAME_CATALOG } from './learning-hub.js';
+import { restoreLearningProgress, serializeLearningProgress, viewFromHash } from './hub-state.js';
+import { renderPinyinPage, createPinyinCourse, PINYIN_PROGRESS_IDS } from './courses/pinyin.js';
+import { renderAlphabetPage, createAlphabetCourse } from './courses/alphabet.js';
+import { ALPHABET_PROGRESS_IDS } from './courses/alphabet-data.js';
+import './courses/pinyin.css';
+import './courses/alphabet.css';
+import './learning-hub.css';
 
 const icon = (name, size = 22) => {
   const paths = {
@@ -65,47 +73,20 @@ if (state.lastVisit && state.lastVisit !== today) {
 state.lastVisit = today;
 const save = () => { try { localStorage.setItem('number-garden', JSON.stringify({ ...state, learned: [...state.learned] })); } catch {} };
 save();
+let languageSaved;
+try { languageSaved = localStorage.getItem('sprout-learning'); } catch {}
+const learning = restoreLearningProgress(languageSaved, { pinyin: PINYIN_PROGRESS_IDS, alphabet: ALPHABET_PROGRESS_IDS });
+const saveLearning = () => { try { localStorage.setItem('sprout-learning', serializeLearningProgress(learning)); } catch {} };
+let pinyinCourse;
+let alphabetCourse;
 
-document.querySelector('#app').innerHTML = `
-  <aside class="sidebar">
-    <a class="brand" href="#home" aria-label="数字小乐园首页">
-      <span class="brand-mark"><span>1</span><i></i><b></b></span>
-      <span><strong>数字小乐园</strong><small>小小数字，大大世界</small></span>
-    </a>
-    <div class="nav-caption">开启快乐学习</div>
-    <nav class="navigation" aria-label="主要导航">
-      <button class="nav-item active" data-nav="home">${icon('home')}<span>数字乐园</span><span class="nav-dot"></span></button>
-      <button class="nav-item" data-nav="games">${icon('game')}<span>趣味小游戏</span></button>
-      <button class="nav-item" data-nav="song">${icon('music')}<span>数字儿歌</span></button>
-      <button class="nav-item" data-nav="achievements">${icon('medal')}<span>我的小成就</span><span class="new-dot"></span></button>
-    </nav>
-    <div class="sidebar-bottom">
-      <div class="growth-card">
-        <span class="growth-drawing">${icon('leaf', 37)}<span>✧</span></span>
-        <strong>每一次小进步<br>都值得被看见</strong>
-        <p>和宝贝一起，慢慢长大</p>
-        <div class="growth-line"><span id="side-progress"></span></div>
-        <small id="side-progress-text"></small>
-      </div>
-      <button class="parent-link" data-action="parents">${icon('heart', 17)}<span>给爸爸妈妈的话</span>${icon('chevron', 15)}</button>
-      <div class="sidebar-note">为好奇的小脑袋而设计 <span>♥</span></div>
-    </div>
-  </aside>
-  <main id="home" class="main">
-    <header class="topbar">
-      <div><div class="greeting-kicker">准备好发现新朋友了吗？</div><h1>嗨，小小探险家！<span class="wave">👋</span></h1></div>
-      <div class="header-actions"><div class="streak">${icon('fire', 20)}<span>第 <b>${state.visits}</b> 天打卡</span></div><button id="sound-toggle" class="sound-toggle" aria-label="关闭声音" title="关闭声音"></button><div class="avatar" aria-label="小小探险家"><span class="avatar-eye"></span><span class="avatar-smile"></span></div></div>
-    </header>
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy"><span class="hero-tag"><span>✦</span> 快乐启蒙，从 1 开始</span><h2 id="hero-title">小小数字，<br>大大<span class="fun-word">乐趣<svg viewBox="0 0 160 15" aria-hidden="true"><path d="M3 11Q75 0 155 7" fill="none" stroke="#edbd53" stroke-width="7" stroke-linecap="round"/></svg></span>！</h2><p>从 1 到 10，听一听、数一数、玩一玩。<br class="mobile-break">和数字朋友一起，开启奇妙的探索！</p><div class="hero-actions"><button class="button primary" data-action="explore">开始数字探险 ${icon('arrow', 19)}</button><button class="song-button" data-action="song"><span>${icon('music', 18)}</span>听首数字歌</button></div><div class="hero-note"><span class="little-dot"></span>每天一点点，快乐多一点</div></div>
-      <div class="hero-art"><img src="/number-garden.svg" alt="可爱的数字 1、2、3 在花园里一起玩耍"/><span class="art-label label-one">你好呀，数字朋友！<span>✧</span></span><span class="art-label label-two">一起玩吧～</span></div>
-    </section>
-    <section class="numbers-section" id="numbers" aria-labelledby="numbers-title">
+const numbersPage = `<header class="hub-page-heading"><span class="hub-eyebrow">01 / NUMBER GARDEN</span><h1 id="number-page-title" tabindex="-1">和数字，交个朋友 <span>🌱</span></h1><p>从 1 到 10，听一听、数一数、玩一玩。每一个小发现，都值得一颗星星。</p><button class="button secondary" data-action="song">${icon('music', 18)}听首数字儿歌</button></header>
+    <section class="numbers-section" id="number-cards" aria-labelledby="numbers-title">
       <div class="section-heading"><div><h2 id="numbers-title"><span class="heading-icon number-heading">123</span>认识数字 <span class="latin">1–10</span></h2><p>点一点小卡片，听听数字的声音</p></div><span class="section-aside">每一个数字，都是新朋友 <span>✧</span></span></div>
       <div class="number-grid">${Array.from({length: 10}, (_, i) => `<button class="number-card color-${i}" data-number="${i + 1}" aria-label="认识数字 ${i + 1}，${names[i]}"><span class="card-top"><span class="chinese-number">${names[i]}</span><span class="card-speaker">${icon('sound', 16)}</span></span><span class="big-number">${i + 1}</span><span class="counting-icons">${Array.from({length: i + 1}, () => fruitIcon(i)).join('')}</span><span class="learned-indicator" aria-label="已认识">${icon('check', 11)}</span></button>`).join('')}</div>
       <div class="learning-progress"><span class="progress-star">${icon('star', 17)}</span><span id="learning-message"></span><div class="progress-dots">${Array.from({length:10}, (_, i) => `<span data-progress="${i + 1}"></span>`).join('')}</div><span id="progress-count"></span></div>
     </section>
-    <section id="games" class="games-section" aria-labelledby="games-title">
+    <section id="number-games" class="games-section" aria-labelledby="games-title">
       <div class="section-heading"><div><h2 id="games-title"><span class="heading-icon game-heading">${icon('game', 22)}</span>玩一玩，更会数</h2><p>9 种趣味玩法，把数字变成小小的快乐</p></div><span class="section-aside">边玩边学，真有趣 ${icon('arrow', 16)}</span></div>
       <div class="game-grid">
         <button class="game-card fruit-game" data-action="count"><span class="game-illustration fruit-illustration">${fruitIcon(0)}${fruitIcon(1)}${fruitIcon(2)}<i>?</i></span><span class="game-copy"><span class="game-label">观察与数数</span><strong>数一数水果</strong><small>水果篮里有几个小伙伴？</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
@@ -119,12 +100,8 @@ document.querySelector('#app').innerHTML = `
         <button class="game-card drum-game" data-action="drum"><span class="game-illustration drum-card-art" aria-hidden="true"><span>🥁</span><i>♪</i></span><span class="game-copy"><span class="game-label">聆听与数数<span class="game-new">新</span></span><strong>小耳朵听听</strong><small>咚咚咚，小鼓敲了几下？</small></span><span class="game-arrow">${icon('arrow', 19)}</span></button>
       </div>
     </section>
-    <footer class="page-footer">${icon('leaf', 15)}<span>不着急，不比较。每一个小发现，都很了不起。</span><span class="footer-dots">● ● ●</span><button class="footer-parent" data-action="parents">家长指南${icon('chevron', 11)}</button></footer>
-  </main>
-  <dialog id="activity-dialog" aria-labelledby="dialog-title"><button class="modal-close" aria-label="关闭">${icon('close', 22)}</button><div id="dialog-content"></div></dialog>
-  <div id="toast" role="status" aria-live="polite"></div>
-  <div id="confetti" aria-hidden="true"></div>
 `;
+document.querySelector('#app').innerHTML = renderLearningHub({ icon, visits: state.visits, numbersPage, pinyinPage: renderPinyinPage(), alphabetPage: renderAlphabetPage() });
 
 const dialog = document.querySelector('#activity-dialog');
 const dialogContent = document.querySelector('#dialog-content');
@@ -159,14 +136,15 @@ function chime(success = false) {
   } catch {}
 }
 
-function speak(text, onend) {
+function speak(text, onend, language = 'zh-CN') {
   if (!state.sound) { onend?.(); return; }
   if (!('speechSynthesis' in window)) { toast('这个浏览器暂不支持点读，可以和爸爸妈妈一起念哦'); onend?.(); return; }
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'zh-CN'; utterance.rate = .78; utterance.pitch = 1.25;
+  utterance.lang = language; utterance.rate = language === 'en-US' ? .72 : .78; utterance.pitch = 1.15;
   const voices = window.speechSynthesis.getVoices();
-  const voice = voices.find(v => /zh[-_]CN/i.test(v.lang)) || voices.find(v => /^zh/i.test(v.lang));
+  const prefix = language.split('-')[0];
+  const voice = voices.find(v => v.lang.replace('_', '-').toLowerCase() === language.toLowerCase()) || voices.find(v => v.lang.toLowerCase().startsWith(prefix));
   if (voice) utterance.voice = voice;
   utterance.onend = onend;
   utterance.onerror = event => {
@@ -196,8 +174,22 @@ dialog.addEventListener('click', e => { if (e.target === dialog) { const bounds 
 
 function updateProgress() {
   const count = state.learned.size;
-  document.querySelector('#side-progress').style.width = `${count * 10}%`;
-  document.querySelector('#side-progress-text').textContent = `已经认识 ${count} / 10 个数字朋友`;
+  const learnedTotal = count + learning.pinyin.size + learning.alphabet.size;
+  const total = 10 + PINYIN_PROGRESS_IDS.length + ALPHABET_PROGRESS_IDS.length;
+  document.querySelector('#side-progress').style.width = `${learnedTotal / total * 100}%`;
+  document.querySelector('#side-progress-text').textContent = `已收集 ${learnedTotal} / ${total} 颗学习小星星`;
+  const subjects = { numbers: [count, 10], pinyin: [learning.pinyin.size, PINYIN_PROGRESS_IDS.length], alphabet: [learning.alphabet.size, 26] };
+  Object.entries(subjects).forEach(([subject, [learned, available]]) => {
+    document.querySelectorAll(`[data-subject-progress="${subject}"]`).forEach(el => { el.textContent = `${learned} / ${available}`; });
+  });
+  const nextNumber = Array.from({length: 10}, (_, i) => i + 1).find(n => !state.learned.has(n));
+  const nextPinyin = PINYIN_PROGRESS_IDS.find(id => !learning.pinyin.has(id));
+  const nextLetter = ALPHABET_PROGRESS_IDS.find(id => !learning.alphabet.has(id));
+  document.querySelector('[data-continue-label="numbers"]').textContent = nextNumber ? `下一位朋友：数字 ${nextNumber}` : '10 个数字都认识啦，再复习一下吧';
+  document.querySelector('[data-continue-label="pinyin"]').textContent = nextPinyin ? `继续学习第 ${PINYIN_PROGRESS_IDS.indexOf(nextPinyin) + 1} 课` : '14 课都完成啦，再复习一下吧';
+  document.querySelector('[data-continue-label="alphabet"]').textContent = nextLetter ? `下一位朋友：字母 ${nextLetter}` : 'A–Z 都认识啦，再复习一下吧';
+  pinyinCourse?.refreshProgress();
+  alphabetCourse?.refreshProgress();
   document.querySelector('#progress-count').textContent = `${count} / 10`;
   document.querySelector('#learning-message').textContent = count === 10 ? '真棒！10 个数字朋友都认识你啦！' : count ? `真棒！你已经认识 ${count} 个数字朋友啦` : '收集你的数字小星星，开始第一步吧！';
   document.querySelectorAll('[data-progress]').forEach(el => el.classList.toggle('filled', state.learned.has(Number(el.dataset.progress))));
@@ -291,7 +283,7 @@ function finishGame() {
 
 function completeExtraGame({ title, message, replay }) {
   state.wins++;
-  save();
+  updateProgress();
   openModal(`<div class="reward-star">★<span>✦</span><i>✧</i></div><span class="modal-kicker">这次的挑战，全部完成！</span><h2 id="dialog-title">${title}</h2><p class="modal-subtitle">${message}<br>送你一颗闪闪的小星星！</p><div class="modal-actions"><button class="button secondary" id="extra-finish-close">休息一下</button><button class="button primary" id="extra-play-again">再玩一次${icon('arrow', 18)}</button></div>`, 'reward-modal');
   celebrate();
   chime(true);
@@ -333,12 +325,16 @@ function showAchievements() {
     { title:'数字好伙伴', description:'认识 5 个数字', earned:state.learned.size >= 5, symbol:'🌼' },
     { title:'闪亮小星星', description:'认识全部 10 个数字', earned:state.learned.size === 10, symbol:'🌟' },
     { title:'游戏小能手', description:'完整通关任意小游戏', earned:state.wins > 0, symbol:'🏆' },
+    { title:'拼音小萌芽', description:'完成任意一课拼音学习', earned:learning.pinyin.size > 0, symbol:'🌷' },
+    { title:'拼音好伙伴', description:'完成全部 14 课拼音', earned:learning.pinyin.size === PINYIN_PROGRESS_IDS.length, symbol:'🦋' },
+    { title:'字母新朋友', description:'认识第一个英文字母', earned:learning.alphabet.size > 0, symbol:'🍃' },
+    { title:'字母收藏家', description:'认识全部 26 个字母', earned:learning.alphabet.size === 26, symbol:'🌈' },
   ];
-  openModal(`<span class="modal-kicker">每一次努力，都闪闪发光</span><h2 id="dialog-title">我的小成就</h2><p class="modal-subtitle">已经认识 <b>${state.learned.size}</b> 个数字，完成 <b>${state.wins}</b> 次小游戏</p><div class="achievement-grid">${achievements.map(a=>`<div class="achievement ${a.earned?'earned':''}"><span class="achievement-symbol">${a.earned ? a.symbol : icon('lock',30)}</span><strong>${a.title}</strong><small>${a.description}</small><span class="achievement-status">${a.earned?'已获得 · 你真棒！':'等待你来点亮'}</span></div>`).join('')}</div><button class="button primary" id="back-to-learn">继续数字探险${icon('arrow',18)}</button>`, 'achievement-modal');
-  document.querySelector('#back-to-learn').onclick = () => showNumber(Array.from({length:10},(_,i)=>i+1).find(n=>!state.learned.has(n)) || 1);
+  openModal(`<span class="modal-kicker">每一次努力，都闪闪发光</span><h2 id="dialog-title">我的小成就</h2><p class="modal-subtitle">认识 <b>${state.learned.size}</b> 个数字 · 完成 <b>${learning.pinyin.size}</b> 课拼音 · 认识 <b>${learning.alphabet.size}</b> 个字母<br>已经完成 <b>${state.wins}</b> 次小游戏</p><div class="achievement-grid">${achievements.map(a=>`<div class="achievement ${a.earned?'earned':''}"><span class="achievement-symbol">${a.earned ? a.symbol : icon('lock',30)}</span><strong>${a.title}</strong><small>${a.description}</small><span class="achievement-status">${a.earned?'已获得 · 你真棒！':'等待你来点亮'}</span></div>`).join('')}</div><button class="button primary" id="back-to-learn">继续探索${icon('arrow',18)}</button>`, 'achievement-modal');
+  document.querySelector('#back-to-learn').onclick = () => { closeModal(); navigate('home'); };
 }
 function showParents() {
-  openModal(`<span class="modal-symbol parent-symbol">${icon('heart',30)}</span><span class="modal-kicker">写给温柔的大朋友</span><h2 id="dialog-title">陪伴，是最好的启蒙</h2><p class="modal-subtitle">适合 3–6 岁儿童，建议家长陪伴使用</p><div class="parent-tips"><p><b>01 · 每天一点点</b>一次玩 5–10 分钟就好。孩子意犹未尽的时候，明天还会期待。</p><p><b>02 · 从生活中发现数字</b>数一数桌上的苹果、上楼的台阶，把屏幕里的朋友带进生活。</p><p><b>03 · 鼓励每一次尝试</b>答错也没关系，和孩子一起再数一遍。努力和好奇心最值得表扬。</p><p><b>04 · 学习记录自动保存</b>认识的数字和小成就保存在当前浏览器里，下次打开可以继续。</p></div><button class="button primary" id="parents-close">和宝贝一起出发${icon('heart',18)}</button>`, 'parent-modal');
+  openModal(`<span class="modal-symbol parent-symbol">${icon('heart',30)}</span><span class="modal-kicker">写给温柔的大朋友</span><h2 id="dialog-title">陪伴，是最好的启蒙</h2><p class="modal-subtitle">从数字到语言，跟着孩子自己的节奏探索</p><div class="parent-tips"><p><b>01 · 每天一点点</b>一次玩 5–10 分钟就好。低龄孩子先认数字、看看字母；拼音可以在准备好时一起慢慢学。</p><p><b>02 · 把发现带进生活</b>数桌上的苹果、找书里的字母、听一个汉字的声调。屏幕外也有很多小课堂。</p><p><b>03 · 陪孩子一起听读</b>拼音按 2024 新版人教一年级上册顺序组织，是自主制作的辅助练习。例字合成语音用于读音参考；声母要读得轻短，建议结合老师示范。英文字母学习的是字母名和常见单词。</p><p><b>04 · 鼓励每一次尝试</b>答错可以再试，没有倒计时和排名。认识的数字、完成的拼音课、字母和成就自动保存在当前浏览器中。</p></div><button class="button primary" id="parents-close">和宝贝一起出发${icon('heart',18)}</button>`, 'parent-modal');
   document.querySelector('#parents-close').onclick = closeModal;
 }
 
@@ -357,20 +353,82 @@ const balloonParty = createBalloonParty(extraGameEnvironment);
 const bearPicnic = createBearPicnic(extraGameEnvironment);
 const littleDrum = createLittleDrum(extraGameEnvironment);
 
+function courseEnvironment(subject) {
+  return {
+    ...extraGameEnvironment,
+    learned: learning[subject],
+    speakEnglish: (text, onend) => speak(text, onend, 'en-US'),
+    onLearn(id) { learning[subject].add(id); saveLearning(); updateProgress(); },
+  };
+}
+pinyinCourse = createPinyinCourse(courseEnvironment('pinyin'));
+alphabetCourse = createAlphabetCourse(courseEnvironment('alphabet'));
+pinyinCourse.bind(document.querySelector('#pinyin'));
+alphabetCourse.bind(document.querySelector('#alphabet'));
+
 const actions = {
   explore: () => showNumber(Array.from({length:10},(_,i)=>i+1).find(n=>!state.learned.has(n)) || 1),
-  song: showSong, count: () => startGame('count'), find: () => startGame('find'), trace: () => showTrace(), parents: showParents,
+  song: showSong, count: () => startGame('count'), find: () => startGame('find'), trace: () => showTrace(), parents: showParents, achievements: showAchievements,
   train: adventures.train, compare: adventures.compare, memory: memoryGarden,
   balloons: balloonParty, picnic: bearPicnic, drum: littleDrum,
 };
 document.querySelectorAll('[data-action]').forEach(el=>el.addEventListener('click',()=>actions[el.dataset.action]?.()));
 document.querySelectorAll('[data-number]').forEach(el=>el.addEventListener('click',()=>showNumber(Number(el.dataset.number))));
-document.querySelectorAll('[data-nav]').forEach(el=>el.addEventListener('click',()=>{
-  const target=el.dataset.nav;
-  if (target === 'song') { showSong(); return; }
-  if (target === 'achievements') { showAchievements(); return; }
-  document.querySelectorAll('[data-nav]').forEach(item=>item.classList.toggle('active',item===el));
-  document.querySelector(`#${target}`).scrollIntoView({behavior:'smooth',block:'start'});
-}));
-document.querySelector('#sound-toggle').onclick = () => { state.sound=!state.sound; if (!state.sound) stopActivity(); updateProgress(); toast(state.sound?'声音已开启，听听数字朋友的声音吧':'声音已关闭'); };
+const pageNames = { home: '探索首页', numbers: '数字乐园', pinyin: '拼音天地', alphabet: '字母森林', games: '游戏大厅' };
+function showView(view, focus = true) {
+  closeModal();
+  document.querySelectorAll('[data-page]').forEach(el => { el.hidden = el.dataset.page !== view; });
+  document.querySelectorAll('[data-nav]').forEach(el => {
+    const selected = el.dataset.nav === view;
+    el.classList.toggle('active', selected);
+    if (selected) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+  });
+  document.querySelector('#current-page-label').textContent = pageNames[view];
+  document.title = `${pageNames[view]} · 小芽学习乐园`;
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (focus) {
+    const heading = document.querySelector(`[data-page="${view}"] h1, [data-page="${view}"] h2`);
+    if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
+  }
+}
+function navigate(view) {
+  if (location.hash !== `#${view}`) history.pushState(null, '', `#${view}`);
+  showView(view);
+}
+document.querySelector('.skip-link').addEventListener('click', event => {
+  event.preventDefault();
+  document.querySelector('#main-content').focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: 'instant' });
+});
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  const view = link.getAttribute('href').slice(1);
+  if (!Object.hasOwn(pageNames, view)) return;
+  link.addEventListener('click', event => { event.preventDefault(); navigate(view); });
+});
+window.addEventListener('hashchange', () => showView(viewFromHash(location.hash)));
+document.querySelectorAll('[data-continue]').forEach(button => button.onclick = () => {
+  const subject = button.dataset.continue;
+  navigate(subject);
+  if (subject === 'numbers') actions.explore();
+  if (subject === 'pinyin') pinyinCourse.openLesson();
+  if (subject === 'alphabet') alphabetCourse.openLesson();
+});
+document.querySelectorAll('[data-play]').forEach(button => button.onclick = () => {
+  const [subject, type] = button.dataset.play.split(':');
+  if (subject === 'numbers') actions[type]?.();
+  if (subject === 'pinyin') pinyinCourse.startGame(type);
+  if (subject === 'alphabet') alphabetCourse.startGame(type);
+});
+document.querySelectorAll('[data-game-filter]').forEach(button => button.onclick = () => {
+  const filter = button.dataset.gameFilter;
+  document.querySelectorAll('[data-game-filter]').forEach(el => {
+    el.classList.toggle('selected', el === button);
+    el.setAttribute('aria-pressed', String(el === button));
+  });
+  document.querySelectorAll('#games [data-game-subject]').forEach(el => { el.hidden = filter !== 'all' && el.dataset.gameSubject !== filter; });
+  const count = GAME_CATALOG.filter(game => filter === 'all' || game.subject === filter).length;
+  document.querySelector('#game-filter-status').textContent = `${count} 个游戏，选一个开始吧`;
+});
+document.querySelector('#sound-toggle').onclick = () => { state.sound=!state.sound; if (!state.sound) stopActivity(); updateProgress(); toast(state.sound?'声音已开启，听听新朋友的声音吧':'声音已关闭'); };
 updateProgress();
+showView(viewFromHash(location.hash), false);
