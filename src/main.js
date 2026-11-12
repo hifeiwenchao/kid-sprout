@@ -5,6 +5,7 @@ import { createMemoryGarden } from './games/memory-garden.js';
 import { createBalloonParty } from './games/balloon-party.js';
 import { createBearPicnic } from './games/bear-picnic.js';
 import { createLittleDrum } from './games/little-drum.js';
+import { createFruitCounter } from './games/fruit-counter.js';
 import './games/new-game-cards.css';
 import { renderLearningHub } from './learning-hub.js';
 import { filterGames } from './game-catalog.js';
@@ -247,7 +248,18 @@ function showGameRound() {
   const answers = shuffle([n, ...shuffle(Array.from({length:10},(_,i)=>i+1).filter(v=>v!==n)).slice(0, isCounting ? 2 : 5)]);
   openModal(`<div class="round-indicator">${Array.from({length:5},(_,i)=>`<span class="${i < game.round - 1 ? 'done' : i === game.round - 1 ? 'current' : ''}">${i < game.round - 1 ? '✓' : i+1}</span>`).join('')}</div><span class="modal-kicker">${isCounting ? '数一数水果' : '数字捉迷藏'} · 第 ${game.round} / 5 关</span><h2 id="dialog-title">${isCounting ? '一共有几个水果呢？' : `请找到数字「${names[n-1]}」`}</h2><p class="modal-subtitle">${isCounting ? '伸出小手，一个一个慢慢数' : '仔细看一看，点一点它的小卡片'}</p>${isCounting ? `<div class="game-fruit-basket">${Array.from({length:n},(_,i)=>`<button class="basket-fruit" data-fruit-count="${i+1}" aria-label="数第 ${i+1} 个水果">${fruitIcon(fruit)}</button>`).join('')}</div>` : `<button class="listen-prompt" id="listen-prompt">${icon('sound',24)}听听要找谁</button>`}<div class="answer-grid ${isCounting ? '' : 'six-answers'}">${answers.map(value=>`<button class="answer-button color-${value-1}" data-answer="${value}" aria-label="数字 ${value}">${value}</button>`).join('')}</div><p id="game-feedback" class="game-feedback" role="status">${isCounting ? '点一点水果，也可以听见数数声哦' : '找到了就点一下，你一定可以的！'}</p><button id="next-round" class="button primary" hidden>${game.round === 5 ? '看看我的小奖励' : '继续下一关'} ${icon('arrow',18)}</button>`, 'game-modal');
   speak(isCounting ? '一共有几个水果呢？一起数一数吧' : `请找到数字${names[n-1]}`);
-  dialogContent.querySelectorAll('[data-fruit-count]').forEach(el => el.onclick = () => { el.classList.add('counted'); speak(names[Number(el.dataset.fruitCount)-1]); });
+  const countFruit = createFruitCounter();
+  dialogContent.querySelectorAll('[data-fruit-count]').forEach(el => {
+    el.setAttribute('aria-pressed', 'false');
+    el.onclick = () => {
+      if (game.locked) return;
+      const counted = countFruit(el.dataset.fruitCount);
+      el.classList.add('counted');
+      el.setAttribute('aria-pressed', 'true');
+      dialogContent.querySelector('#game-feedback').textContent = `已经数了 ${counted} 个水果，再看看有没有漏掉的。`;
+      speak(names[counted - 1]);
+    };
+  });
   dialogContent.querySelector('#listen-prompt')?.addEventListener('click', () => speak(`请找到数字${names[n-1]}`));
   dialogContent.querySelectorAll('[data-answer]').forEach(el => el.onclick = () => {
     if (game.locked) return;
