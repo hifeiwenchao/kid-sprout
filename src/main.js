@@ -21,6 +21,8 @@ import { ALPHABET_PROGRESS_IDS } from './courses/alphabet-data.js';
 import './courses/pinyin.css';
 import './courses/alphabet.css';
 import './learning-hub.css';
+import { showSupport } from './support-dialog.js';
+import './support.css';
 
 const icon = (name, size = 22) => {
   const paths = {
@@ -374,6 +376,7 @@ alphabetCourse.bind(document.querySelector('#alphabet'));
 const actions = {
   explore: () => showNumber(Array.from({length:10},(_,i)=>i+1).find(n=>!state.learned.has(n)) || 1),
   song: showSong, count: () => startGame('count'), find: () => startGame('find'), trace: () => showTrace(), parents: showParents, achievements: showAchievements,
+  support: () => showSupport({ openModal, dialogContent, icon }),
   train: adventures.train, compare: adventures.compare, memory: memoryGarden,
   balloons: balloonParty, picnic: bearPicnic, drum: littleDrum,
 };

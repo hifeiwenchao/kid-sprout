@@ -1,0 +1,28 @@
+.footer-support { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 8px 15px; border: 1px solid #dce4ce; border-radius: 24px; background: #eff3e5; color: #5a744e; font-size: 12px; }
+.footer-support:hover { background: #e5edda; border-color: #bdcca9; }
+.footer-support svg { color: currentColor; }
+.footer-support small { color: #738267; font-size: 10px; }
+.support-modal { width: min(460px, calc(100% - 32px)); padding: 30px 30px 22px; }
+.support-seed { display: grid; place-items: center; width: 50px; height: 50px; margin: 0 auto 14px; border-radius: 17px; background: #edf2e0; color: #6e8a58; }
+.support-modal .modal-kicker { color: #7a896d; font-size: 11px; }
+.support-modal h2 { margin: 7px 0 10px; font-size: 25px; }
+.support-intro { margin: 0 0 18px; color: #78836e; font-size: 12px; line-height: 1.9; }
+.support-methods { display: flex; gap: 10px; max-width: 300px; margin: 0 auto 16px; }
+.support-method { display: inline-flex; align-items: center; justify-content: center; gap: 9px; flex: 1; min-height: 44px; border: 1px solid #e2e7d9; border-radius: 12px; background: #f7f8f1; color: #6f7b65; font-size: 13px; }
+.support-method>span { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 7px; background: #e3eee0; color: #39814e; font-size: 13px; font-weight: 650; }
+.support-alipay>span { background: #e3f1fb; color: #2579b3; }
+.support-wechat[aria-pressed="true"] { border-color: #83ac85; background: #eaf4e7; color: #32683c; box-shadow: inset 0 0 0 1px #83ac85; }
+.support-alipay[aria-pressed="true"] { border-color: #85b1d0; background: #edf6fd; color: #286c9b; box-shadow: inset 0 0 0 1px #85b1d0; }
+.support-code { width: min(250px, 100%); margin: 0 auto; padding: 10px 10px 8px; border: 1px solid #e7eade; border-radius: 16px; background: #fff; }
+.support-code img { display: block; width: 100%; height: auto; }
+.support-code figcaption { margin-top: 7px; color: #6e7c62; font-size: 11px; line-height: 1.6; }
+.support-instructions { margin: 12px 0; color: #526948; font-size: 12px; line-height: 1.7; }
+.support-save { display: inline-flex; min-height: 44px; font-size: 12px; }
+.support-phone-tip { margin: 10px 0 16px; color: #7b8572; font-size: 11px; line-height: 1.8; }
+.support-note { margin: 0; padding-top: 14px; border-top: 1px solid #e7eadf; color: #79846d; font-size: 11px; line-height: 1.9; }
+@media (max-width: 580px) {
+  .footer-support { min-height: 44px; }
+  .support-modal { padding: 26px 20px 20px; }
+  .support-modal h2 { font-size: 23px; }
+  .support-seed { width: 42px; height: 42px; margin-bottom: 10px; border-radius: 14px; }
+}
