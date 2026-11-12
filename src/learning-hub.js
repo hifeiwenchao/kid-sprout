@@ -19,6 +19,7 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
       <div class="sidebar-bottom">
         <div class="growth-card"><span class="growth-drawing">${icon('leaf', 34)}<span>✧</span></span><strong>每一份小小努力<br>都在悄悄发芽</strong><div class="growth-line"><span id="side-progress"></span></div><small id="side-progress-text"></small></div>
         <button class="parent-link" data-action="parents">${icon('heart', 17)}<span>给爸爸妈妈的话</span>${icon('chevron', 15)}</button>
+        <button type="button" class="support-entry sidebar-support" data-action="support">${icon('heart', 16)}<span>支持萌芽</span><small>自愿打赏</small></button>
         <div class="sidebar-note">不着急，不比较 <span>♥</span></div>
       </div>
     </aside>
@@ -41,7 +42,7 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
       <section id="games" class="subject-view games-page" data-page="games" aria-labelledby="games-page-title" hidden><header class="hub-page-heading"><span class="hub-eyebrow">THE PLAYROOM</span><h1 id="games-page-title" tabindex="-1">把学习，变成一场游戏 <span>🎈</span></h1><p>60 个小小挑战。不计时、不比较，试一试就很棒。</p></header>${renderGameFilters()}<p id="game-filter-status" class="hub-filter-status" role="status">60 个游戏，选一个开始吧</p><div class="hub-games-grid">${GAME_CATALOG.map(game => renderGameCard(game, icon)).join('')}</div><div id="game-empty" class="game-empty" hidden><span aria-hidden="true">🌱</span><h2>小伙伴还没找到</h2><p>换个词，或试试其他练习目标吧。</p><button class="button secondary" id="game-filter-clear">显示全部游戏</button></div></section>
       <footer class="page-footer hub-footer">
         <div class="hub-footer-message">${icon('leaf', 15)}<span>不着急，不比较。每一个小发现，都很了不起。</span><button class="footer-parent" data-action="parents">家长指南 ${icon('chevron', 12)}</button></div>
-        <button type="button" class="footer-support" data-action="support">${icon('heart', 15)}支持萌芽 <small>· 自愿打赏</small></button>
+        <button type="button" class="support-entry footer-support" data-action="support">${icon('heart', 15)}支持萌芽 <small>· 自愿打赏</small></button>
         <a class="footer-filing" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2026060185号-1</a>
       </footer>
     </main>
