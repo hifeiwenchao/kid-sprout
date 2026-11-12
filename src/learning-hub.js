@@ -39,7 +39,10 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
       <section id="pinyin" class="subject-view pinyin-page" data-page="pinyin" aria-labelledby="pinyin-page-title" hidden>${pinyinPage}</section>
       <section id="alphabet" class="subject-view alphabet-page" data-page="alphabet" aria-labelledby="alphabet-page-title" hidden>${alphabetPage}</section>
       <section id="games" class="subject-view games-page" data-page="games" aria-labelledby="games-page-title" hidden><header class="hub-page-heading"><span class="hub-eyebrow">THE PLAYROOM</span><h1 id="games-page-title" tabindex="-1">把学习，变成一场游戏 <span>🎈</span></h1><p>60 个小小挑战。不计时、不比较，试一试就很棒。</p></header>${renderGameFilters()}<p id="game-filter-status" class="hub-filter-status" role="status">60 个游戏，选一个开始吧</p><div class="hub-games-grid">${GAME_CATALOG.map(game => renderGameCard(game, icon)).join('')}</div><div id="game-empty" class="game-empty" hidden><span aria-hidden="true">🌱</span><h2>小伙伴还没找到</h2><p>换个词，或试试其他练习目标吧。</p><button class="button secondary" id="game-filter-clear">显示全部游戏</button></div></section>
-      <footer class="page-footer hub-footer">${icon('leaf', 15)}<span>不着急，不比较。每一个小发现，都很了不起。</span><button class="footer-parent" data-action="parents">家长指南 ${icon('chevron', 12)}</button></footer>
+      <footer class="page-footer hub-footer">
+        <div class="hub-footer-message">${icon('leaf', 15)}<span>不着急，不比较。每一个小发现，都很了不起。</span><button class="footer-parent" data-action="parents">家长指南 ${icon('chevron', 12)}</button></div>
+        <a class="footer-filing" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2026060185号-1</a>
+      </footer>
     </main>
     <dialog id="activity-dialog" aria-labelledby="dialog-title"><button class="modal-close" aria-label="关闭">${icon('close', 22)}</button><div id="dialog-content"></div></dialog><div id="toast" role="status" aria-live="polite"></div><div id="confetti" aria-hidden="true"></div>
   `;
