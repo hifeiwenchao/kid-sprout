@@ -20,6 +20,7 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
         <div class="growth-card"><span class="growth-drawing">${icon('leaf', 34)}<span>✧</span></span><strong>每一份小小努力<br>都在悄悄发芽</strong><div class="growth-line"><span id="side-progress"></span></div><small id="side-progress-text"></small></div>
         <button class="parent-link" data-action="parents">${icon('heart', 17)}<span>给爸爸妈妈的话</span>${icon('chevron', 15)}</button>
         <button type="button" class="support-entry sidebar-support" data-action="support">${icon('heart', 16)}<span>支持萌芽</span><small>自愿打赏</small></button>
+        <a class="contact-link sidebar-contact" href="mailto:hi@feiwenchao.com">${icon('mail', 16)}<span><strong>联系我</strong><small>hi@feiwenchao.com</small></span></a>
         <div class="sidebar-note">不着急，不比较 <span>♥</span></div>
       </div>
     </aside>
@@ -43,6 +44,7 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
       <footer class="page-footer hub-footer">
         <div class="hub-footer-message">${icon('leaf', 15)}<span>不着急，不比较。每一个小发现，都很了不起。</span><button class="footer-parent" data-action="parents">家长指南 ${icon('chevron', 12)}</button></div>
         <button type="button" class="support-entry footer-support" data-action="support">${icon('heart', 15)}支持萌芽 <small>· 自愿打赏</small></button>
+        <a class="contact-link footer-contact" href="mailto:hi@feiwenchao.com">${icon('mail', 16)}<span><strong>联系我</strong><small>hi@feiwenchao.com</small></span></a>
         <a class="footer-filing" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2026060185号-1</a>
       </footer>
     </main>

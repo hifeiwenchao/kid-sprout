@@ -58,3 +58,14 @@ dialog { width: 610px; }dialog h2 { font-size: 26px; }.modal-subtitle { font-siz
 @media(max-width:580px) { .game-library-toolbar { grid-template-columns:1fr;padding:15px;gap:14px; }.subject-game-library .hub-section-heading { align-items:flex-start; }.subject-game-library .hub-text-link { font-size:10px;padding-top:5px; }.subject-game-group .hub-games-grid .hub-game-card { min-height:104px; }.subject-game-group h3 { font-size:15px; } }
 
 .hub-game-art.hub-game-art-text { font-size:18px;white-space:nowrap;letter-spacing:-.5px; }.hub-game-art.hub-game-art-small { font-size:16px;white-space:nowrap;letter-spacing:-.5px; }
+
+.contact-link { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 9px 10px; border-radius: 10px; color: #687b60; text-align: left; }
+.contact-link>svg { flex-shrink: 0; color: currentColor; }
+.contact-link>span { display: grid; gap: 3px; min-width: 0; }
+.contact-link strong { font-size: 11px; font-weight: 500; }
+.contact-link small { font-family: Arial, sans-serif; font-size: 11px; line-height: 1.5; letter-spacing: 0; }
+.contact-link:hover { background: #eff3e5; color: #456d4b; }
+.sidebar-contact { width: 100%; margin-top: 8px; }
+.footer-contact { display: none; }
+@media (min-width: 801px) and (max-height: 760px) { .hub-sidebar .growth-card { display: none; } }
+@media (max-width: 800px) { .footer-contact { display: inline-flex; } }
