@@ -27,6 +27,8 @@ import { createSpeechPlayer } from './speech.js';
 import { createDrawingBoard } from './drawing-board.js';
 import { renderDrawingBoard } from './drawing-board-view.js';
 import './drawing-board.css';
+import { NUMBER_VALUES, numberName, restoreNumberProgress, nextNumberToLearn, zeroBasketExample } from './courses/number-data.js';
+import './courses/number-zero.css';
 
 const icon = (name, size = 22) => {
   const paths = {
@@ -70,10 +72,14 @@ const motifs = [
 ];
 const fruitIcon = (index, className = '') => `<svg class="fruit ${className}" viewBox="0 0 34 36" aria-hidden="true">${motifs[index % 10]}</svg>`;
 
+function emptyBasket(hasApple = false) {
+  return `<span class="zero-basket-picture" role="img" aria-label="${hasApple ? '篮子里有 1 个苹果' : '空篮子，一个苹果也没有'}"><svg viewBox="0 0 112 87" fill="none" aria-hidden="true"><path d="M28 39C29 4 83 4 84 39" stroke="#b8a579" stroke-width="5"/><path d="m12 37 11 43h66l11-43Z" fill="#eee2bd" stroke="#c6b283" stroke-width="3"/><path d="M17 48h78M20 60h72M23 72h66M36 38l5 42M56 38v42M76 38l-5 42" stroke="#d2be91" stroke-width="2"/><path d="M12 37h88" stroke="#b8a579" stroke-width="5" stroke-linecap="round"/></svg>${hasApple ? `<svg class="zero-basket-apple" viewBox="0 0 34 36" aria-hidden="true">${motifs[0]}</svg>` : ''}</span>`;
+}
+
 const readSaved = () => { try { const value = JSON.parse(localStorage.getItem('number-garden') || '{}'); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; } catch { return {}; } };
 const saved = readSaved();
 const state = {
-  learned: new Set((Array.isArray(saved.learned) ? saved.learned : []).filter(n => Number.isInteger(n) && n >= 1 && n <= 10)),
+  learned: restoreNumberProgress(saved.learned),
   sound: saved.sound !== false,
   wins: Number(saved.wins) || 0,
   visits: Math.max(1, Number(saved.visits) || 1),
@@ -94,11 +100,11 @@ const saveLearning = () => { try { localStorage.setItem('sprout-learning', seria
 let pinyinCourse;
 let alphabetCourse;
 
-const numbersPage = `<header class="hub-page-heading"><span class="hub-eyebrow">01 / NUMBER GARDEN</span><h1 id="number-page-title" tabindex="-1">和数字，交个朋友 <span>🌱</span></h1><p>从 1 到 10，听一听、数一数、玩一玩。每一个小发现，都值得一颗星星。</p><button class="button secondary" data-action="song">${icon('music', 18)}听首数字儿歌</button></header>
+const numbersPage = `<header class="hub-page-heading"><span class="hub-eyebrow">01 / NUMBER GARDEN</span><h1 id="number-page-title" tabindex="-1">和数字，交个朋友 <span>🌱</span></h1><p>从 0 到 10，听一听、数一数、玩一玩。每一个小发现，都值得一颗星星。</p><button class="button secondary" data-action="song">${icon('music', 18)}听首数字儿歌</button></header>
     <section class="numbers-section" id="number-cards" aria-labelledby="numbers-title">
-      <div class="section-heading"><div><h2 id="numbers-title"><span class="heading-icon number-heading">123</span>认识数字 <span class="latin">1–10</span></h2><p>点一点小卡片，听听数字的声音</p></div><span class="section-aside">每一个数字，都是新朋友 <span>✧</span></span></div>
-      <div class="number-grid">${Array.from({length: 10}, (_, i) => `<button class="number-card color-${i}" data-number="${i + 1}" aria-label="认识数字 ${i + 1}，${names[i]}"><span class="card-top"><span class="chinese-number">${names[i]}</span><span class="card-speaker">${icon('sound', 16)}</span></span><span class="big-number">${i + 1}</span><span class="counting-icons">${Array.from({length: i + 1}, () => fruitIcon(i)).join('')}</span><span class="learned-indicator" aria-label="已认识">${icon('check', 11)}</span></button>`).join('')}</div>
-      <div class="learning-progress"><span class="progress-star">${icon('star', 17)}</span><span id="learning-message"></span><div class="progress-dots">${Array.from({length:10}, (_, i) => `<span data-progress="${i + 1}"></span>`).join('')}</div><span id="progress-count"></span></div>
+      <div class="section-heading"><div><h2 id="numbers-title"><span class="heading-icon number-heading">123</span>认识数字 <span class="latin">0–10</span></h2><p>点一点小卡片，听听数字的声音</p></div><span class="section-aside">每一个数字，都是新朋友 <span>✧</span></span></div>
+      <div class="number-grid">${NUMBER_VALUES.map(n => `<button class="number-card color-${Math.max(0, n - 1)}" data-number="${n}" aria-label="认识数字 ${n}，${numberName(n)}"><span class="card-top"><span class="chinese-number">${numberName(n)}</span><span class="card-speaker">${icon('sound', 16)}</span></span><span class="big-number">${n}</span><span class="counting-icons">${n === 0 ? `<span class="zero-card-basket">${emptyBasket()}<span>一个也没有</span></span>` : Array.from({length: n}, () => fruitIcon(n - 1)).join('')}</span><span class="learned-indicator" aria-label="已认识">${icon('check', 11)}</span></button>`).join('')}</div>
+      <div class="learning-progress"><span class="progress-star">${icon('star', 17)}</span><span id="learning-message"></span><div class="progress-dots">${NUMBER_VALUES.map(n => `<span data-progress="${n}"></span>`).join('')}</div><span id="progress-count"></span></div>
     </section>
     ${renderSubjectGames('numbers', icon)}
 `;
@@ -168,23 +174,23 @@ dialog.addEventListener('click', e => { if (e.target === dialog) { const bounds 
 function updateProgress() {
   const count = state.learned.size;
   const learnedTotal = count + learning.pinyin.size + learning.alphabet.size;
-  const total = 10 + PINYIN_PROGRESS_IDS.length + ALPHABET_PROGRESS_IDS.length;
+  const total = NUMBER_VALUES.length + PINYIN_PROGRESS_IDS.length + ALPHABET_PROGRESS_IDS.length;
   document.querySelector('#side-progress').style.width = `${learnedTotal / total * 100}%`;
   document.querySelector('#side-progress-text').textContent = `已收集 ${learnedTotal} / ${total} 颗学习小星星`;
-  const subjects = { numbers: [count, 10], pinyin: [learning.pinyin.size, PINYIN_PROGRESS_IDS.length], alphabet: [learning.alphabet.size, 26] };
+  const subjects = { numbers: [count, NUMBER_VALUES.length], pinyin: [learning.pinyin.size, PINYIN_PROGRESS_IDS.length], alphabet: [learning.alphabet.size, 26] };
   Object.entries(subjects).forEach(([subject, [learned, available]]) => {
     document.querySelectorAll(`[data-subject-progress="${subject}"]`).forEach(el => { el.textContent = `${learned} / ${available}`; });
   });
-  const nextNumber = Array.from({length: 10}, (_, i) => i + 1).find(n => !state.learned.has(n));
+  const nextNumber = nextNumberToLearn(state.learned);
   const nextPinyin = PINYIN_PROGRESS_IDS.find(id => !learning.pinyin.has(id));
   const nextLetter = ALPHABET_PROGRESS_IDS.find(id => !learning.alphabet.has(id));
-  document.querySelector('[data-continue-label="numbers"]').textContent = nextNumber ? `下一位朋友：数字 ${nextNumber}` : '10 个数字都认识啦，再复习一下吧';
+  document.querySelector('[data-continue-label="numbers"]').textContent = nextNumber !== undefined ? `下一位朋友：数字 ${nextNumber}` : '11 个数字都认识啦，再复习一下吧';
   document.querySelector('[data-continue-label="pinyin"]').textContent = nextPinyin ? `继续学习第 ${PINYIN_PROGRESS_IDS.indexOf(nextPinyin) + 1} 课` : '14 课都完成啦，再复习一下吧';
   document.querySelector('[data-continue-label="alphabet"]').textContent = nextLetter ? `下一位朋友：字母 ${nextLetter}` : 'A–Z 都认识啦，再复习一下吧';
   pinyinCourse?.refreshProgress();
   alphabetCourse?.refreshProgress();
-  document.querySelector('#progress-count').textContent = `${count} / 10`;
-  document.querySelector('#learning-message').textContent = count === 10 ? '真棒！10 个数字朋友都认识你啦！' : count ? `真棒！你已经认识 ${count} 个数字朋友啦` : '收集你的数字小星星，开始第一步吧！';
+  document.querySelector('#progress-count').textContent = `${count} / ${NUMBER_VALUES.length}`;
+  document.querySelector('#learning-message').textContent = count === NUMBER_VALUES.length ? '真棒！11 个数字朋友都认识你啦！' : count ? `真棒！你已经认识 ${count} 个数字朋友啦` : '收集你的数字小星星，开始第一步吧！';
   document.querySelectorAll('[data-progress]').forEach(el => el.classList.toggle('filled', state.learned.has(Number(el.dataset.progress))));
   document.querySelectorAll('[data-number]').forEach(el => el.classList.toggle('learned', state.learned.has(Number(el.dataset.number))));
   const soundButton = document.querySelector('#sound-toggle');
@@ -202,20 +208,48 @@ function celebrate() {
   setTimeout(() => { container.innerHTML = ''; }, 2000);
 }
 
+function showZero() {
+  const wasNew = !state.learned.has(0);
+  state.learned.add(0);
+  updateProgress();
+  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字零！</h2><div class="number-friend color-0"><span>0</span><i>● ●</i><b>⌣</b></div><p class="modal-subtitle">一个也没有，可以用 0 表示。</p><div class="zero-basket-scene"><div id="zero-basket-picture">${emptyBasket()}</div><strong id="zero-basket-count">0 个苹果</strong><p id="zero-basket-explanation" role="status">${zeroBasketExample(false).explanation}</p><button type="button" id="zero-basket-toggle" class="button secondary">${zeroBasketExample(false).action}</button></div><div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="repeat">${icon('sound', 17)}再听一遍</button><button type="button" class="button secondary" id="zero-trace">${icon('pencil', 17)}描一描 0</button><button type="button" class="button primary" id="zero-practice">找一找空书架${icon('arrow', 17)}</button></div><div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="next">认识数字 1${icon('arrow', 17)}</button></div><p class="modal-footnote">数字排排队：0 在 1 的前面。试试放入苹果，再把它拿走。</p>`, 'number-modal zero-modal');
+  let hasApple = false;
+  const toggle = dialogContent.querySelector('#zero-basket-toggle');
+  toggle.onclick = () => {
+    hasApple = !hasApple;
+    const example = zeroBasketExample(hasApple);
+    dialogContent.querySelector('#zero-basket-picture').innerHTML = emptyBasket(hasApple);
+    dialogContent.querySelector('#zero-basket-count').textContent = `${example.count} 个苹果`;
+    dialogContent.querySelector('#zero-basket-explanation').textContent = example.explanation;
+    toggle.textContent = example.action;
+    speak(example.speech);
+  };
+  dialogContent.querySelector('[data-modal-action="repeat"]').onclick = () => speak('零，一个也没有，用零表示。数字零在数字一的前面。');
+  dialogContent.querySelector('[data-modal-action="next"]').onclick = () => showNumber(1);
+  dialogContent.querySelector('#zero-trace').onclick = () => showTrace(0);
+  dialogContent.querySelector('#zero-practice').onclick = () => {
+    const activity = NUMBER_EXTRA_GAMES.find(item => item.type === 'zero-shelves');
+    playActivity(extraGameEnvironment, activity, buildNumberExtraRounds);
+  };
+  speak('零，一个也没有，用零表示。篮子里一个苹果也没有，就是零个苹果。');
+  if (wasNew && state.learned.size === NUMBER_VALUES.length) celebrate();
+}
+
 function showNumber(n) {
+  if (n === 0) { showZero(); return; }
   const wasNew = !state.learned.has(n);
   state.learned.add(n); updateProgress();
   openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字${names[n - 1]}！</h2><div class="number-friend color-${n - 1}"><span>${n}</span><i>● ●</i><b>⌣</b></div><p class="modal-subtitle">${names[n - 1]}${units[n - 1]}${fruits[n - 1]}，一起数一数</p><div class="modal-fruits">${Array.from({length:n}, (_, i) => `<button class="count-fruit" data-count="${i + 1}" aria-label="第 ${i + 1} ${units[n - 1]}${fruits[n - 1]}">${fruitIcon(n - 1)}<small>${i + 1}</small></button>`).join('')}</div><div class="modal-actions"><button class="button secondary" data-modal-action="repeat">${icon('sound',18)}再听一遍</button><button class="button primary" data-modal-action="next">${n === 10 ? '和数字一起玩' : '下一个朋友'}${icon('arrow',18)}</button></div><p class="modal-footnote">试着点一点每${units[n - 1]}${fruits[n - 1]}吧</p>`, 'number-modal');
   speak(`${names[n - 1]}，数字${names[n - 1]}。${names[n - 1]}${units[n - 1]}${fruits[n - 1]}`);
-  if (wasNew && state.learned.size === 10) celebrate();
+  if (wasNew && state.learned.size === NUMBER_VALUES.length) celebrate();
   dialogContent.querySelectorAll('[data-count]').forEach(button => button.addEventListener('click', () => { button.classList.add('counted'); speak(names[Number(button.dataset.count) - 1]); }));
   dialogContent.querySelector('[data-modal-action="repeat"]').onclick = () => speak(`数字${names[n - 1]}，${names[n - 1]}${units[n - 1]}${fruits[n - 1]}`);
   dialogContent.querySelector('[data-modal-action="next"]').onclick = () => n < 10 ? showNumber(n + 1) : startGame('count');
 }
 
-const rhyme = ['一像铅笔细又长', '二像小鸭水上漂', '三像耳朵听声音', '四像小旗迎风飘', '五像秤钩来买菜', '六像口哨嘟嘟响', '七像镰刀割青草', '八像葫芦扭扭腰', '九像气球天上飞', '一零手拉手就是十'];
+const rhyme = ['零像鸡蛋圆溜溜，一个也没有就是零', '一像铅笔细又长', '二像小鸭水上漂', '三像耳朵听声音', '四像小旗迎风飘', '五像秤钩来买菜', '六像口哨嘟嘟响', '七像镰刀割青草', '八像葫芦扭扭腰', '九像气球天上飞', '一零手拉手就是十'];
 function showSong() {
-  openModal(`<span class="modal-symbol song-symbol">${icon('music',32)}</span><span class="modal-kicker">唱唱念念，记住数字</span><h2 id="dialog-title">数字朋友歌</h2><p class="modal-subtitle">拍一拍小手，跟着节奏一起念</p><div class="song-lyrics">${rhyme.map((line,i) => `<div data-lyric="${i}"><span class="lyric-number color-${i}">${i + 1}</span>${line}</div>`).join('')}</div><button class="button primary" id="song-play">${icon('play',18)}播放数字儿歌</button>`, 'song-modal');
+  openModal(`<span class="modal-symbol song-symbol">${icon('music',32)}</span><span class="modal-kicker">唱唱念念，记住数字</span><h2 id="dialog-title">数字朋友歌</h2><p class="modal-subtitle">拍一拍小手，跟着节奏一起念</p><div class="song-lyrics">${rhyme.map((line,i) => `<div data-lyric="${i}"><span class="lyric-number color-${Math.max(0, i - 1)}">${i}</span>${line}</div>`).join('')}</div><button class="button primary" id="song-play">${icon('play',18)}播放数字儿歌</button>`, 'song-modal');
   const play = document.querySelector('#song-play');
   let songLine = 0;
   function playLine(i) {
@@ -238,15 +272,15 @@ function startGame(type) {
   showGameRound();
 }
 function showGameRound() {
-  const targets = Array.from({length:10},(_,i)=>i+1).filter(n => !game.used.includes(n));
+  const targets = NUMBER_VALUES.filter(n => !game.used.includes(n));
   game.target = targets[Math.floor(Math.random()*targets.length)];
   game.used.push(game.target); game.locked = false;
   const n = game.target;
   const isCounting = game.type === 'count';
   const fruit = Math.floor(Math.random()*3);
-  const answers = shuffle([n, ...shuffle(Array.from({length:10},(_,i)=>i+1).filter(v=>v!==n)).slice(0, isCounting ? 2 : 5)]);
-  openModal(`<div class="round-indicator">${Array.from({length:5},(_,i)=>`<span class="${i < game.round - 1 ? 'done' : i === game.round - 1 ? 'current' : ''}">${i < game.round - 1 ? '✓' : i+1}</span>`).join('')}</div><span class="modal-kicker">${isCounting ? '数一数水果' : '数字捉迷藏'} · 第 ${game.round} / 5 关</span><h2 id="dialog-title">${isCounting ? '一共有几个水果呢？' : `请找到数字「${names[n-1]}」`}</h2><p class="modal-subtitle">${isCounting ? '伸出小手，一个一个慢慢数' : '仔细看一看，点一点它的小卡片'}</p>${isCounting ? `<div class="game-fruit-basket">${Array.from({length:n},(_,i)=>`<button class="basket-fruit" data-fruit-count="${i+1}" aria-label="数第 ${i+1} 个水果">${fruitIcon(fruit)}</button>`).join('')}</div>` : `<button class="listen-prompt" id="listen-prompt">${icon('sound',24)}听听要找谁</button>`}<div class="answer-grid ${isCounting ? '' : 'six-answers'}">${answers.map(value=>`<button class="answer-button color-${value-1}" data-answer="${value}" aria-label="数字 ${value}">${value}</button>`).join('')}</div><p id="game-feedback" class="game-feedback" role="status">${isCounting ? '点一点水果，也可以听见数数声哦' : '找到了就点一下，你一定可以的！'}</p><button id="next-round" class="button primary" hidden>${game.round === 5 ? '看看我的小奖励' : '继续下一关'} ${icon('arrow',18)}</button>`, 'game-modal');
-  speak(isCounting ? '一共有几个水果呢？一起数一数吧' : `请找到数字${names[n-1]}`);
+  const answers = shuffle([n, ...shuffle(NUMBER_VALUES.filter(v=>v!==n)).slice(0, isCounting ? 2 : 5)]);
+  openModal(`<div class="round-indicator">${Array.from({length:5},(_,i)=>`<span class="${i < game.round - 1 ? 'done' : i === game.round - 1 ? 'current' : ''}">${i < game.round - 1 ? '✓' : i+1}</span>`).join('')}</div><span class="modal-kicker">${isCounting ? '数一数水果' : '数字捉迷藏'} · 第 ${game.round} / 5 关</span><h2 id="dialog-title">${isCounting ? '一共有几个水果呢？' : `请找到数字「${numberName(n)}」`}</h2><p class="modal-subtitle">${isCounting ? n === 0 ? '篮子空空的，一个水果也没有，可以用 0 表示' : '伸出小手，一个一个慢慢数' : '仔细看一看，点一点它的小卡片'}</p>${isCounting ? `<div class="game-fruit-basket">${n === 0 ? `<div class="zero-game-empty">${emptyBasket()}<span>一个水果也没有</span></div>` : Array.from({length:n},(_,i)=>`<button class="basket-fruit" data-fruit-count="${i+1}" aria-label="数第 ${i+1} 个水果">${fruitIcon(fruit)}</button>`).join('')}</div>` : `<button class="listen-prompt" id="listen-prompt">${icon('sound',24)}听听要找谁</button>`}<div class="answer-grid ${isCounting ? '' : 'six-answers'}">${answers.map(value=>`<button class="answer-button color-${Math.max(0, value-1)}" data-answer="${value}" aria-label="数字 ${value}">${value}</button>`).join('')}</div><p id="game-feedback" class="game-feedback" role="status">${isCounting ? n === 0 ? '没有水果，用哪个数字表示呢？' : '点一点水果，也可以听见数数声哦' : '找到了就点一下，你一定可以的！'}</p><button id="next-round" class="button primary" hidden>${game.round === 5 ? '看看我的小奖励' : '继续下一关'} ${icon('arrow',18)}</button>`, 'game-modal');
+  speak(isCounting ? n === 0 ? '篮子里一个水果也没有。一共有几个水果呢？' : '一共有几个水果呢？一起数一数吧' : `请找到数字${numberName(n)}`);
   const countFruit = createFruitCounter();
   dialogContent.querySelectorAll('[data-fruit-count]').forEach(el => {
     el.setAttribute('aria-pressed', 'false');
@@ -259,7 +293,7 @@ function showGameRound() {
       speak(names[counted - 1]);
     };
   });
-  dialogContent.querySelector('#listen-prompt')?.addEventListener('click', () => speak(`请找到数字${names[n-1]}`));
+  dialogContent.querySelector('#listen-prompt')?.addEventListener('click', () => speak(`请找到数字${numberName(n)}`));
   dialogContent.querySelectorAll('[data-answer]').forEach(el => el.onclick = () => {
     if (game.locked) return;
     const feedback = document.querySelector('#game-feedback');
@@ -272,7 +306,7 @@ function showGameRound() {
     state.learned.add(n); updateProgress();
     feedback.textContent = ['太棒啦，你找对了！', '小小脑袋，真聪明！', '答对啦，送你一颗小星星！'][Math.floor(Math.random()*3)];
     feedback.classList.add('success');
-    chime(true); speak(`答对啦，是${names[n-1]}！`); celebrate();
+    chime(true); speak(`答对啦，是${numberName(n)}！`); celebrate();
     document.querySelector('#next-round').hidden = false;
   });
   document.querySelector('#next-round').onclick = () => { if (game.round === 5) finishGame(); else { game.round++; showGameRound(); } };
@@ -296,8 +330,8 @@ function completeExtraGame({ title, message, replay }) {
   dialogContent.querySelector('#extra-play-again').onclick = replay;
 }
 
-function showTrace(n = 1) {
-  openModal(`<span class="modal-kicker">小手描数字</span><h2 id="dialog-title">一起画出数字${names[n-1]}吧</h2><p class="modal-subtitle">用小手指或鼠标，沿着数字描一描</p><div class="trace-wrap"><span class="trace-guide">${n}</span><canvas id="trace-canvas" aria-label="数字 ${n} 的自由描画区域"></canvas></div><div class="trace-number-picker">${names.map((_,i)=>`<button class="${i+1 === n ? 'selected' : ''}" data-trace="${i+1}" aria-label="描数字 ${i+1}">${i+1}</button>`).join('')}</div><div class="modal-actions"><button id="clear-trace" class="button secondary">重新画一画</button><button id="finish-trace" class="button primary">我画好啦${icon('check',18)}</button></div><p class="modal-footnote">大胆试一试，每一条线都是进步</p>`, 'trace-modal');
+function showTrace(n = 0) {
+  openModal(`<span class="modal-kicker">小手描数字</span><h2 id="dialog-title">一起画出数字${numberName(n)}吧</h2><p class="modal-subtitle">用小手指或鼠标，沿着数字描一描</p><div class="trace-wrap"><span class="trace-guide">${n}</span><canvas id="trace-canvas" aria-label="数字 ${n} 的自由描画区域"></canvas></div><div class="trace-number-picker">${NUMBER_VALUES.map(value=>`<button class="${value === n ? 'selected' : ''}" data-trace="${value}" aria-label="描数字 ${value}">${value}</button>`).join('')}</div><div class="modal-actions"><button id="clear-trace" class="button secondary">重新画一画</button><button id="finish-trace" class="button primary">我画好啦${icon('check',18)}</button></div><p class="modal-footnote">大胆试一试，每一条线都是进步</p>`, 'trace-modal');
   const canvas = document.querySelector('#trace-canvas');
   const ratio = window.devicePixelRatio || 1;
   const canvasWidth = canvas.clientWidth;
@@ -315,11 +349,11 @@ function showTrace(n = 1) {
   document.querySelector('#finish-trace').onclick = () => {
     if (!painted) { toast('先在数字上描一描，再点「我画好啦」哦'); return; }
     state.learned.add(n); updateProgress(); celebrate(); chime(true);
-    speak(`画得真棒！这是数字${names[n-1]}`);
-    toast(`数字${names[n-1]}收集成功，你真棒！`);
+    speak(`画得真棒！这是数字${numberName(n)}`);
+    toast(`数字${numberName(n)}收集成功，你真棒！`);
     const button=document.querySelector('#finish-trace');
     button.innerHTML=`下一个数字${icon('arrow',18)}`;
-    button.onclick=()=>showTrace(n === 10 ? 1 : n+1);
+    button.onclick=()=>showTrace(n === 10 ? 0 : n+1);
   };
 }
 
@@ -327,7 +361,7 @@ function showAchievements() {
   const achievements = [
     { title:'第一位朋友', description:'认识第 1 个数字', earned:state.learned.size > 0, symbol:'🌱' },
     { title:'数字好伙伴', description:'认识 5 个数字', earned:state.learned.size >= 5, symbol:'🌼' },
-    { title:'闪亮小星星', description:'认识全部 10 个数字', earned:state.learned.size === 10, symbol:'🌟' },
+    { title:'闪亮小星星', description:'认识全部 11 个数字', earned:state.learned.size === NUMBER_VALUES.length, symbol:'🌟' },
     { title:'游戏小能手', description:'完整通关任意小游戏', earned:state.wins > 0, symbol:'🏆' },
     { title:'拼音小萌芽', description:'完成任意一课拼音学习', earned:learning.pinyin.size > 0, symbol:'🌷' },
     { title:'拼音好伙伴', description:'完成全部 14 课拼音', earned:learning.pinyin.size === PINYIN_PROGRESS_IDS.length, symbol:'🦋' },
@@ -372,7 +406,7 @@ alphabetCourse.bind(document.querySelector('#alphabet'));
 const drawingBoard = createDrawingBoard(document.querySelector('#drawing'), { toast });
 
 const actions = {
-  explore: () => showNumber(Array.from({length:10},(_,i)=>i+1).find(n=>!state.learned.has(n)) || 1),
+  explore: () => showNumber(nextNumberToLearn(state.learned) ?? 0),
   song: showSong, count: () => startGame('count'), find: () => startGame('find'), trace: () => showTrace(), parents: showParents, achievements: showAchievements,
   support: () => showSupport({ openModal, dialogContent, icon }),
   train: adventures.train, compare: adventures.compare, memory: memoryGarden,

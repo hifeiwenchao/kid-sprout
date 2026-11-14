@@ -52,9 +52,28 @@ export function renderDrawingBoard({ icon } = {}) {
         <div class="drawing-toolbox-note">${icon ? icon('heart', 14) : drawingIcon('spark', 14)}<span>每一笔，都是独一无二的你。</span></div>
       </aside>
       <div class="drawing-paper-area">
+        <section class="drawing-tracing-panel" aria-label="选择临摹底稿">
+          <div class="drawing-tracing-groups" role="group" aria-label="临摹类型">
+            <button type="button" data-tracing-group="free" aria-pressed="true">自由画画</button>
+            <button type="button" data-tracing-group="numbers" aria-pressed="false">数字 0–10</button>
+            <button type="button" data-tracing-group="alphabet" aria-pressed="false">字母 Aa–Zz</button>
+          </div>
+          <div id="drawing-tracing-controls" class="drawing-tracing-controls" hidden>
+            <div class="drawing-tracing-stepper" role="group" aria-label="切换临摹字符">
+              <button type="button" id="drawing-tracing-previous" aria-label="上一个临摹字符" title="上一个">‹</button>
+              <span class="drawing-tracing-selection"><span>正在临摹</span><strong id="drawing-tracing-current">0</strong></span>
+              <button type="button" id="drawing-tracing-next" aria-label="下一个临摹字符" title="下一个">›</button>
+            </div>
+            <details class="drawing-tracing-chooser" id="drawing-tracing-chooser">
+              <summary>选择字符 <span aria-hidden="true">⌄</span></summary>
+              <div id="drawing-tracing-picker" class="drawing-tracing-picker" role="group" aria-label="选择要临摹的字符"></div>
+            </details>
+            <p id="drawing-tracing-hint">沿着虚线描一描；切换字符会自动清空笔迹。</p>
+          </div>
+        </section>
         <div class="drawing-paper-toolbar"><span class="drawing-paper-label"><i aria-hidden="true"></i>我的画纸</span><div class="drawing-paper-actions"><button type="button" id="drawing-undo" aria-label="撤销上一笔" title="撤销上一笔（Ctrl / ⌘ Z）" disabled>${drawingIcon('undo', 18)}<span>撤销</span></button><button type="button" id="drawing-redo" aria-label="重做上一笔" title="重做上一笔（Ctrl / ⌘ Shift Z）" disabled>${drawingIcon('redo', 18)}<span>重做</span></button><span class="drawing-toolbar-divider" aria-hidden="true"></span><button type="button" id="drawing-grid" aria-pressed="false" aria-label="显示网格" title="显示或隐藏网格">${drawingIcon('grid', 18)}<span>网格</span></button><button type="button" id="drawing-clear" aria-label="清空画纸" title="清空画纸">${drawingIcon('clear', 18)}<span>清空</span></button></div></div>
         <div class="drawing-clear-confirm" id="drawing-clear-confirm" role="group" aria-label="确认清空画纸" hidden><div><strong>换一张空白画纸？</strong><span>清空后可以撤销，找回刚才的画。</span></div><div><button type="button" id="drawing-clear-cancel">再画一会</button><button type="button" id="drawing-clear-accept">清空画纸</button></div></div>
-        <div class="drawing-paper-mat"><div class="drawing-paper-tape drawing-tape-left" aria-hidden="true"></div><div class="drawing-paper-tape drawing-tape-right" aria-hidden="true"></div><div id="drawing-stage" class="drawing-stage"><canvas id="drawing-canvas" width="1200" height="900" tabindex="0" aria-label="自由涂画区域">浏览器暂不支持画板，请换一个支持 Canvas 的浏览器。</canvas><div id="drawing-empty" class="drawing-empty" aria-hidden="true"><svg width="77" height="67" viewBox="0 0 77 67" fill="none"><path d="M8 47c-8-11 8-29 19-18s-10 28 0 32c11 4 37-29 40-18" stroke="#dce5d5" stroke-width="4" stroke-linecap="round"/><path d="m39 15 8-8 10 10-8 8-10-10Z" fill="#e9c785"/><path d="m38 16-7 18 18-8-11-10Z" fill="#f4e7c8"/><path d="m31 34 3-8 5 5-8 3Z" fill="#a3b495"/><path d="m64 4 1 4 4 1-4 1-1 4-1-4-4-1 4-1 1-4Z" fill="#d3bc8f"/></svg><strong>这里，装得下所有奇思妙想</strong><span>点一点，画一画，开始你的创作吧</span></div></div></div>
+        <div class="drawing-paper-mat"><div class="drawing-paper-tape drawing-tape-left" aria-hidden="true"></div><div class="drawing-paper-tape drawing-tape-right" aria-hidden="true"></div><div id="drawing-stage" class="drawing-stage"><canvas id="drawing-tracing-guide" width="1200" height="900" aria-hidden="true"></canvas><canvas id="drawing-canvas" width="1200" height="900" tabindex="0" aria-label="自由涂画区域">浏览器暂不支持画板，请换一个支持 Canvas 的浏览器。</canvas><div id="drawing-empty" class="drawing-empty" aria-hidden="true"><svg width="77" height="67" viewBox="0 0 77 67" fill="none"><path d="M8 47c-8-11 8-29 19-18s-10 28 0 32c11 4 37-29 40-18" stroke="#dce5d5" stroke-width="4" stroke-linecap="round"/><path d="m39 15 8-8 10 10-8 8-10-10Z" fill="#e9c785"/><path d="m38 16-7 18 18-8-11-10Z" fill="#f4e7c8"/><path d="m31 34 3-8 5 5-8 3Z" fill="#a3b495"/><path d="m64 4 1 4 4 1-4 1-1 4-1-4-4-1 4-1 1-4Z" fill="#d3bc8f"/></svg><strong>这里，装得下所有奇思妙想</strong><span>点一点，画一画，开始你的创作吧</span></div></div></div>
         <div class="drawing-paper-footer"><p id="drawing-status" role="status">选一支喜欢的颜色，画下第一个小灵感吧</p><span class="drawing-paper-doodle" aria-hidden="true">✷ <i>made with imagination</i></span></div>
       </div>
     </div>`;

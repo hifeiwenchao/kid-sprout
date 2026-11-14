@@ -1,0 +1,17 @@
+.zero-card-basket { display: inline-flex; align-items: center; gap: 5px; color: #9c937c; font-size: 10px; }
+.zero-basket-picture { display: inline-block; position: relative; width: 112px; height: 87px; }
+.zero-basket-picture>svg:first-child { display: block; width: 100%; height: 100%; }
+.zero-card-basket .zero-basket-picture { width: 43px; height: 33px; }
+.zero-basket-apple { position: absolute; left: 40px; top: 29px; width: 34px; height: 36px; }
+.zero-basket-scene { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; margin: 14px 0; border: 1px solid #e6e9db; border-radius: 17px; background: #f7f9f1; }
+.zero-basket-scene strong { color: #6c855a; font-size: 17px; }
+.zero-basket-scene p { min-height: 42px; margin: 0; color: #89947c; font-size: 12px; line-height: 1.8; }
+.zero-lesson-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
+.zero-lesson-actions .button { min-height: 42px; }
+.zero-game-empty { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; width: 100%; color: #8e977e; font-size: 13px; }
+.trace-number-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); }
+.trace-number-picker>button { min-width: 40px; max-width: none; height: 40px; }
+@media (max-width: 580px) {
+  .zero-lesson-actions .button { padding: 10px 12px; font-size: 11px; }
+  .zero-basket-scene { padding: 12px; margin: 9px 0; }
+}

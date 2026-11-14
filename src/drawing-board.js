@@ -1,4 +1,5 @@
 import { createDrawingHistory } from './drawing-history.js';
+import { TRACING_GROUPS, getTracingTemplate, drawTracingGuide } from './drawing-tracing.js';
 
 const WIDTH = 1200;
 const HEIGHT = 900;
@@ -44,6 +45,13 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
   const redoButton = root.querySelector('#drawing-redo');
   const preview = root.querySelector('#drawing-brush-preview');
   const fullscreenButton = root.querySelector('#drawing-fullscreen');
+  const tracingCanvas = root.querySelector('#drawing-tracing-guide');
+  const tracingContext = tracingCanvas.getContext('2d');
+  const tracingControls = root.querySelector('#drawing-tracing-controls');
+  const tracingPicker = root.querySelector('#drawing-tracing-picker');
+  const tracingChooser = root.querySelector('#drawing-tracing-chooser');
+  const tracingPrevious = root.querySelector('#drawing-tracing-previous');
+  const tracingNext = root.querySelector('#drawing-tracing-next');
   const history = createDrawingHistory();
   const paper = document.createElement('canvas');
   paper.width = canvas.width = WIDTH;
@@ -57,6 +65,9 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
   let fullscreen = false;
   let nativeFullscreen = false;
   let scrollBeforeFullscreen = 0;
+  let tracingGroup = 'free';
+  let tracingTemplate = null;
+  const tracingCharacters = Object.fromEntries(TRACING_GROUPS.map(group => [group.id, group.characters[0]]));
   const firstColor = root.querySelector('[data-drawing-color]');
   let color = firstColor.dataset.drawingColor;
   let colorName = firstColor.getAttribute('aria-label');
@@ -82,8 +93,61 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
     render();
     undoButton.disabled = !history.canUndo;
     redoButton.disabled = !history.canRedo;
-    root.querySelector('#drawing-empty').hidden = history.strokes.length > 0;
+    root.querySelector('#drawing-empty').hidden = Boolean(tracingTemplate) || history.strokes.length > 0;
   }
+
+  function selectTracing(groupId, character = tracingCharacters[groupId]) {
+    const group = TRACING_GROUPS.find(item => item.id === groupId);
+    const template = group ? getTracingTemplate(groupId, character) : null;
+    if (groupId !== 'free' && !template) return;
+    const changed = tracingTemplate !== template;
+    finishStroke();
+    clearConfirm.hidden = true;
+    tracingChooser.open = false;
+    if (changed) history.clear();
+    tracingGroup = groupId;
+    tracingTemplate = template;
+    if (group) tracingCharacters[groupId] = character;
+    root.querySelectorAll('[data-tracing-group]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.tracingGroup === groupId));
+    });
+    tracingControls.hidden = !template;
+    canvas.setAttribute('aria-label', template ? `${template.label}临摹区域` : '自由涂画区域');
+    if (template) {
+      const index = group.characters.indexOf(character);
+      root.querySelector('#drawing-tracing-current').textContent = character;
+      tracingPrevious.disabled = index === 0;
+      tracingNext.disabled = index === group.characters.length - 1;
+      tracingPrevious.setAttribute('aria-label', index > 0 ? `临摹上一个：${group.characters[index - 1]}` : '已经是第一个');
+      tracingNext.setAttribute('aria-label', index < group.characters.length - 1 ? `临摹下一个：${group.characters[index + 1]}` : '已经是最后一个');
+      tracingPicker.innerHTML = group.characters.map(item => `<button type="button" data-tracing-character="${item}" aria-label="临摹${group.label}中的 ${item}" aria-pressed="${item === character}">${item}</button>`).join('');
+    }
+    drawTracingGuide(tracingContext, template, WIDTH, HEIGHT);
+    refreshArtwork();
+    status.textContent = template ? `一起描一描${template.label}吧！切换字符会自动清空笔迹，点“撤销”可以找回。` : '回到自由画画啦，点“撤销”可以找回刚才的笔迹。';
+  }
+
+  root.querySelectorAll('[data-tracing-group]').forEach(button => {
+    button.onclick = () => selectTracing(button.dataset.tracingGroup);
+  });
+  tracingPicker.addEventListener('click', event => {
+    const button = event.target.closest('[data-tracing-character]');
+    if (!button) return;
+    selectTracing(tracingGroup, button.dataset.tracingCharacter);
+    tracingChooser.querySelector('summary').focus({ preventScroll: true });
+  });
+  function moveTracing(direction) {
+    const group = TRACING_GROUPS.find(item => item.id === tracingGroup);
+    if (!group) return;
+    const index = group.characters.indexOf(tracingCharacters[tracingGroup]);
+    const character = group.characters[index + direction];
+    if (character !== undefined) selectTracing(tracingGroup, character);
+  }
+  tracingPrevious.onclick = () => moveTracing(-1);
+  tracingNext.onclick = () => moveTracing(1);
+  root.addEventListener('pointerdown', event => {
+    if (!tracingChooser.contains(event.target)) tracingChooser.open = false;
+  });
 
   function refreshBrush() {
     root.querySelectorAll('[data-drawing-tool]').forEach(button => {
@@ -299,6 +363,15 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
     const imageContext = image.getContext('2d');
     imageContext.fillStyle = '#ffffff';
     imageContext.fillRect(0, 0, WIDTH, HEIGHT);
+    // Keep the tracing character in the saved practice, without guide lines.
+    // The guide stays separate from the ink so erasing never removes it.
+    if (tracingTemplate) {
+      const guide = document.createElement('canvas');
+      guide.width = WIDTH;
+      guide.height = HEIGHT;
+      drawTracingGuide(guide.getContext('2d'), tracingTemplate, WIDTH, HEIGHT, { guides: false });
+      imageContext.drawImage(guide, 0, 0);
+    }
     imageContext.drawImage(paper, 0, 0);
     image.toBlob(blob => {
       if (!blob) { toast('图片暂时没有保存成功，请再试一次'); return; }
@@ -319,6 +392,12 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
 
   root.addEventListener('keydown', event => {
     if (!active) return;
+    if (event.key === 'Escape' && tracingChooser.open) {
+      event.preventDefault();
+      tracingChooser.open = false;
+      tracingChooser.querySelector('summary').focus({ preventScroll: true });
+      return;
+    }
     if (event.key === 'Escape' && !clearConfirm.hidden) {
       event.preventDefault();
       clearConfirm.hidden = true;
@@ -355,6 +434,7 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
       active = false;
       void leaveFullscreen();
       clearConfirm.hidden = true;
+      tracingChooser.open = false;
     },
   };
 }

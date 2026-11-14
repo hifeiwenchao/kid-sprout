@@ -39,6 +39,28 @@
 .drawing-toolbox-note { display: flex; align-items: flex-start; justify-content: center; gap: 5px; padding-top: 15px; border-top: 1px solid #eceee3; color: #b1b69f; font-size: 8px; line-height: 1.8; white-space: nowrap; }
 .drawing-toolbox-note svg { flex-shrink: 0; margin-top: 1px; color: #c2a489; }
 .drawing-paper-area { min-width: 0; }
+.drawing-tracing-panel { position: relative; z-index: 4; min-width: 0; margin-bottom: 12px; padding: 9px; border: 1px solid #e4e8d9; border-radius: 14px; background: #fffef8; }
+.drawing-tracing-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.drawing-tracing-groups button { min-width: 0; min-height: 40px; padding: 8px 6px; border: 1px solid transparent; border-radius: 9px; background: #f6f7ef; color: #87927b; font-size: 11px; white-space: nowrap; }
+.drawing-tracing-groups button:hover { border-color: #d6dfc9; background: #f0f4e7; }
+.drawing-tracing-groups button[aria-pressed="true"] { border-color: #becfa8; background: #eaf1df; color: #52754c; font-weight: 600; }
+.drawing-tracing-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-top: 8px; padding: 7px 3px 0; border-top: 1px solid #eceee2; }
+.drawing-tracing-stepper { display: flex; align-items: center; gap: 6px; }
+.drawing-tracing-stepper button { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; padding: 0; border: 1px solid #e0e6d5; border-radius: 9px; background: #fffef9; color: #7b9168; font: 25px/1 Arial, sans-serif; }
+.drawing-tracing-stepper button:not(:disabled):hover { background: #eef3e5; border-color: #c5d3b2; }
+.drawing-tracing-stepper button:disabled { opacity: .35; }
+.drawing-tracing-selection { display: flex; align-items: center; justify-content: center; gap: 9px; min-width: 93px; color: #97a087; font-size: 10px; white-space: nowrap; }
+#drawing-tracing-current { min-width: 25px; color: #6d855a; text-align: center; font-family: 'Nunito', Arial, sans-serif; font-size: 23px; font-weight: 750; }
+.drawing-tracing-chooser { position: relative; margin-left: auto; }
+.drawing-tracing-chooser summary { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 40px; padding: 8px 12px; border: 1px solid #e3dfcc; border-radius: 9px; background: #faf6e9; color: #a18d65; font-size: 10px; list-style: none; cursor: pointer; white-space: nowrap; }
+.drawing-tracing-chooser summary::-webkit-details-marker { display: none; }
+.drawing-tracing-chooser summary:focus-visible { outline: 3px solid #daae46; outline-offset: 3px; }
+.drawing-tracing-chooser[open] summary { border-color: #d1bf94; background: #f4edd8; }
+.drawing-tracing-picker { position: absolute; z-index: 6; top: calc(100% + 7px); right: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(48px, 1fr)); gap: 6px; width: min(360px, calc(100vw - 70px)); max-height: min(270px, 45dvh); overflow-y: auto; overscroll-behavior: contain; padding: 12px; border: 1px solid #dce4ce; border-radius: 13px; background: #fffef9; box-shadow: 0 10px 30px #44553324; }
+.drawing-tracing-picker button { min-width: 48px; min-height: 40px; padding: 4px; border: 1px solid #e4e9da; border-radius: 8px; background: #f6f8ef; color: #788d66; font-family: 'Nunito', Arial, sans-serif; font-size: 20px; }
+.drawing-tracing-picker button:hover { border-color: #b6c79f; background: #edf3e3; }
+.drawing-tracing-picker button[aria-pressed="true"] { border-color: #9eb987; background: #e4eed7; color: #4e7044; box-shadow: 0 0 0 1px #b0c69a inset; }
+#drawing-tracing-hint { flex-basis: 100%; margin: 0; padding-bottom: 2px; color: #9ca48f; font-size: 10px; line-height: 1.7; }
 .drawing-paper-toolbar { display: flex; align-items: center; justify-content: space-between; min-height: 43px; gap: 10px; margin: -1px 0 11px; }
 .drawing-paper-label { display: inline-flex; align-items: center; gap: 7px; color: #859076; font-size: 11px; white-space: nowrap; }
 .drawing-paper-label>i { width: 6px; height: 6px; border-radius: 50%; background: #a3b587; }
@@ -55,6 +77,7 @@
 #drawing-stage[data-tool="eraser"] #drawing-canvas { cursor: cell; }
 .drawing-stage.drawing-is-drawing .drawing-empty { opacity: 0; }
 #drawing-canvas { display: block; position: relative; z-index: 1; width: 100%; height: 100%; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+#drawing-tracing-guide { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 #drawing-canvas:focus-visible { outline: 3px solid #a4b789; outline-offset: -3px; }
 .drawing-paper-tape { position: absolute; z-index: 3; top: 8px; width: 70px; height: 22px; background: #ddd2a975; pointer-events: none; box-shadow: 0 1px 1px #b3a77c08; }
 .drawing-tape-left { left: 33px; transform: rotate(-14deg); }
@@ -206,6 +229,9 @@ body.drawing-fullscreen-open { overflow: hidden; }
 .drawing-is-fullscreen .drawing-toolbox-title { margin-bottom: 18px; }
 .drawing-is-fullscreen .drawing-toolbox-note { display: none; }
 .drawing-is-fullscreen .drawing-paper-area { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.drawing-is-fullscreen .drawing-tracing-panel { flex-shrink: 0; margin-bottom: 7px; padding: 6px; }
+.drawing-is-fullscreen .drawing-tracing-controls { gap: 4px 10px; margin-top: 5px; padding-top: 5px; }
+.drawing-is-fullscreen #drawing-tracing-hint { display: none; }
 .drawing-is-fullscreen .drawing-paper-toolbar { flex-shrink: 0; margin: 0 0 8px; }
 .drawing-is-fullscreen .drawing-clear-confirm { flex-shrink: 0; }
 .drawing-is-fullscreen .drawing-paper-mat { container-type: size; display: flex; flex: 1; align-items: center; justify-content: center; min-height: 0; padding: 14px; overflow: hidden; }
@@ -260,4 +286,26 @@ body.drawing-fullscreen-open { overflow: hidden; }
   .drawing-is-fullscreen .drawing-color-options { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .drawing-is-fullscreen .drawing-preview { display: none; }
   .drawing-is-fullscreen .drawing-paper-mat { padding: 8px; }
+}
+
+@media (max-width: 580px) {
+  .drawing-tracing-panel { margin-bottom: 8px; padding: 6px; border-radius: 12px; }
+  .drawing-tracing-groups { gap: 3px; }
+  .drawing-tracing-groups button { padding: 8px 3px; font-size: 10px; }
+  .drawing-tracing-controls { gap: 5px 8px; padding-right: 0; padding-left: 0; }
+  .drawing-tracing-stepper { gap: 3px; }
+  .drawing-tracing-selection { min-width: 89px; gap: 6px; }
+  .drawing-tracing-chooser summary { padding: 8px 9px; gap: 6px; }
+  #drawing-tracing-hint { font-size: 9px; }
+}
+@media (max-height: 600px) and (min-width: 581px) {
+  .drawing-is-fullscreen .drawing-tracing-panel { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 9px; padding: 5px; }
+  .drawing-is-fullscreen .drawing-tracing-groups { flex: 1 1 270px; }
+  .drawing-is-fullscreen .drawing-tracing-groups button { font-size: 10px; }
+  .drawing-is-fullscreen .drawing-tracing-controls { flex: 1 1 255px; margin: 0; padding: 0; border: 0; }
+  .drawing-is-fullscreen .drawing-tracing-selection>span { display: none; }
+  .drawing-is-fullscreen .drawing-tracing-selection { min-width: 30px; }
+}
+@media (max-width: 580px), (max-height: 600px) {
+  .drawing-is-fullscreen .drawing-tracing-picker { position: fixed; top: auto; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); width: min(360px, calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))); max-height: 45dvh; }
 }
