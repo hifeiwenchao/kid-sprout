@@ -13,5 +13,5 @@ export function serializeLearningProgress(progress) {
 
 export function viewFromHash(hash) {
   const view = hash.replace(/^#/, '');
-  return ['home', 'numbers', 'pinyin', 'alphabet', 'games'].includes(view) ? view : 'home';
+  return ['home', 'numbers', 'pinyin', 'alphabet', 'drawing', 'games'].includes(view) ? view : 'home';
 }

@@ -3,7 +3,7 @@ import { renderGameCard, renderGameFilters } from './game-cards.js';
 export { GAME_CATALOG } from './game-catalog.js';
 
 
-export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alphabetPage }) {
+export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alphabetPage, drawingPage = '' }) {
   return `
     <a class="skip-link" href="#main-content">跳到学习内容</a>
     <aside class="sidebar hub-sidebar">
@@ -14,6 +14,7 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
         <a class="nav-item" href="#numbers" data-nav="numbers"><span class="nav-subject-symbol nav-number">12</span><span>数字乐园</span></a>
         <a class="nav-item" href="#pinyin" data-nav="pinyin"><span class="nav-subject-symbol nav-pinyin">ā</span><span>拼音天地</span></a>
         <a class="nav-item" href="#alphabet" data-nav="alphabet"><span class="nav-subject-symbol nav-alphabet">Aa</span><span>字母森林</span></a>
+        <a class="nav-item" href="#drawing" data-nav="drawing">${icon('pencil')}<span>小小画板</span></a>
         <a class="nav-item" href="#games" data-nav="games">${icon('game')}<span>游戏大厅</span></a>
       </nav>
       <div class="sidebar-bottom">
@@ -35,11 +36,13 @@ export function renderLearningHub({ icon, visits, numbersPage, pinyinPage, alpha
           <a class="subject-card subject-pinyin" href="#pinyin"><div class="subject-card-top"><span>02 / 中文启蒙</span><span class="subject-card-arrow">${icon('arrow', 19)}</span></div><div class="subject-art art-pinyin" aria-hidden="true"><b>ā</b><b>o</b><b>e</b><i>✧</i></div><h3>拼音天地</h3><p>声母韵母，声调拼读<br>走进汉语的小世界</p><div class="subject-card-footer"><span>14 课 · 20 个游戏</span><strong data-subject-progress="pinyin">0 / 14</strong></div></a>
           <a class="subject-card subject-alphabet" href="#alphabet"><div class="subject-card-top"><span>03 / 英语启蒙</span><span class="subject-card-arrow">${icon('arrow', 19)}</span></div><div class="subject-art art-alphabet" aria-hidden="true"><b>A</b><b>a</b><i>✧</i></div><h3>字母森林</h3><p>大写小写，听读配对<br>遇见 A–Z 新朋友</p><div class="subject-card-footer"><span>26 个字母 · 20 个游戏</span><strong data-subject-progress="alphabet">0 / 26</strong></div></a>
         </div>
+        <a class="drawing-home-entry" href="#drawing"><span class="drawing-home-art" aria-hidden="true">${icon('pencil', 30)}<i></i><i></i><i></i></span><span class="drawing-home-copy"><small>A LITTLE ROOM FOR IMAGINATION</small><strong>给小小想象，一张大大的画纸</strong><span>挑个喜欢的颜色，随心画一画。</span></span><span class="drawing-home-action">去画画 ${icon('arrow', 18)}</span></a>
         <div class="hub-lower-grid"><section class="hub-continue"><span class="hub-eyebrow">ONE LITTLE STEP</span><h2>一点点，就很了不起</h2><p>选一位朋友，留下今天的小进步。</p><button class="continue-row" data-continue="numbers"><span class="continue-icon subject-numbers">12</span><span><strong>数字好朋友</strong><small data-continue-label="numbers">从数字 1 开始</small></span>${icon('arrow', 17)}</button><button class="continue-row" data-continue="pinyin"><span class="continue-icon subject-pinyin">ā</span><span><strong>拼音第一站</strong><small data-continue-label="pinyin">从 a o e 开始</small></span>${icon('arrow', 17)}</button><button class="continue-row" data-continue="alphabet"><span class="continue-icon subject-alphabet">Aa</span><span><strong>字母的奇妙森林</strong><small data-continue-label="alphabet">从字母 A 开始</small></span>${icon('arrow', 17)}</button></section><section class="hub-featured"><div class="hub-section-heading"><div><span class="hub-eyebrow">LEARN THROUGH PLAY</span><h2>玩一会，也学一点</h2></div><a class="hub-text-link" href="#games">全部游戏 ${icon('arrow', 15)}</a></div><div class="hub-featured-list">${['numbers:count', 'pinyin:listen', 'alphabet:match'].map(key => GAME_CATALOG.find(game => `${game.subject}:${game.type}` === key)).map(game => renderGameCard(game, icon)).join('')}</div></section></div>
       </section>
       <section id="numbers" class="subject-view number-page" data-page="numbers" aria-labelledby="number-page-title" hidden>${numbersPage}</section>
       <section id="pinyin" class="subject-view pinyin-page" data-page="pinyin" aria-labelledby="pinyin-page-title" hidden>${pinyinPage}</section>
       <section id="alphabet" class="subject-view alphabet-page" data-page="alphabet" aria-labelledby="alphabet-page-title" hidden>${alphabetPage}</section>
+      <section id="drawing" class="subject-view drawing-page" data-page="drawing" aria-labelledby="drawing-page-title" hidden>${drawingPage}</section>
       <section id="games" class="subject-view games-page" data-page="games" aria-labelledby="games-page-title" hidden><header class="hub-page-heading"><span class="hub-eyebrow">THE PLAYROOM</span><h1 id="games-page-title" tabindex="-1">把学习，变成一场游戏 <span>🎈</span></h1><p>60 个小小挑战。不计时、不比较，试一试就很棒。</p></header>${renderGameFilters()}<p id="game-filter-status" class="hub-filter-status" role="status">60 个游戏，选一个开始吧</p><div class="hub-games-grid">${GAME_CATALOG.map(game => renderGameCard(game, icon)).join('')}</div><div id="game-empty" class="game-empty" hidden><span aria-hidden="true">🌱</span><h2>小伙伴还没找到</h2><p>换个词，或试试其他练习目标吧。</p><button class="button secondary" id="game-filter-clear">显示全部游戏</button></div></section>
       <footer class="page-footer hub-footer">
         <div class="hub-footer-message">${icon('leaf', 15)}<span>不着急，不比较。每一个小发现，都很了不起。</span><button class="footer-parent" data-action="parents">家长指南 ${icon('chevron', 12)}</button></div>

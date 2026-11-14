@@ -23,6 +23,10 @@ import './courses/alphabet.css';
 import './learning-hub.css';
 import { showSupport } from './support-dialog.js';
 import './support.css';
+import { createSpeechPlayer } from './speech.js';
+import { createDrawingBoard } from './drawing-board.js';
+import { renderDrawingBoard } from './drawing-board-view.js';
+import './drawing-board.css';
 
 const icon = (name, size = 22) => {
   const paths = {
@@ -98,7 +102,7 @@ const numbersPage = `<header class="hub-page-heading"><span class="hub-eyebrow">
     </section>
     ${renderSubjectGames('numbers', icon)}
 `;
-document.querySelector('#app').innerHTML = renderLearningHub({ icon, visits: state.visits, numbersPage, pinyinPage: renderPinyinPage(), alphabetPage: renderAlphabetPage() });
+document.querySelector('#app').innerHTML = renderLearningHub({ icon, visits: state.visits, numbersPage, pinyinPage: renderPinyinPage(), alphabetPage: renderAlphabetPage(), drawingPage: renderDrawingBoard({ icon }) });
 
 const dialog = document.querySelector('#activity-dialog');
 const dialogContent = document.querySelector('#dialog-content');
@@ -133,26 +137,18 @@ function chime(success = false) {
   } catch {}
 }
 
-function speak(text, onend, language = 'zh-CN') {
-  if (!state.sound) { onend?.(); return; }
-  if (!('speechSynthesis' in window)) { toast('这个浏览器暂不支持点读，可以和爸爸妈妈一起念哦'); onend?.(); return; }
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = language; utterance.rate = language === 'en-US' ? .72 : .78; utterance.pitch = 1.15;
-  const voices = window.speechSynthesis.getVoices();
-  const prefix = language.split('-')[0];
-  const voice = voices.find(v => v.lang.replace('_', '-').toLowerCase() === language.toLowerCase()) || voices.find(v => v.lang.toLowerCase().startsWith(prefix));
-  if (voice) utterance.voice = voice;
-  utterance.onend = onend;
-  utterance.onerror = event => {
-    if (!['canceled', 'interrupted'].includes(event.error)) { toast('声音暂时无法播放，试试再听一遍'); onend?.(); }
-  };
-  window.speechSynthesis.speak(utterance);
-}
+const speech = createSpeechPlayer({
+  synthesis: window.speechSynthesis,
+  Utterance: window.SpeechSynthesisUtterance,
+  isEnabled: () => state.sound,
+  onUnavailable: () => toast('这个浏览器暂不支持点读，可以和爸爸妈妈一起念哦'),
+  onError: () => toast('声音暂时无法播放，试试再听一遍'),
+});
+const speak = speech.speak;
 
 function stopActivity() {
   activeSong = false;
-  window.speechSynthesis?.cancel();
+  speech.stop();
   cleanupActivity?.(); cleanupActivity = null;
 }
 function openModal(html, className = '') {
@@ -353,7 +349,7 @@ const extraGameEnvironment = {
   setCleanup(fn) { cleanupActivity = fn; },
   isSoundEnabled: () => state.sound,
   enableSound() { if (!state.sound) { state.sound = true; updateProgress(); } },
-  stopSpeech() { window.speechSynthesis?.cancel(); },
+  stopSpeech: speech.stop,
 };
 const adventures = createNumberAdventures(extraGameEnvironment);
 const memoryGarden = createMemoryGarden(extraGameEnvironment);
@@ -373,6 +369,7 @@ pinyinCourse = createPinyinCourse(courseEnvironment('pinyin'));
 alphabetCourse = createAlphabetCourse(courseEnvironment('alphabet'));
 pinyinCourse.bind(document.querySelector('#pinyin'));
 alphabetCourse.bind(document.querySelector('#alphabet'));
+const drawingBoard = createDrawingBoard(document.querySelector('#drawing'), { toast });
 
 const actions = {
   explore: () => showNumber(Array.from({length:10},(_,i)=>i+1).find(n=>!state.learned.has(n)) || 1),
@@ -383,10 +380,12 @@ const actions = {
 };
 document.querySelectorAll('[data-action]').forEach(el=>el.addEventListener('click',()=>actions[el.dataset.action]?.()));
 document.querySelectorAll('[data-number]').forEach(el=>el.addEventListener('click',()=>showNumber(Number(el.dataset.number))));
-const pageNames = { home: '探索首页', numbers: '数字乐园', pinyin: '拼音天地', alphabet: '字母森林', games: '游戏大厅' };
+const pageNames = { home: '探索首页', numbers: '数字乐园', pinyin: '拼音天地', alphabet: '字母森林', drawing: '小小画板', games: '游戏大厅' };
 function showView(view, focus = true) {
+  drawingBoard.deactivate();
   closeModal();
   document.querySelectorAll('[data-page]').forEach(el => { el.hidden = el.dataset.page !== view; });
+  if (view === 'drawing') drawingBoard.activate();
   document.querySelectorAll('[data-nav]').forEach(el => {
     const selected = el.dataset.nav === view;
     el.classList.toggle('active', selected);

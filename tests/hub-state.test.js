@@ -27,6 +27,6 @@ test('bad individual fields do not erase another subject and saved progress roun
 });
 
 test('hash navigation resolves known subject views and safely defaults unknown paths', () => {
-  for (const view of ['home', 'numbers', 'pinyin', 'alphabet', 'games']) assert.equal(viewFromHash('#' + view), view);
+  for (const view of ['home', 'numbers', 'pinyin', 'alphabet', 'drawing', 'games']) assert.equal(viewFromHash('#' + view), view);
   for (const hash of ['', '#missing', '#%bad', '#__proto__']) assert.equal(viewFromHash(hash), 'home');
 });
