@@ -29,6 +29,11 @@ import { renderDrawingBoard } from './drawing-board-view.js';
 import './drawing-board.css';
 import { NUMBER_VALUES, numberName, restoreNumberProgress, nextNumberToLearn, zeroBasketExample } from './courses/number-data.js';
 import './courses/number-zero.css';
+import { renderLessonTracing, createLessonTracing } from './courses/lesson-tracing.js';
+import './courses/lesson-tracing.css';
+import { renderMemoryScene, createMemoryScene } from './courses/memory-scene.js';
+import './courses/memory-scene.css';
+import { getNumberMemoryScene } from './courses/number-memory.js';
 
 const icon = (name, size = 22) => {
   const paths = {
@@ -212,7 +217,10 @@ function showZero() {
   const wasNew = !state.learned.has(0);
   state.learned.add(0);
   updateProgress();
-  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字零！</h2><div class="number-friend color-0"><span>0</span><i>● ●</i><b>⌣</b></div><p class="modal-subtitle">一个也没有，可以用 0 表示。</p><div class="zero-basket-scene"><div id="zero-basket-picture">${emptyBasket()}</div><strong id="zero-basket-count">0 个苹果</strong><p id="zero-basket-explanation" role="status">${zeroBasketExample(false).explanation}</p><button type="button" id="zero-basket-toggle" class="button secondary">${zeroBasketExample(false).action}</button></div><div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="repeat">${icon('sound', 17)}再听一遍</button><button type="button" class="button secondary" id="zero-trace">${icon('pencil', 17)}描一描 0</button><button type="button" class="button primary" id="zero-practice">找一找空书架${icon('arrow', 17)}</button></div><div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="next">认识数字 1${icon('arrow', 17)}</button></div><p class="modal-footnote">数字排排队：0 在 1 的前面。试试放入苹果，再把它拿走。</p>`, 'number-modal zero-modal');
+  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字零！</h2>${renderMemoryScene(getNumberMemoryScene(0))}<p class="modal-subtitle">一个也没有，可以用 0 表示。</p><div class="zero-basket-scene"><div id="zero-basket-picture">${emptyBasket()}</div><strong id="zero-basket-count">0 个苹果</strong><p id="zero-basket-explanation" role="status">${zeroBasketExample(false).explanation}</p><button type="button" id="zero-basket-toggle" class="button secondary">${zeroBasketExample(false).action}</button></div>${renderLessonTracing({ groupId: 'numbers', character: '0' })}<div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="repeat">${icon('sound', 17)}再听一遍</button><button type="button" class="button primary" id="zero-practice">找一找空书架${icon('arrow', 17)}</button></div><div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="next">认识数字 1${icon('arrow', 17)}</button></div><p class="modal-footnote">数字排排队：0 在 1 的前面。试试放入苹果，再把它拿走。</p>`, 'number-modal zero-modal');
+  const tracing = createLessonTracing(dialogContent.querySelector('[data-lesson-tracing]'), { groupId: 'numbers', character: '0' });
+  const memory = createMemoryScene(dialogContent.querySelector('[data-memory-scene]'));
+  cleanupActivity = () => { tracing.destroy(); memory.destroy(); };
   let hasApple = false;
   const toggle = dialogContent.querySelector('#zero-basket-toggle');
   toggle.onclick = () => {
@@ -226,7 +234,6 @@ function showZero() {
   };
   dialogContent.querySelector('[data-modal-action="repeat"]').onclick = () => speak('零，一个也没有，用零表示。数字零在数字一的前面。');
   dialogContent.querySelector('[data-modal-action="next"]').onclick = () => showNumber(1);
-  dialogContent.querySelector('#zero-trace').onclick = () => showTrace(0);
   dialogContent.querySelector('#zero-practice').onclick = () => {
     const activity = NUMBER_EXTRA_GAMES.find(item => item.type === 'zero-shelves');
     playActivity(extraGameEnvironment, activity, buildNumberExtraRounds);
@@ -239,7 +246,10 @@ function showNumber(n) {
   if (n === 0) { showZero(); return; }
   const wasNew = !state.learned.has(n);
   state.learned.add(n); updateProgress();
-  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字${names[n - 1]}！</h2><div class="number-friend color-${n - 1}"><span>${n}</span><i>● ●</i><b>⌣</b></div><p class="modal-subtitle">${names[n - 1]}${units[n - 1]}${fruits[n - 1]}，一起数一数</p><div class="modal-fruits">${Array.from({length:n}, (_, i) => `<button class="count-fruit" data-count="${i + 1}" aria-label="第 ${i + 1} ${units[n - 1]}${fruits[n - 1]}">${fruitIcon(n - 1)}<small>${i + 1}</small></button>`).join('')}</div><div class="modal-actions"><button class="button secondary" data-modal-action="repeat">${icon('sound',18)}再听一遍</button><button class="button primary" data-modal-action="next">${n === 10 ? '和数字一起玩' : '下一个朋友'}${icon('arrow',18)}</button></div><p class="modal-footnote">试着点一点每${units[n - 1]}${fruits[n - 1]}吧</p>`, 'number-modal');
+  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字${names[n - 1]}！</h2>${renderMemoryScene(getNumberMemoryScene(n))}<p class="modal-subtitle">${names[n - 1]}${units[n - 1]}${fruits[n - 1]}，一起数一数</p><div class="modal-fruits">${Array.from({length:n}, (_, i) => `<button class="count-fruit" data-count="${i + 1}" aria-label="第 ${i + 1} ${units[n - 1]}${fruits[n - 1]}">${fruitIcon(n - 1)}<small>${i + 1}</small></button>`).join('')}</div>${renderLessonTracing({ groupId: 'numbers', character: String(n) })}<div class="modal-actions"><button class="button secondary" data-modal-action="repeat">${icon('sound',18)}再听一遍</button><button class="button primary" data-modal-action="next">${n === 10 ? '和数字一起玩' : '下一个朋友'}${icon('arrow',18)}</button></div><p class="modal-footnote">试着点一点每${units[n - 1]}${fruits[n - 1]}吧</p>`, 'number-modal');
+  const tracing = createLessonTracing(dialogContent.querySelector('[data-lesson-tracing]'), { groupId: 'numbers', character: String(n) });
+  const memory = createMemoryScene(dialogContent.querySelector('[data-memory-scene]'));
+  cleanupActivity = () => { tracing.destroy(); memory.destroy(); };
   speak(`${names[n - 1]}，数字${names[n - 1]}。${names[n - 1]}${units[n - 1]}${fruits[n - 1]}`);
   if (wasNew && state.learned.size === NUMBER_VALUES.length) celebrate();
   dialogContent.querySelectorAll('[data-count]').forEach(button => button.addEventListener('click', () => { button.classList.add('counted'); speak(names[Number(button.dataset.count) - 1]); }));

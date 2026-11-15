@@ -1,5 +1,7 @@
 import { renderSubjectGames } from '../game-cards.js';
 import { PINYIN_LESSONS, PINYIN_PROGRESS_IDS, PINYIN_ITEMS, PINYIN_SOURCES, PINYIN_TONES, buildPinyinRounds } from './pinyin-data.js';
+import { getPinyinMemory, getToneMemory } from './pinyin-memory.js';
+import { renderMemoryScene, createMemoryScene } from './memory-scene.js';
 export { PINYIN_PROGRESS_IDS } from './pinyin-data.js';
 
 const games = [
@@ -12,7 +14,7 @@ const toneArt = tone => `<svg viewBox="0 0 100 90" aria-hidden="true"><path d="$
 export function renderPinyinPage() {
   return `
     <div class="pinyin-hero">
-      <div class="pinyin-hero-copy"><span class="pinyin-eyebrow">字音里的小小魔法</span><h1 id="pinyin-page-title" tabindex="-1">你好呀，<br><em>拼音朋友！</em></h1><p>看看口型，跟着读一读。<br>从 a o e 出发，慢慢拼出新世界。</p><button class="button primary pinyin-start" data-pinyin-start>开始拼音探险 <span aria-hidden="true">→</span></button><span class="pinyin-hero-note">14节小课 · 2024新版人教教材顺序</span></div>
+      <div class="pinyin-hero-copy"><span class="pinyin-eyebrow">字音里的小小魔法</span><h1 id="pinyin-page-title" tabindex="-1">你好呀，<br><em>拼音朋友！</em></h1><p>看看形象小动画，跟着读一读。<br>从 a o e 出发，慢慢拼出新世界。</p><button class="button primary pinyin-start" data-pinyin-start>开始拼音探险 <span aria-hidden="true">→</span></button><span class="pinyin-hero-note">14节小课 · 2024新版人教教材顺序</span></div>
       <div class="pinyin-hero-art" aria-hidden="true"><span class="pinyin-art-spark pinyin-art-spark-one">✦</span><span class="pinyin-art-cloud">☁</span><div class="pinyin-letter-card pinyin-letter-a">ā<i></i></div><div class="pinyin-letter-card pinyin-letter-b">b<i></i></div><div class="pinyin-letter-card pinyin-letter-o">ō<i></i></div><span class="pinyin-art-caption">听一听，世界有声音</span><span class="pinyin-art-spark pinyin-art-spark-two">✧</span><span class="pinyin-art-leaf">❧</span></div>
     </div>
     <div class="pinyin-section-heading"><div><span class="pinyin-eyebrow">一课一课，认识新朋友</span><h2>我的拼音小路</h2><p>按课次慢慢学，点开卡片就能开始</p></div><span class="pinyin-progress-count" data-pinyin-progress>已学 0 / 14 课</span></div>
@@ -58,9 +60,11 @@ export function createPinyinCourse(env) {
     const lesson = PINYIN_LESSONS.find(item => item.id === id) || PINYIN_LESSONS.find(item => !env.learned.has(item.id)) || PINYIN_LESSONS[0];
     let selected = lesson.symbols[0];
     let alive = true;
+    let memory;
     env.openModal(`
       <span class="modal-kicker">拼音小路 · 第 ${lesson.number} / 14 课</span><h2 id="dialog-title">你好，${lesson.title}</h2><p class="modal-subtitle">先看口型，再跟着大人读一读</p>
       <div class="pinyin-symbol-tabs" role="group" aria-label="本课拼音">${lesson.symbols.map((symbol, index) => `<button class="pinyin-symbol-tab ${index === 0 ? 'pinyin-selected' : ''}" data-pinyin-symbol="${symbol}" aria-pressed="${index === 0}">${symbol}</button>`).join('')}</div>
+      <div data-pinyin-memory></div>
       <div class="pinyin-detail" data-pinyin-detail></div>
       ${lesson.readSyllables.length ? `<div class="pinyin-whole-syllables"><h3>整体认读小伙伴</h3><p>整个音节直接读，和声母短音分开体会。</p><div>${lesson.readSyllables.map(syllable => `<span>${syllable}</span>`).join('')}</div></div>` : ''}
       <details class="pinyin-spelling-practice" open><summary>${lesson.number < 3 ? '给韵母戴上四声小帽子' : '和大人一起拼一拼'}</summary><div>${lesson.spellings.map(spelling => `<p>${spelling}</p>`).join('')}</div><p class="pinyin-rule">${lesson.rule}</p></details>
@@ -68,11 +72,12 @@ export function createPinyinCourse(env) {
       <p class="game-feedback pinyin-lesson-feedback" data-pinyin-lesson-feedback role="status">慢慢读，不着急。学会一课就收下一片小叶子。</p>
       <div class="pinyin-lesson-actions"><button class="button pinyin-secondary" data-pinyin-prev ${lesson.number === 1 ? 'disabled' : ''}>上一课</button><button class="button primary" data-pinyin-finish>完成这一课 ✓</button></div>
     `, 'pinyin-modal pinyin-lesson-modal');
-    env.setCleanup?.(() => { alive = false; env.stopSpeech?.(); });
+    env.setCleanup?.(() => { alive = false; memory?.destroy(); env.stopSpeech?.(); });
     const content = env.dialogContent;
     const feedback = content.querySelector('[data-pinyin-lesson-feedback]');
     function showSymbol(symbol) {
       if (!alive) return;
+      memory?.destroy();
       env.stopSpeech?.();
       selected = symbol;
       const item = PINYIN_ITEMS[symbol];
@@ -82,6 +87,8 @@ export function createPinyinCourse(env) {
       });
       const spelling = ['ü', 'üe', 'ün'].includes(symbol) ? '和 y、j、q、x 拼写时，ü 的两点会藏起来，读音要记住。' : symbol === 'i' ? 'i 戴上声调小帽子时，要把上面的小点去掉。' : ['ui', 'iu', 'un'].includes(symbol) ? `${symbol}是复合韵母的简写形式，跟着例字连起来读。` : '';
       content.querySelector('[data-pinyin-detail]').innerHTML = `<div class="pinyin-feature-letter" aria-label="拼音 ${symbol}">${symbol}<span>${item.kind === 'initial' ? '声母' : '韵母'}</span></div><div class="pinyin-mouth-hint"><span>口型小提示</span><h3>${item.hint}</h3><p>${item.kind === 'initial' ? '声母读得轻而短。例字里还有韵母，要分开体会。' : '韵母读得响亮一些，注意嘴巴怎样变化。'}</p>${spelling ? `<p class="pinyin-spelling-note">${spelling}</p>` : ''}</div><div class="pinyin-example"><span>例字读音参考</span><strong>${item.example} <small>${item.examplePinyin}</small></strong>${symbol === 'o' ? '' : `<button class="button pinyin-secondary" data-pinyin-read>${soundIcon()}听例字</button>`}${item.referenceNote ? `<p class="pinyin-o-note">${item.referenceNote}</p>` : ''}</div>`;
+      content.querySelector('[data-pinyin-memory]').innerHTML = renderMemoryScene(getPinyinMemory(symbol));
+      memory = createMemoryScene(content.querySelector('[data-memory-scene]'));
       const readButton = content.querySelector('[data-pinyin-read]');
       if (readButton) readButton.onclick = () => readReference(item.speech, feedback);
     }
@@ -110,8 +117,9 @@ export function createPinyinCourse(env) {
   function openTone(number) {
     const tone = PINYIN_TONES[number - 1];
     if (!tone) return;
-    env.openModal(`<span class="modal-kicker">声音的小路</span><h2 id="dialog-title">${tone.name}，${tone.hint.slice(0, 4)}</h2><div class="pinyin-tone-big">${toneArt(tone)}<strong>${['ā', 'á', 'ǎ', 'à'][number - 1]}</strong></div><p class="modal-subtitle">${tone.hint}</p><p class="pinyin-reference-note">伸出手指画一画，再请大人带着读一读。</p><button class="button primary" data-pinyin-tone-game>玩声调小滑梯 →</button>`, 'pinyin-modal');
-    env.setCleanup?.(() => env.stopSpeech?.());
+    env.openModal(`<span class="modal-kicker">声音的小路</span><h2 id="dialog-title">${tone.name}，${tone.hint.slice(0, 4)}</h2>${renderMemoryScene(getToneMemory(number))}<p class="modal-subtitle">${tone.hint}</p><p class="pinyin-reference-note">伸出手指画一画，再请大人带着读一读。</p><button class="button primary" data-pinyin-tone-game>玩声调小滑梯 →</button>`, 'pinyin-modal');
+    const memory = createMemoryScene(env.dialogContent.querySelector('[data-memory-scene]'));
+    env.setCleanup?.(() => { memory.destroy(); env.stopSpeech?.(); });
     env.dialogContent.querySelector('[data-pinyin-tone-game]').onclick = () => startGame('tones');
     say(`${tone.name}。${tone.hint}`);
   }

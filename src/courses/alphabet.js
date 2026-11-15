@@ -1,5 +1,8 @@
 import { renderSubjectGames } from '../game-cards.js';
 import { ALPHABET, ALPHABET_GROUPS, getAlphabetLesson, createAlphabetRounds, createAlphabetSession } from './alphabet-data.js';
+import { renderLessonTracing, createLessonTracing } from './lesson-tracing.js';
+import { getAlphabetMemoryScene } from './alphabet-memory.js';
+import { renderMemoryScene, createMemoryScene } from './memory-scene.js';
 
 const lettersById = new Map(ALPHABET.map(letter => [letter.id, letter]));
 const gameDetails = {
@@ -22,14 +25,14 @@ function cardMarkup(letter) {
 export function renderAlphabetPage() {
   return `
     <div class="alphabet-hero">
-      <div class="alphabet-hero-copy"><span class="alphabet-eyebrow">ENGLISH GARDEN · 英文字母</span><h1 id="alphabet-page-title" tabindex="-1">小小字母，<br>大声说 <em lang="en">Hello!</em></h1><p>认识 A–Z，发现大小写的小秘密。<br>听一听、找一找，和字母朋友一起玩。</p><button class="button primary" data-alphabet-resume>从 A 开始认识 <span aria-hidden="true">→</span></button><span class="alphabet-hero-note">每次认识几个，每天进步一点点</span></div>
+      <div class="alphabet-hero-copy"><span class="alphabet-eyebrow">ENGLISH GARDEN · 英文字母</span><h1 id="alphabet-page-title" tabindex="-1">小小字母，<br>大声说 <em lang="en">Hello!</em></h1><p>认识 A–Z，发现大小写的小秘密。<br>听一听、描一描，和字母朋友一起玩。</p><button class="button primary" data-alphabet-resume>从 A 开始认识 <span aria-hidden="true">→</span></button><span class="alphabet-hero-note">每次认识几个，每天进步一点点</span></div>
       <div class="alphabet-hero-art" aria-hidden="true"><span class="alphabet-art-spark">✦</span><span class="alphabet-art-cloud">☁</span><span class="alphabet-art-word">Hello, little learner!</span><span class="alphabet-art-block alphabet-art-a">A<i>a</i></span><span class="alphabet-art-block alphabet-art-b">B<i>b</i></span><span class="alphabet-art-apple">🍎</span><span class="alphabet-art-bear">🐻</span><span class="alphabet-art-flower">✿</span></div>
     </div>
     <section class="alphabet-study" aria-labelledby="alphabet-cards-title">
-      <div class="alphabet-section-heading"><div><span class="alphabet-eyebrow">MEET THE LETTERS</span><h2 id="alphabet-cards-title">今天，认识哪几个字母？</h2><p>点开卡片，听字母名和英文单词</p></div><div class="alphabet-progress" role="status" aria-live="polite"><span aria-hidden="true">✦</span><span>已认识 <b id="alphabet-progress-count">0 / 26</b></span></div></div>
+      <div class="alphabet-section-heading"><div><span class="alphabet-eyebrow">MEET THE LETTERS</span><h2 id="alphabet-cards-title">今天，认识哪几个字母？</h2><p>点开卡片，听读字母和单词，再练写大小写</p></div><div class="alphabet-progress" role="status" aria-live="polite"><span aria-hidden="true">✦</span><span>已认识 <b id="alphabet-progress-count">0 / 26</b></span></div></div>
       <div class="alphabet-group-picker" role="group" aria-label="选择一组字母">${ALPHABET_GROUPS.map((group, index) => `<button data-alphabet-group="${group.id}" aria-pressed="${index === 0}"><strong lang="en">${group.label}</strong><span data-alphabet-group-progress="${group.id}">0 / ${group.letters.length}</span></button>`).join('')}</div>
       ${ALPHABET_GROUPS.map((group, index) => `<div class="alphabet-card-grid" data-alphabet-panel="${group.id}" role="group" aria-label="${group.label} 字母卡片" ${index ? 'hidden' : ''}>${group.letters.map(id => cardMarkup(lettersById.get(id))).join('')}</div>`).join('')}
-      <p class="alphabet-study-note"><span aria-hidden="true">💡</span> 大写和小写，都是同一位字母朋友的名字。先看模样，再跟着读。</p>
+      <p class="alphabet-study-note"><span aria-hidden="true">💡</span> 大写和小写，都是同一位字母朋友的名字。先看模样、跟着读，再动手描一描。</p>
     </section>
     ${renderSubjectGames('alphabet')}`;
 }
@@ -97,19 +100,23 @@ export function createAlphabetCourse(env) {
     const letter = getAlphabetLesson(learned, id);
     const index = ALPHABET.indexOf(letter);
     const soundOn = isSoundEnabled();
+    const tracingOptions = { groupId: 'alphabet', character: letter.uppercase + letter.lowercase };
+    const memoryScene = getAlphabetMemoryScene(letter.id);
     openModal(`
       <span class="modal-kicker">英文字母 · 第 ${index + 1} / 26 位朋友</span>
       <h2 id="dialog-title">你好，我是字母 <span lang="en">${letter.id}</span></h2>
       <p class="modal-subtitle">一个大写，一个小写，都是我哦</p>
-      <div class="alphabet-lesson-pair"><div><span>大写字母</span><strong lang="en">${letter.uppercase}</strong></div><div><span>小写字母</span><strong lang="en">${letter.lowercase}</strong></div></div>
+      ${renderMemoryScene(memoryScene)}
       <button class="alphabet-speak-button" id="alphabet-letter-speak">${icon('sound', 19)}${soundOn ? '听字母名' : '开启声音听字母名'} <b lang="en">${letter.id}</b></button>
       <div class="alphabet-word-friend"><span class="alphabet-word-picture" aria-hidden="true">${letter.emoji}</span><div><span>我的单词朋友</span><strong lang="en">${letter.word}</strong><span>${letter.translation}</span></div><button id="alphabet-word-speak" aria-label="${soundOn ? `听英文单词 ${letter.word}` : '声音已关闭，点此查看听音提示'}">${icon(soundOn ? 'sound' : 'mute', 22)}</button></div>
-      <p class="alphabet-letter-hint"><span aria-hidden="true">✎</span>${letter.hint}</p>
       <p class="alphabet-speech-note" id="alphabet-speech-status" role="status">${soundOn ? '听到的是字母的名字。点单词旁的小喇叭，还能听英文单词。' : '声音已关闭，仍然可以看卡片学习。想听英文，点“开启声音听字母名”。'}</p>
+      ${renderLessonTracing(tracingOptions)}
       <div class="alphabet-lesson-actions"><button class="button secondary" id="alphabet-previous" ${index === 0 ? 'disabled' : ''}>上一位朋友</button><button class="button primary" id="alphabet-next">${index === 25 ? '和字母一起玩' : `认识 ${ALPHABET[index + 1].id}`} ${icon('arrow', 18)}</button></div>
     `, 'alphabet-modal alphabet-lesson-modal');
     let active = true;
-    setCleanup(() => { active = false; stopSpeech(); });
+    const memory = createMemoryScene(dialogContent.querySelector('[data-memory-scene]'));
+    const tracing = createLessonTracing(dialogContent.querySelector('[data-lesson-tracing]'), tracingOptions);
+    setCleanup(() => { active = false; memory.destroy(); tracing.destroy(); stopSpeech(); });
     markLearned(letter.id);
     dialogContent.querySelector('#alphabet-letter-speak').onclick = () => {
       if (!active) return;
