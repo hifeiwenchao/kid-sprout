@@ -62,4 +62,4 @@ root负责AppModel、主题、导航/首页、游戏原生场景、平台画板�
 - [x] 并行实现后分别做需求/代码审查，重点60玩法覆盖、真实内容、存档和不抢桌面约束。
 - [x] Node/共享资源/SwiftPM/Gradle测试、网页构建及Apple后台构建；不声称未经执行的UI验收。
 - [x] 更新运行/范围/验证文档，打包Mac与Android产物。
-- [ ] 提交并快进集成main，push origin main；完成后补记Git结果。
+- [x] 实现提交 `6e622ed`（macOS基础提交 `d400420`）已快进集成本机main，并成功push origin main。合并后网页125项、Swift核心12项再次通过，原目录iOS后台构建成功；保留用户本地Xcode开发团队等设置。

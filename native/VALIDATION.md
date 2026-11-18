@@ -24,6 +24,8 @@
 
 交付产物位于被 Git 忽略的 `native/artifacts/`：`kid-sprout-debug.apk`、`KidSproutMac.app`、`萌芽启蒙-macOS.zip`；本机后台日志与资源摘要保存在 `validation-web-parity/`。Xcode 必须打开 `native/ios/KidSprout.xcodeproj`，不能用只含核心库的 `Package.swift` 运行应用。
 
+实现提交 `6e622ed` 与 macOS 基础提交 `d400420` 已快进合并并推送 `origin/main`。在原项目目录重新安装依赖后，网页 125 项、Swift 核心 12 项及 iOS 后台构建再次通过；用户本地的 Xcode 开发团队、图标与搜索路径设置已备份并保留为未提交改动。
+
 **尚未验证**：本版实际 UI/键盘焦点/触控、字体放大后的视觉效果、实体触控笔、不同系统的离线语音与分享/邮件应用、最低系统与 Intel 实机。更新后的 UI 测试仅完成编译，需在专用设备/CI 执行；历史截图不能作为本版验收证据。iOS 真机签名、Mac Developer ID/公证、商店发布及跨端同步均未配置。
 
 ## 历史：原生数字首版
