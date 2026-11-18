@@ -1,15 +1,42 @@
 import SwiftUI
 import AVFoundation
+#if os(iOS)
 import KidSproutCore
+#else
+import AppKit
+#endif
 
 @main
 struct KidSproutApp: App {
     @StateObject private var model = AppModel()
     @StateObject private var board = DrawingModel()
+    init() {
+        #if os(macOS) && DEBUG
+        // Exercise each appearance in UI tests without changing the system setting.
+        let arguments = ProcessInfo.processInfo.arguments
+        if let index = arguments.firstIndex(of: "-AppleInterfaceStyle"), index + 1 < arguments.count {
+            switch arguments[index + 1] {
+            case "Dark": NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+            case "Light": NSApplication.shared.appearance = NSAppearance(named: .aqua)
+            default: break
+            }
+        }
+        #endif
+    }
     var body: some Scene {
+        #if os(macOS)
+        Window("萌芽启蒙", id: "main") {
+            RootView().environmentObject(model).environmentObject(board).tint(Sprout.accent)
+                .frame(minWidth: 760, minHeight: 600)
+        }
+        .defaultSize(width: 1100, height: 800)
+        .windowResizability(.contentMinSize)
+        .commands { SidebarCommands() }
+        #else
         WindowGroup {
             RootView().environmentObject(model).environmentObject(board).tint(Sprout.accent)
         }
+        #endif
     }
 }
 
@@ -38,9 +65,21 @@ struct KidSproutApp: App {
 }
 
 enum Sprout {
+    #if os(iOS)
     static let accent = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark ? UIColor(red: 0.57, green: 0.83, blue: 0.65, alpha: 1) : UIColor(red: 0.16, green: 0.48, blue: 0.36, alpha: 1)
     })
+    static let background = Color(uiColor: .systemGroupedBackground)
+    static let panel = Color(uiColor: .secondarySystemGroupedBackground)
+    #else
+    static let accent = Color(nsColor: NSColor(name: nil) { appearance in
+        appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            ? NSColor(red: 0.57, green: 0.83, blue: 0.65, alpha: 1)
+            : NSColor(red: 0.16, green: 0.48, blue: 0.36, alpha: 1)
+    })
+    static let background = Color(nsColor: .windowBackgroundColor)
+    static let panel = Color(nsColor: .controlBackgroundColor)
+    #endif
     static let green = Color(red: 0.16, green: 0.48, blue: 0.36)
     static let orange = Color(red: 0.78, green: 0.35, blue: 0.14)
     static let yellow = Color(red: 1, green: 0.88, blue: 0.55)
@@ -56,17 +95,18 @@ enum Area: String, CaseIterable, Identifiable {
 }
 
 struct RootView: View {
+    #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
     @EnvironmentObject private var model: AppModel
     @State private var area: Area? = .home
     var body: some View {
         Group {
+            #if os(macOS)
+            sidebar
+            #else
             if sizeClass == .regular {
-                NavigationSplitView {
-                    List(Area.allCases, selection: $area) { item in Label(item.title, systemImage: item.symbol).tag(item).padding(.vertical, 9) }
-                        .navigationTitle("萌芽启蒙")
-                        .safeAreaInset(edge: .bottom) { Label("每天一点，快乐长大", systemImage: "sun.max.fill").font(.caption).foregroundStyle(.secondary).padding() }
-                } detail: { NavigationStack { content(area ?? .home) } }
+                sidebar
             } else {
                 TabView(selection: Binding(get: { area ?? .home }, set: { area = $0 })) {
                     ForEach(Area.allCases) { item in
@@ -74,8 +114,20 @@ struct RootView: View {
                     }
                 }
             }
+            #endif
         }
         .onChange(of: area) { _, _ in model.stopSpeaking() }
+    }
+    private var sidebar: some View {
+        NavigationSplitView {
+            List(Area.allCases, selection: $area) { item in
+                Label(item.title, systemImage: item.symbol).tag(item).padding(.vertical, 9)
+                    .accessibilityIdentifier("nav-\(item.rawValue)")
+            }
+            .navigationTitle("萌芽启蒙")
+            .navigationSplitViewColumnWidth(min: 190, ideal: 220, max: 280)
+            .safeAreaInset(edge: .bottom) { Label("每天一点，快乐长大", systemImage: "sun.max.fill").font(.caption).foregroundStyle(.secondary).padding() }
+        } detail: { NavigationStack { content(area ?? .home) } }
     }
     @ViewBuilder private func content(_ item: Area) -> some View {
         switch item {
@@ -94,13 +146,13 @@ struct Page<Content: View>: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) { content }.padding(22).frame(maxWidth: 950).frame(maxWidth: .infinity)
-        }.background(Color(uiColor: .systemGroupedBackground))
+        }.background(Sprout.background)
     }
 }
 struct Panel<Content: View>: View {
     let content: Content
     init(@ViewBuilder content: () -> Content) { self.content = content() }
-    var body: some View { VStack(alignment: .leading, spacing: 16) { content }.padding(22).frame(maxWidth: .infinity, alignment: .leading).background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 25)) }
+    var body: some View { VStack(alignment: .leading, spacing: 16) { content }.padding(22).frame(maxWidth: .infinity, alignment: .leading).background(Sprout.panel, in: RoundedRectangle(cornerRadius: 25)) }
 }
 struct BigButton: ButtonStyle {
     var color = Sprout.green
@@ -135,7 +187,7 @@ struct ExploreView: View {
             }
             Button { navigate(.numbers) } label: {
                 HStack { VStack(alignment: .leading, spacing: 7) { Text("继续我的小探索").font(.headline); Text("上次认识了数字 \(model.progress.lastNumber)").font(.subheadline) }; Spacer(); Image(systemName: "arrow.right.circle.fill").font(.largeTitle) }.padding(22)
-            }.foregroundStyle(Sprout.ink).background(Sprout.yellow, in: RoundedRectangle(cornerRadius: 23)).accessibilityIdentifier("continueLearning")
+            }.buttonStyle(.plain).foregroundStyle(Sprout.ink).background(Sprout.yellow, in: RoundedRectangle(cornerRadius: 23)).accessibilityIdentifier("continueLearning")
             Text("今天，想玩点什么？").font(.title2.bold())
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 14)], spacing: 14) {
                 destination(.numbers, description: "从 0 到 10，一起数一数", emoji: "🍎")
@@ -152,11 +204,11 @@ struct ExploreView: View {
         }.foregroundStyle(Sprout.ink).frame(maxWidth: .infinity, alignment: .leading)
     }
     private func metric(_ value: String, _ title: String, symbol: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) { Image(systemName: symbol).foregroundStyle(Sprout.orange); Text(value).font(.title2.bold()); Text(title).font(.caption).foregroundStyle(.secondary) }.frame(maxWidth: .infinity, alignment: .leading).padding(20).background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22))
+        VStack(alignment: .leading, spacing: 8) { Image(systemName: symbol).foregroundStyle(Sprout.orange); Text(value).font(.title2.bold()); Text(title).font(.caption).foregroundStyle(.secondary) }.frame(maxWidth: .infinity, alignment: .leading).padding(20).background(Sprout.panel, in: RoundedRectangle(cornerRadius: 22))
     }
     private func destination(_ area: Area, description: String, emoji: String) -> some View {
         Button { navigate(area) } label: {
-            VStack(alignment: .leading, spacing: 13) { Text(emoji).font(.system(size: 40)); Text(area.title).font(.title3.bold()); Text(description).font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.leading) }.frame(maxWidth: .infinity, minHeight: 140, alignment: .leading).padding(20).background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24))
+            VStack(alignment: .leading, spacing: 13) { Text(emoji).font(.system(size: 40)); Text(area.title).font(.title3.bold()); Text(description).font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.leading) }.frame(maxWidth: .infinity, minHeight: 140, alignment: .leading).padding(20).background(Sprout.panel, in: RoundedRectangle(cornerRadius: 24))
         }.buttonStyle(.plain)
     }
 }

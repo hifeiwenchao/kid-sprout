@@ -2,9 +2,19 @@
 
 SwiftUI、PencilKit 和 AVFoundation 实现，最低 iOS 17，无 WebView、无第三方运行依赖。首版包括数字 0–10、三种五关小游戏、画板和家长区。共享离线课程直接从 `../shared/curriculum.json` 打包；不展示尚未迁移的拼音、字母和其他游戏。
 
+同一工程新增 **KidSproutMac** scheme，使用共用学习界面和独立AppKit画板支持macOS 14+，运行方式见[Mac说明](../macos/README.md)。iPhone/iPad继续选择**KidSprout** scheme。
+
 ## 使用 Xcode
 
-打开 `native/ios/KidSprout.xcodeproj`，选择 `KidSprout` scheme 和 iPhone 或 iPad 模拟器后运行。项目已提交，可直接打开，无需生成器。
+在 Finder 中进入仓库的 `native/ios/` 目录，双击 **KidSprout.xcodeproj**，或在仓库根目录通过终端打开：
+
+```sh
+open native/ios/KidSprout.xcodeproj
+```
+
+在 Xcode 顶部选择 **KidSprout** scheme 和 **iPhone / iPad Simulator**（例如 iPhone 17 Pro），然后点击运行；运行 Mac 版则选择 **KidSproutMac + My Mac**。项目已提交，可直接打开，无需生成器。
+
+请打开 **KidSprout.xcodeproj**。`Package.swift` 只包含 **KidSproutCore** 核心库及其测试，没有可运行的 App；如果 Xcode 中只看到 KidSproutCore，关闭该包窗口后重新打开上述工程。
 
 真机运行时在 Signing & Capabilities 选择自己的 Apple 开发团队；bundle ID 为 `com.feiwenchao.kidsprout`。此阶段未配置 App Store 发布签名。
 

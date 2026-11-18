@@ -13,12 +13,19 @@
 			00000000000000000000000B,
 			00000000000000000000000C,
 			000000000000000000000002,
+			000000000000000000000038,
+			000000000000000000000039,
+			00000000000000000000003A,
+			00000000000000000000003B,
 		); sourceTree = "<group>"; };
 000000000000000000000002 = { isa = "PBXGroup"; name = "Products"; children = (
 			00000000000000000000000E,
 			00000000000000000000001C,
 			000000000000000000000028,
 			000000000000000000000031,
+			000000000000000000000040,
+			00000000000000000000004D,
+			000000000000000000000055,
 		); sourceTree = "<group>"; };
 000000000000000000000003 = { isa = "PBXFileReference"; lastKnownFileType = "sourcecode.swift"; path = "Sources/KidSproutCore/Models.swift"; sourceTree = "SOURCE_ROOT"; };
 000000000000000000000004 = { isa = "PBXFileReference"; lastKnownFileType = "sourcecode.swift"; path = "App/DrawingView.swift"; sourceTree = "SOURCE_ROOT"; };
@@ -94,7 +101,7 @@
 		); buildRules = (
 
 		); dependencies = (
-			00000000000000000000003D,
+			000000000000000000000061,
 		); };
 000000000000000000000026 = { isa = "PBXBuildFile"; fileRef = 00000000000000000000000E; };
 000000000000000000000027 = { isa = "PBXFrameworksBuildPhase"; buildActionMask = "2147483647"; files = (
@@ -119,8 +126,8 @@
 		); buildRules = (
 
 		); dependencies = (
-			00000000000000000000003F,
-			000000000000000000000041,
+			000000000000000000000063,
+			000000000000000000000065,
 		); };
 000000000000000000000030 = { isa = "PBXFrameworksBuildPhase"; buildActionMask = "2147483647"; files = (
 
@@ -142,15 +149,102 @@
 		); buildRules = (
 
 		); dependencies = (
-			000000000000000000000043,
+			000000000000000000000067,
 		); };
-000000000000000000000038 = { isa = "XCBuildConfiguration"; name = "Debug"; buildSettings = { CLANG_ENABLE_MODULES = "YES"; ENABLE_USER_SCRIPT_SANDBOXING = "YES"; GCC_C_LANGUAGE_STANDARD = "gnu17"; SWIFT_VERSION = "5.0"; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; };
-000000000000000000000039 = { isa = "XCBuildConfiguration"; name = "Release"; buildSettings = { CLANG_ENABLE_MODULES = "YES"; ENABLE_USER_SCRIPT_SANDBOXING = "YES"; GCC_C_LANGUAGE_STANDARD = "gnu17"; SWIFT_VERSION = "5.0"; SWIFT_OPTIMIZATION_LEVEL = "-O"; }; };
-00000000000000000000003A = { isa = "XCConfigurationList"; buildConfigurations = (
-			000000000000000000000038,
-			000000000000000000000039,
+000000000000000000000038 = { isa = "PBXFileReference"; lastKnownFileType = "sourcecode.swift"; path = "MacApp/DrawingModel.swift"; sourceTree = "SOURCE_ROOT"; };
+000000000000000000000039 = { isa = "PBXFileReference"; lastKnownFileType = "sourcecode.swift"; path = "MacApp/DrawingView.swift"; sourceTree = "SOURCE_ROOT"; };
+00000000000000000000003A = { isa = "PBXFileReference"; lastKnownFileType = "sourcecode.swift"; path = "MacTests/MacDrawingTests.swift"; sourceTree = "SOURCE_ROOT"; };
+00000000000000000000003B = { isa = "PBXFileReference"; lastKnownFileType = "sourcecode.swift"; path = "MacUITests/MacAppUITests.swift"; sourceTree = "SOURCE_ROOT"; };
+00000000000000000000003C = { isa = "PBXBuildFile"; fileRef = 00000000000000000000000B; };
+00000000000000000000003D = { isa = "PBXBuildFile"; fileRef = 00000000000000000000000C; };
+00000000000000000000003E = { isa = "PBXResourcesBuildPhase"; buildActionMask = "2147483647"; files = (
+			00000000000000000000003C,
+			00000000000000000000003D,
+		); runOnlyForDeploymentPostprocessing = "0"; };
+00000000000000000000003F = { isa = "PBXFrameworksBuildPhase"; buildActionMask = "2147483647"; files = (
+
+		); runOnlyForDeploymentPostprocessing = "0"; };
+000000000000000000000040 = { isa = "PBXFileReference"; explicitFileType = "wrapper.application"; path = "KidSproutMac.app"; sourceTree = "BUILT_PRODUCTS_DIR"; };
+000000000000000000000041 = { isa = "XCBuildConfiguration"; name = "Debug"; buildSettings = { SWIFT_VERSION = "5.0"; MACOSX_DEPLOYMENT_TARGET = "14.0"; SDKROOT = "macosx"; SUPPORTED_PLATFORMS = "macosx"; CLANG_ENABLE_MODULES = "YES"; CODE_SIGN_STYLE = "Manual"; CODE_SIGN_IDENTITY = "-"; GENERATE_INFOPLIST_FILE = "YES"; CURRENT_PROJECT_VERSION = "1"; MARKETING_VERSION = "0.1.0"; PRODUCT_NAME = "KidSproutMac"; PRODUCT_BUNDLE_IDENTIFIER = "com.feiwenchao.kidsprout.mac"; INFOPLIST_KEY_CFBundleName = "萌芽启蒙"; ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon"; ENABLE_TESTABILITY = "YES"; INFOPLIST_KEY_CFBundleDisplayName = "萌芽启蒙"; INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education"; ENABLE_APP_SANDBOX = "YES"; CODE_SIGN_ENTITLEMENTS = "Mac.entitlements"; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; CODE_SIGN_INJECT_BASE_ENTITLEMENTS = "YES"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG"; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; };
+000000000000000000000042 = { isa = "XCBuildConfiguration"; name = "Release"; buildSettings = { SWIFT_VERSION = "5.0"; MACOSX_DEPLOYMENT_TARGET = "14.0"; SDKROOT = "macosx"; SUPPORTED_PLATFORMS = "macosx"; CLANG_ENABLE_MODULES = "YES"; CODE_SIGN_STYLE = "Manual"; CODE_SIGN_IDENTITY = "-"; GENERATE_INFOPLIST_FILE = "YES"; CURRENT_PROJECT_VERSION = "1"; MARKETING_VERSION = "0.1.0"; PRODUCT_NAME = "KidSproutMac"; PRODUCT_BUNDLE_IDENTIFIER = "com.feiwenchao.kidsprout.mac"; INFOPLIST_KEY_CFBundleName = "萌芽启蒙"; ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon"; ENABLE_TESTABILITY = "NO"; INFOPLIST_KEY_CFBundleDisplayName = "萌芽启蒙"; INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education"; ENABLE_APP_SANDBOX = "YES"; CODE_SIGN_ENTITLEMENTS = "Mac.entitlements"; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; CODE_SIGN_INJECT_BASE_ENTITLEMENTS = "NO"; SWIFT_OPTIMIZATION_LEVEL = "-O"; }; };
+000000000000000000000043 = { isa = "XCConfigurationList"; buildConfigurations = (
+			000000000000000000000041,
+			000000000000000000000042,
 		); defaultConfigurationIsVisible = "0"; defaultConfigurationName = "Release"; };
-00000000000000000000003B = { isa = "PBXProject"; attributes = { LastUpgradeCheck = "2660"; BuildIndependentTargetsInParallel = "YES"; }; buildConfigurationList = 00000000000000000000003A; compatibilityVersion = "Xcode 14.0"; developmentRegion = "zh-Hans"; knownRegions = (
+000000000000000000000044 = { isa = "PBXBuildFile"; fileRef = 000000000000000000000005; };
+000000000000000000000045 = { isa = "PBXBuildFile"; fileRef = 000000000000000000000006; };
+000000000000000000000046 = { isa = "PBXBuildFile"; fileRef = 000000000000000000000007; };
+000000000000000000000047 = { isa = "PBXBuildFile"; fileRef = 000000000000000000000038; };
+000000000000000000000048 = { isa = "PBXBuildFile"; fileRef = 000000000000000000000039; };
+000000000000000000000049 = { isa = "PBXBuildFile"; fileRef = 000000000000000000000003; };
+00000000000000000000004A = { isa = "PBXSourcesBuildPhase"; buildActionMask = "2147483647"; files = (
+			000000000000000000000044,
+			000000000000000000000045,
+			000000000000000000000046,
+			000000000000000000000047,
+			000000000000000000000048,
+			000000000000000000000049,
+		); runOnlyForDeploymentPostprocessing = "0"; };
+00000000000000000000004B = { isa = "PBXNativeTarget"; name = "KidSproutMac"; productName = "KidSproutMac"; productReference = 000000000000000000000040; productType = "com.apple.product-type.application"; buildConfigurationList = 000000000000000000000043; buildPhases = (
+			00000000000000000000004A,
+			00000000000000000000003F,
+			00000000000000000000003E,
+		); buildRules = (
+
+		); dependencies = (
+
+		); };
+00000000000000000000004C = { isa = "PBXFrameworksBuildPhase"; buildActionMask = "2147483647"; files = (
+
+		); runOnlyForDeploymentPostprocessing = "0"; };
+00000000000000000000004D = { isa = "PBXFileReference"; explicitFileType = "wrapper.cfbundle"; path = "KidSproutMacTests.xctest"; sourceTree = "BUILT_PRODUCTS_DIR"; };
+00000000000000000000004E = { isa = "XCBuildConfiguration"; name = "Debug"; buildSettings = { SWIFT_VERSION = "5.0"; MACOSX_DEPLOYMENT_TARGET = "14.0"; SDKROOT = "macosx"; SUPPORTED_PLATFORMS = "macosx"; CLANG_ENABLE_MODULES = "YES"; CODE_SIGN_STYLE = "Manual"; CODE_SIGN_IDENTITY = "-"; GENERATE_INFOPLIST_FILE = "YES"; CURRENT_PROJECT_VERSION = "1"; MARKETING_VERSION = "0.1.0"; PRODUCT_NAME = "KidSproutMacTests"; PRODUCT_BUNDLE_IDENTIFIER = "com.feiwenchao.kidsprout.mac.tests"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KidSproutMac.app/Contents/MacOS/KidSproutMac"; BUNDLE_LOADER = "$(TEST_HOST)"; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks"; ENABLE_TESTABILITY = "YES"; CODE_SIGN_INJECT_BASE_ENTITLEMENTS = "YES"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG"; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; };
+00000000000000000000004F = { isa = "XCBuildConfiguration"; name = "Release"; buildSettings = { SWIFT_VERSION = "5.0"; MACOSX_DEPLOYMENT_TARGET = "14.0"; SDKROOT = "macosx"; SUPPORTED_PLATFORMS = "macosx"; CLANG_ENABLE_MODULES = "YES"; CODE_SIGN_STYLE = "Manual"; CODE_SIGN_IDENTITY = "-"; GENERATE_INFOPLIST_FILE = "YES"; CURRENT_PROJECT_VERSION = "1"; MARKETING_VERSION = "0.1.0"; PRODUCT_NAME = "KidSproutMacTests"; PRODUCT_BUNDLE_IDENTIFIER = "com.feiwenchao.kidsprout.mac.tests"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KidSproutMac.app/Contents/MacOS/KidSproutMac"; BUNDLE_LOADER = "$(TEST_HOST)"; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks"; ENABLE_TESTABILITY = "NO"; CODE_SIGN_INJECT_BASE_ENTITLEMENTS = "NO"; SWIFT_OPTIMIZATION_LEVEL = "-O"; }; };
+000000000000000000000050 = { isa = "XCConfigurationList"; buildConfigurations = (
+			00000000000000000000004E,
+			00000000000000000000004F,
+		); defaultConfigurationIsVisible = "0"; defaultConfigurationName = "Release"; };
+000000000000000000000051 = { isa = "PBXBuildFile"; fileRef = 00000000000000000000003A; };
+000000000000000000000052 = { isa = "PBXSourcesBuildPhase"; buildActionMask = "2147483647"; files = (
+			000000000000000000000051,
+		); runOnlyForDeploymentPostprocessing = "0"; };
+000000000000000000000053 = { isa = "PBXNativeTarget"; name = "KidSproutMacTests"; productName = "KidSproutMacTests"; productReference = 00000000000000000000004D; productType = "com.apple.product-type.bundle.unit-test"; buildConfigurationList = 000000000000000000000050; buildPhases = (
+			000000000000000000000052,
+			00000000000000000000004C,
+		); buildRules = (
+
+		); dependencies = (
+			000000000000000000000069,
+		); };
+000000000000000000000054 = { isa = "PBXFrameworksBuildPhase"; buildActionMask = "2147483647"; files = (
+
+		); runOnlyForDeploymentPostprocessing = "0"; };
+000000000000000000000055 = { isa = "PBXFileReference"; explicitFileType = "wrapper.cfbundle"; path = "KidSproutMacUITests.xctest"; sourceTree = "BUILT_PRODUCTS_DIR"; };
+000000000000000000000056 = { isa = "XCBuildConfiguration"; name = "Debug"; buildSettings = { SWIFT_VERSION = "5.0"; MACOSX_DEPLOYMENT_TARGET = "14.0"; SDKROOT = "macosx"; SUPPORTED_PLATFORMS = "macosx"; CLANG_ENABLE_MODULES = "YES"; CODE_SIGN_STYLE = "Manual"; CODE_SIGN_IDENTITY = "-"; GENERATE_INFOPLIST_FILE = "YES"; CURRENT_PROJECT_VERSION = "1"; MARKETING_VERSION = "0.1.0"; PRODUCT_NAME = "KidSproutMacUITests"; PRODUCT_BUNDLE_IDENTIFIER = "com.feiwenchao.kidsprout.mac.uitests"; TEST_TARGET_NAME = "KidSproutMac"; ENABLE_TESTABILITY = "YES"; CODE_SIGN_INJECT_BASE_ENTITLEMENTS = "YES"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG"; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; };
+000000000000000000000057 = { isa = "XCBuildConfiguration"; name = "Release"; buildSettings = { SWIFT_VERSION = "5.0"; MACOSX_DEPLOYMENT_TARGET = "14.0"; SDKROOT = "macosx"; SUPPORTED_PLATFORMS = "macosx"; CLANG_ENABLE_MODULES = "YES"; CODE_SIGN_STYLE = "Manual"; CODE_SIGN_IDENTITY = "-"; GENERATE_INFOPLIST_FILE = "YES"; CURRENT_PROJECT_VERSION = "1"; MARKETING_VERSION = "0.1.0"; PRODUCT_NAME = "KidSproutMacUITests"; PRODUCT_BUNDLE_IDENTIFIER = "com.feiwenchao.kidsprout.mac.uitests"; TEST_TARGET_NAME = "KidSproutMac"; ENABLE_TESTABILITY = "NO"; CODE_SIGN_INJECT_BASE_ENTITLEMENTS = "NO"; SWIFT_OPTIMIZATION_LEVEL = "-O"; }; };
+000000000000000000000058 = { isa = "XCConfigurationList"; buildConfigurations = (
+			000000000000000000000056,
+			000000000000000000000057,
+		); defaultConfigurationIsVisible = "0"; defaultConfigurationName = "Release"; };
+000000000000000000000059 = { isa = "PBXBuildFile"; fileRef = 00000000000000000000003B; };
+00000000000000000000005A = { isa = "PBXSourcesBuildPhase"; buildActionMask = "2147483647"; files = (
+			000000000000000000000059,
+		); runOnlyForDeploymentPostprocessing = "0"; };
+00000000000000000000005B = { isa = "PBXNativeTarget"; name = "KidSproutMacUITests"; productName = "KidSproutMacUITests"; productReference = 000000000000000000000055; productType = "com.apple.product-type.bundle.ui-testing"; buildConfigurationList = 000000000000000000000058; buildPhases = (
+			00000000000000000000005A,
+			000000000000000000000054,
+		); buildRules = (
+
+		); dependencies = (
+			00000000000000000000006B,
+		); };
+00000000000000000000005C = { isa = "XCBuildConfiguration"; name = "Debug"; buildSettings = { CLANG_ENABLE_MODULES = "YES"; ENABLE_USER_SCRIPT_SANDBOXING = "YES"; GCC_C_LANGUAGE_STANDARD = "gnu17"; SWIFT_VERSION = "5.0"; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; };
+00000000000000000000005D = { isa = "XCBuildConfiguration"; name = "Release"; buildSettings = { CLANG_ENABLE_MODULES = "YES"; ENABLE_USER_SCRIPT_SANDBOXING = "YES"; GCC_C_LANGUAGE_STANDARD = "gnu17"; SWIFT_VERSION = "5.0"; SWIFT_OPTIMIZATION_LEVEL = "-O"; }; };
+00000000000000000000005E = { isa = "XCConfigurationList"; buildConfigurations = (
+			00000000000000000000005C,
+			00000000000000000000005D,
+		); defaultConfigurationIsVisible = "0"; defaultConfigurationName = "Release"; };
+00000000000000000000005F = { isa = "PBXProject"; attributes = { LastUpgradeCheck = "2660"; BuildIndependentTargetsInParallel = "YES"; }; buildConfigurationList = 00000000000000000000005E; compatibilityVersion = "Xcode 14.0"; developmentRegion = "zh-Hans"; knownRegions = (
 			"zh-Hans",
 			"en",
 			"Base",
@@ -159,14 +253,21 @@
 			000000000000000000000025,
 			00000000000000000000002F,
 			000000000000000000000037,
+			00000000000000000000004B,
+			000000000000000000000053,
+			00000000000000000000005B,
 		); };
-00000000000000000000003C = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000003B; proxyType = "1"; remoteGlobalIDString = 000000000000000000000014; remoteInfo = "KidSproutCore"; };
-00000000000000000000003D = { isa = "PBXTargetDependency"; target = 000000000000000000000014; targetProxy = 00000000000000000000003C; };
-00000000000000000000003E = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000003B; proxyType = "1"; remoteGlobalIDString = 000000000000000000000014; remoteInfo = "KidSproutCore"; };
-00000000000000000000003F = { isa = "PBXTargetDependency"; target = 000000000000000000000014; targetProxy = 00000000000000000000003E; };
-000000000000000000000040 = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000003B; proxyType = "1"; remoteGlobalIDString = 000000000000000000000025; remoteInfo = "KidSprout"; };
-000000000000000000000041 = { isa = "PBXTargetDependency"; target = 000000000000000000000025; targetProxy = 000000000000000000000040; };
-000000000000000000000042 = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000003B; proxyType = "1"; remoteGlobalIDString = 000000000000000000000025; remoteInfo = "KidSprout"; };
-000000000000000000000043 = { isa = "PBXTargetDependency"; target = 000000000000000000000025; targetProxy = 000000000000000000000042; };
-}; rootObject = 00000000000000000000003B;
+000000000000000000000060 = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000005F; proxyType = "1"; remoteGlobalIDString = 000000000000000000000014; remoteInfo = "KidSproutCore"; };
+000000000000000000000061 = { isa = "PBXTargetDependency"; target = 000000000000000000000014; targetProxy = 000000000000000000000060; };
+000000000000000000000062 = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000005F; proxyType = "1"; remoteGlobalIDString = 000000000000000000000014; remoteInfo = "KidSproutCore"; };
+000000000000000000000063 = { isa = "PBXTargetDependency"; target = 000000000000000000000014; targetProxy = 000000000000000000000062; };
+000000000000000000000064 = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000005F; proxyType = "1"; remoteGlobalIDString = 000000000000000000000025; remoteInfo = "KidSprout"; };
+000000000000000000000065 = { isa = "PBXTargetDependency"; target = 000000000000000000000025; targetProxy = 000000000000000000000064; };
+000000000000000000000066 = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000005F; proxyType = "1"; remoteGlobalIDString = 000000000000000000000025; remoteInfo = "KidSprout"; };
+000000000000000000000067 = { isa = "PBXTargetDependency"; target = 000000000000000000000025; targetProxy = 000000000000000000000066; };
+000000000000000000000068 = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000005F; proxyType = "1"; remoteGlobalIDString = 00000000000000000000004B; remoteInfo = "KidSproutMac"; };
+000000000000000000000069 = { isa = "PBXTargetDependency"; target = 00000000000000000000004B; targetProxy = 000000000000000000000068; };
+00000000000000000000006A = { isa = "PBXContainerItemProxy"; containerPortal = 00000000000000000000005F; proxyType = "1"; remoteGlobalIDString = 00000000000000000000004B; remoteInfo = "KidSproutMac"; };
+00000000000000000000006B = { isa = "PBXTargetDependency"; target = 00000000000000000000004B; targetProxy = 00000000000000000000006A; };
+}; rootObject = 00000000000000000000005F;
 }

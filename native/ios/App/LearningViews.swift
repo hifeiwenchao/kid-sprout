@@ -1,5 +1,7 @@
 import SwiftUI
+#if os(iOS)
 import KidSproutCore
+#endif
 
 struct NumbersView: View {
     @EnvironmentObject private var model: AppModel
@@ -17,7 +19,7 @@ struct NumbersView: View {
                             VStack(spacing: 3) {
                                 Text("\(lesson.value)").font(.system(.title2, design: .rounded, weight: .bold))
                                 if model.progress.learnedNumbers.contains(lesson.value) { Image(systemName: "checkmark.circle.fill").font(.caption2) }
-                            }.frame(maxWidth: .infinity, minHeight: 57).foregroundStyle(value == lesson.value ? Color.white : Color.primary).background(value == lesson.value ? Sprout.green : Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 17))
+                            }.frame(maxWidth: .infinity, minHeight: 57).foregroundStyle(value == lesson.value ? Color.white : Color.primary).background(value == lesson.value ? Sprout.green : Sprout.panel, in: RoundedRectangle(cornerRadius: 17))
                         }.accessibilityLabel("数字\(lesson.value)\(model.progress.learnedNumbers.contains(lesson.value) ? "，已学过" : "")").accessibilityIdentifier("lesson\(lesson.value)")
                     }
                 }
@@ -102,7 +104,7 @@ struct GamesView: View {
             HStack { VStack(alignment: .leading, spacing: 9) { Text("玩着玩着，就学会了").font(.title2.bold()); Text("每次 5 关，答错也能再试。通关获得 5 颗星星。").foregroundStyle(.secondary) }; Spacer(); Text("🎈").font(.system(size: 55)) }
             ForEach(GameKind.allCases) { kind in
                 NavigationLink { GameView(kind: kind) } label: {
-                    HStack(spacing: 18) { Image(systemName: kind.symbol).font(.system(size: 30)).foregroundStyle(Sprout.green).frame(width: 62, height: 68).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 20)); VStack(alignment: .leading, spacing: 7) { Text(kind.title).font(.title3.bold()); Text(kind.subtitle).font(.subheadline).foregroundStyle(.secondary) }; Spacer(); Image(systemName: "chevron.right").foregroundStyle(.secondary) }.padding(20).background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 25))
+                    HStack(spacing: 18) { Image(systemName: kind.symbol).font(.system(size: 30)).foregroundStyle(Sprout.green).frame(width: 62, height: 68).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 20)); VStack(alignment: .leading, spacing: 7) { Text(kind.title).font(.title3.bold()); Text(kind.subtitle).font(.subheadline).foregroundStyle(.secondary) }; Spacer(); Image(systemName: "chevron.right").foregroundStyle(.secondary) }.padding(20).background(Sprout.panel, in: RoundedRectangle(cornerRadius: 25))
                 }.buttonStyle(.plain).accessibilityIdentifier("game-\(kind.rawValue)")
             }
             Label("已完成 \(model.progress.gamesCompleted) 局 · 收获 \(model.progress.stars) 颗星星", systemImage: "star.fill").font(.subheadline).foregroundStyle(.secondary)

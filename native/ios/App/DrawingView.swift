@@ -1,3 +1,4 @@
+#if os(iOS)
 import SwiftUI
 import PencilKit
 
@@ -163,3 +164,4 @@ private struct SystemShare: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIActivityViewController { UIActivityViewController(activityItems: [url], applicationActivities: nil) }
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
+#endif
