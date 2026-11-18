@@ -21,8 +21,6 @@ import { ALPHABET_PROGRESS_IDS } from './courses/alphabet-data.js';
 import './courses/pinyin.css';
 import './courses/alphabet.css';
 import './learning-hub.css';
-import { showSupport } from './support-dialog.js';
-import './support.css';
 import { createSpeechPlayer } from './speech.js';
 import { createDrawingBoard } from './drawing-board.js';
 import { renderDrawingBoard } from './drawing-board-view.js';
@@ -418,7 +416,6 @@ const drawingBoard = createDrawingBoard(document.querySelector('#drawing'), { to
 const actions = {
   explore: () => showNumber(nextNumberToLearn(state.learned) ?? 0),
   song: showSong, count: () => startGame('count'), find: () => startGame('find'), trace: () => showTrace(), parents: showParents, achievements: showAchievements,
-  support: () => showSupport({ openModal, dialogContent, icon }),
   train: adventures.train, compare: adventures.compare, memory: memoryGarden,
   balloons: balloonParty, picnic: bearPicnic, drum: littleDrum,
 };
