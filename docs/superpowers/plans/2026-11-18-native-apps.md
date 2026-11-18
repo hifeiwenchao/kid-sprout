@@ -35,10 +35,10 @@
 
 **Interfaces:** 直接将 `../shared/curriculum.json` 作为 bundle resource，读取 `numbers`。系统本地进度版本独立于内容 schema。系统分享通过家长验证。
 
-- [ ] 先写并运行模型测试：不同顺序点水果只累计一次；错误答案可重试；正确答案不能跳两关；仅完成第五关奖励一次；存档过滤无效数字并恢复。
-- [ ] 实现纯模型，再实现自适应导航、数字课程、三游戏、PencilKit 画板和家长区。画板自动保存 PKDrawing，清空/撤销/重做与 PNG 分享可用。
-- [ ] 生成可用的 Xcode project/scheme，运行 `xcodebuild test` 和模拟器 build；记录命令及结果。
-- [ ] 在 iPhone 与 iPad 模拟器运行，检查导航、游戏、画纸、旋转与重启恢复。
+- [x] 先写并运行模型测试：不同顺序点水果只累计一次；错误答案可重试；正确答案不能跳两关；仅完成第五关奖励一次；存档过滤无效数字并恢复。
+- [x] 实现纯模型，再实现自适应导航、数字课程、三游戏、PencilKit 画板和家长区。画板自动保存 PKDrawing，清空/撤销/重做与 PNG 分享可用。
+- [x] 生成可用的 Xcode project/scheme，运行 `xcodebuild test` 和模拟器 build；记录命令及结果。
+- [x] 在 iPhone 与 iPad 模拟器运行，检查导航、游戏、画纸、旋转与重启恢复。
 
 ### Task 3: Android 原生客户端
 
@@ -46,17 +46,17 @@
 
 **Interfaces:** Gradle 将 `../shared` 打包为 assets，读取 `curriculum.json`。游戏和存档不依赖网页 JS。不声明 INTERNET 等无关权限。
 
-- [ ] 安装缺失的 JDK/官方 Android SDK 构建工具，保留本机路径在被忽略的 local.properties 中。
-- [ ] 先写并运行模型测试：水果去重计数、五关奖励一次、重试与锁定、存档过滤、画笔历史与序列化恢复。
-- [ ] 实现 Compose 自适应导航、数字课程与三游戏、原生 Canvas 画板，归一化笔迹并保存草稿；用 FileProvider 分享 PNG。
-- [ ] 使用 wrapper 执行 `testDebugUnitTest assembleDebug lintDebug`，修复错误并记录 APK 路径。
-- [ ] 若可用模拟器，运行手机与平板交互检查；否则明确区分编译/单测与真机验证。
+- [x] 安装缺失的 JDK/官方 Android SDK 构建工具，保留本机路径在被忽略的 local.properties 中。
+- [x] 先写并运行模型测试：水果去重计数、五关奖励一次、重试与锁定、存档过滤、画笔历史与序列化恢复。
+- [x] 实现 Compose 自适应导航、数字课程与三游戏、原生 Canvas 画板，归一化笔迹并保存草稿；用 FileProvider 分享 PNG。
+- [x] 使用 wrapper 执行 `testDebugUnitTest assembleDebug lintDebug`，修复错误并记录 APK 路径。
+- [x] 若可用模拟器，运行手机与平板交互检查；否则明确区分编译/单测与真机验证。
 
 ### Task 4: 集成、审查与交付
 
 **Files:** `README.md`, `.gitignore`, `.dockerignore`, `native/README.md`。
 
-- [ ] 记录每端启动、测试、安装命令、当前范围、后续迁移范围与签名边界；忽略 SDK、签名密钥与构建产物。
-- [ ] 独立审查共享数据、两端状态机、保存恢复、儿童区入口及布局，修复发现的问题。
-- [ ] 运行 `npm test && npm run build && npm run native:content -- --check` 与两端适当的构建测试。
+- [x] 记录每端启动、测试、安装命令、当前范围、后续迁移范围与签名边界；忽略 SDK、签名密钥与构建产物。
+- [x] 独立审查共享数据、两端状态机、保存恢复、儿童区入口及布局，修复发现的问题。
+- [x] 运行 `npm test && npm run build && npm run native:content -- --check` 与两端适当的构建测试。
 - [ ] 使用 `feature: 添加iOS与安卓原生应用首版` 提交。确认原 main 无未提交改动并快进集成，推送用户已授权的 `origin main`。
