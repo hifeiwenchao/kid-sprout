@@ -1,0 +1,1051 @@
+{
+  "schemaVersion": 1,
+  "brand": "萌芽启蒙",
+  "numbers": [
+    {
+      "value": 0,
+      "name": "零"
+    },
+    {
+      "value": 1,
+      "name": "一"
+    },
+    {
+      "value": 2,
+      "name": "二"
+    },
+    {
+      "value": 3,
+      "name": "三"
+    },
+    {
+      "value": 4,
+      "name": "四"
+    },
+    {
+      "value": 5,
+      "name": "五"
+    },
+    {
+      "value": 6,
+      "name": "六"
+    },
+    {
+      "value": 7,
+      "name": "七"
+    },
+    {
+      "value": 8,
+      "name": "八"
+    },
+    {
+      "value": 9,
+      "name": "九"
+    },
+    {
+      "value": 10,
+      "name": "十"
+    }
+  ],
+  "pinyin": {
+    "edition": "2024 新版人教版一年级上册",
+    "sources": [
+      {
+        "title": "统编版（2024）一年级上册目录 · 师梦圆",
+        "url": "https://www.shimengyuan.com/jiaocais/1n2589.html",
+        "note": "核对第二至第四单元的14课课次，y w独立为第9课。"
+      },
+      {
+        "title": "2024年统编教材修订说明 · 人民教育出版社",
+        "url": "https://www.pep.com.cn/rjdt/rjdt/202408/t20240827_1994406.shtml",
+        "note": "2024年秋季一年级使用修订教材，拼音教学减缓起始坡度。"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "lesson-1",
+        "number": 1,
+        "unit": 2,
+        "symbols": [
+          "a",
+          "o",
+          "e"
+        ],
+        "title": "a o e",
+        "readSyllables": [],
+        "spellings": [
+          "ā á ǎ à",
+          "ō ó ǒ ò",
+          "ē é ě è"
+        ],
+        "rule": "四声小帽子标在韵母上：一声平，二声扬，三声拐弯，四声降。"
+      },
+      {
+        "id": "lesson-2",
+        "number": 2,
+        "unit": 2,
+        "symbols": [
+          "i",
+          "u",
+          "ü"
+        ],
+        "title": "i u ü",
+        "readSyllables": [],
+        "spellings": [
+          "ī í ǐ ì",
+          "ū ú ǔ ù",
+          "ǖ ǘ ǚ ǜ"
+        ],
+        "rule": "i戴上声调帽子时去掉小点；ü的两点要保留。"
+      },
+      {
+        "id": "lesson-3",
+        "number": 3,
+        "unit": 2,
+        "symbols": [
+          "b",
+          "p",
+          "m",
+          "f"
+        ],
+        "title": "b p m f",
+        "readSyllables": [],
+        "spellings": [
+          "b + ā → bā（八）",
+          "p + á → pá（爬）",
+          "m + ǎ → mǎ（马）",
+          "f + à → fà（发）"
+        ],
+        "rule": "前面的声母轻而短，后面的韵母响而长，紧紧连起来。"
+      },
+      {
+        "id": "lesson-4",
+        "number": 4,
+        "unit": 2,
+        "symbols": [
+          "d",
+          "t",
+          "n",
+          "l"
+        ],
+        "title": "d t n l",
+        "readSyllables": [],
+        "spellings": [
+          "d + à → dà（大）",
+          "t + ǔ → tǔ（土）",
+          "n + ǚ → nǚ（女）",
+          "l + ǜ → lǜ（绿）"
+        ],
+        "rule": "n、l和ü相拼时，ü的两点保留下来。"
+      },
+      {
+        "id": "lesson-5",
+        "number": 5,
+        "unit": 3,
+        "symbols": [
+          "g",
+          "k",
+          "h"
+        ],
+        "title": "g k h",
+        "readSyllables": [],
+        "spellings": [
+          "g + ē → gē（哥）",
+          "k + ǒu → kǒu（口）",
+          "h + é → hé（河）",
+          "g + u + ā → guā（瓜）"
+        ],
+        "rule": "三拼音节中，声母、介母、韵母连续拼出来：g—u—ā，guā。"
+      },
+      {
+        "id": "lesson-6",
+        "number": 6,
+        "unit": 3,
+        "symbols": [
+          "j",
+          "q",
+          "x"
+        ],
+        "title": "j q x",
+        "readSyllables": [],
+        "spellings": [
+          "j + ī → jī（鸡）",
+          "q + ì → qì（气）",
+          "x + ī → xī（西）",
+          "j + ǘ → jú（菊）"
+        ],
+        "rule": "ü和j、q、x相拼，两点省去，读音不变；不要读成u。"
+      },
+      {
+        "id": "lesson-7",
+        "number": 7,
+        "unit": 3,
+        "symbols": [
+          "z",
+          "c",
+          "s"
+        ],
+        "title": "z c s",
+        "readSyllables": [
+          "zi",
+          "ci",
+          "si"
+        ],
+        "spellings": [
+          "z + ǔ → zǔ（祖）",
+          "c + ā → cā（擦）",
+          "s + è → sè（色）"
+        ],
+        "rule": "zi、ci、si是整体认读音节，要整个记住、直接读。它们后面的i与衣服的i读音不同。"
+      },
+      {
+        "id": "lesson-8",
+        "number": 8,
+        "unit": 3,
+        "symbols": [
+          "zh",
+          "ch",
+          "sh",
+          "r"
+        ],
+        "title": "zh ch sh r",
+        "readSyllables": [
+          "zhi",
+          "chi",
+          "shi",
+          "ri"
+        ],
+        "spellings": [
+          "zh + ú → zhú（竹）",
+          "ch + á → chá（茶）",
+          "sh + ā → shā（沙）",
+          "r + è → rè（热）"
+        ],
+        "rule": "zhi、chi、shi、ri整体认读，舌尖翘起；后面的i与衣服的i读音不同。"
+      },
+      {
+        "id": "lesson-9",
+        "number": 9,
+        "unit": 3,
+        "symbols": [
+          "y",
+          "w"
+        ],
+        "title": "y w",
+        "readSyllables": [
+          "yi",
+          "wu",
+          "yu"
+        ],
+        "spellings": [
+          "yā（鸭）· wā（蛙）",
+          "yī（衣）· wū（乌）· yú（鱼）"
+        ],
+        "rule": "i、u、ü单独成音节时，分别写成yi、wu、yu，整个认读。yu中的ü省去两点。"
+      },
+      {
+        "id": "lesson-10",
+        "number": 10,
+        "unit": 4,
+        "symbols": [
+          "ai",
+          "ei",
+          "ui"
+        ],
+        "title": "ai ei ui",
+        "readSyllables": [],
+        "spellings": [
+          "b + ái → bái（白）",
+          "b + ēi → bēi（杯）",
+          "sh + uǐ → shuǐ（水）"
+        ],
+        "rule": "复韵母要从前一个音滑向后一个音。ui是uei的简写，声调标在i上。"
+      },
+      {
+        "id": "lesson-11",
+        "number": 11,
+        "unit": 4,
+        "symbols": [
+          "ao",
+          "ou",
+          "iu"
+        ],
+        "title": "ao ou iu",
+        "readSyllables": [],
+        "spellings": [
+          "m + āo → māo（猫）",
+          "g + ǒu → gǒu（狗）",
+          "n + iú → niú（牛）"
+        ],
+        "rule": "iu是iou的简写。i和u并排时，声调标在后一个字母上：niú、shuǐ。"
+      },
+      {
+        "id": "lesson-12",
+        "number": 12,
+        "unit": 4,
+        "symbols": [
+          "ie",
+          "üe",
+          "er"
+        ],
+        "title": "ie üe er",
+        "readSyllables": [
+          "ye",
+          "yue"
+        ],
+        "spellings": [
+          "x + ié → xié（鞋）",
+          "yé（爷）· yuè（月）",
+          "ěr（耳），独立成音节"
+        ],
+        "rule": "ye、yue整体认读。üe和y、j、q、x相拼时省去ü的两点；er不能与声母相拼。"
+      },
+      {
+        "id": "lesson-13",
+        "number": 13,
+        "unit": 4,
+        "symbols": [
+          "an",
+          "en",
+          "in",
+          "un",
+          "ün"
+        ],
+        "title": "an en in un ün",
+        "readSyllables": [
+          "yuan",
+          "yin",
+          "yun"
+        ],
+        "spellings": [
+          "sh + ān → shān（山）",
+          "m + én → mén（门）",
+          "yīn（音）· yún（云）· yuán（圆）"
+        ],
+        "rule": "前鼻韵母用舌尖收尾。yuan、yin、yun整体认读；un是uen的简写，yun里的ü省去两点。"
+      },
+      {
+        "id": "lesson-14",
+        "number": 14,
+        "unit": 4,
+        "symbols": [
+          "ang",
+          "eng",
+          "ing",
+          "ong"
+        ],
+        "title": "ang eng ing ong",
+        "readSyllables": [
+          "ying"
+        ],
+        "spellings": [
+          "t + áng → táng（糖）",
+          "d + ēng → dēng（灯）",
+          "x + īng → xīng（星）",
+          "zh + ōng → zhōng（钟）",
+          "yīng（鹰），整体认读"
+        ],
+        "rule": "后鼻韵母用舌根收尾，不能把ng读成两个音。ying是整体认读音节。"
+      }
+    ],
+    "items": [
+      {
+        "symbol": "a",
+        "kind": "final",
+        "hint": "嘴巴张大，舌头放低，声音自然出来。",
+        "example": "阿姨的阿",
+        "examplePinyin": "ā",
+        "speech": "阿姨的阿"
+      },
+      {
+        "symbol": "o",
+        "kind": "final",
+        "hint": "嘴唇拢圆，舌头往后缩一些。",
+        "example": "喔喔叫的喔",
+        "examplePinyin": "ō",
+        "speech": "公鸡喔喔叫",
+        "referenceNote": "喔是多音字，合成语音可能读成别的音。这里请看口型，由大人示范ō。"
+      },
+      {
+        "symbol": "e",
+        "kind": "final",
+        "hint": "嘴巴半开，嘴角向两边展开。",
+        "example": "白鹅的鹅",
+        "examplePinyin": "é",
+        "speech": "白鹅的鹅"
+      },
+      {
+        "symbol": "i",
+        "kind": "final",
+        "hint": "牙齿靠近，嘴角向两边展开。",
+        "example": "衣服的衣",
+        "examplePinyin": "yī",
+        "speech": "衣服的衣"
+      },
+      {
+        "symbol": "u",
+        "kind": "final",
+        "hint": "嘴唇向前拢成一个小圆洞。",
+        "example": "乌鸦的乌",
+        "examplePinyin": "wū",
+        "speech": "乌鸦的乌"
+      },
+      {
+        "symbol": "ü",
+        "kind": "final",
+        "hint": "先摆好i的口型，再把嘴唇拢圆。",
+        "example": "小鱼的鱼",
+        "examplePinyin": "yú",
+        "speech": "小鱼的鱼"
+      },
+      {
+        "symbol": "b",
+        "kind": "initial",
+        "hint": "双唇闭住再打开，气流轻轻出来。",
+        "example": "波浪的波",
+        "examplePinyin": "bō",
+        "speech": "波浪的波"
+      },
+      {
+        "symbol": "p",
+        "kind": "initial",
+        "hint": "双唇闭住再打开，让一口气冲出来。",
+        "example": "山坡的坡",
+        "examplePinyin": "pō",
+        "speech": "山坡的坡"
+      },
+      {
+        "symbol": "m",
+        "kind": "initial",
+        "hint": "双唇闭住，声音从鼻子里出来。",
+        "example": "摸一摸的摸",
+        "examplePinyin": "mō",
+        "speech": "摸一摸的摸"
+      },
+      {
+        "symbol": "f",
+        "kind": "initial",
+        "hint": "上牙轻碰下唇，让气流从缝里出来。",
+        "example": "佛像的佛",
+        "examplePinyin": "fó",
+        "speech": "佛像的佛"
+      },
+      {
+        "symbol": "d",
+        "kind": "initial",
+        "hint": "舌尖抵住上牙床，再轻轻放开。",
+        "example": "得到的得",
+        "examplePinyin": "dé",
+        "speech": "得到的得"
+      },
+      {
+        "symbol": "t",
+        "kind": "initial",
+        "hint": "舌尖抵住上牙床，再送出一口气。",
+        "example": "特别的特",
+        "examplePinyin": "tè",
+        "speech": "特别的特"
+      },
+      {
+        "symbol": "n",
+        "kind": "initial",
+        "hint": "舌尖抵住上牙床，让声音从鼻子出来。",
+        "example": "小牛的牛",
+        "examplePinyin": "niú",
+        "speech": "小牛的牛"
+      },
+      {
+        "symbol": "l",
+        "kind": "initial",
+        "hint": "舌尖抵住上牙床，气从舌头两边走。",
+        "example": "快乐的乐",
+        "examplePinyin": "lè",
+        "speech": "快乐的乐"
+      },
+      {
+        "symbol": "g",
+        "kind": "initial",
+        "hint": "舌根抬起碰软腭，轻轻放开。",
+        "example": "哥哥的哥",
+        "examplePinyin": "gē",
+        "speech": "哥哥的哥"
+      },
+      {
+        "symbol": "k",
+        "kind": "initial",
+        "hint": "舌根抬起再放开，同时送出一口气。",
+        "example": "蝌蚪的蝌",
+        "examplePinyin": "kē",
+        "speech": "蝌蚪的蝌"
+      },
+      {
+        "symbol": "h",
+        "kind": "initial",
+        "hint": "舌根抬高，让气从喉部轻轻擦过。",
+        "example": "喝水的喝",
+        "examplePinyin": "hē",
+        "speech": "喝水的喝"
+      },
+      {
+        "symbol": "j",
+        "kind": "initial",
+        "hint": "舌面抬高靠近硬腭，轻轻放开。",
+        "example": "小鸡的鸡",
+        "examplePinyin": "jī",
+        "speech": "小鸡的鸡"
+      },
+      {
+        "symbol": "q",
+        "kind": "initial",
+        "hint": "舌面抬高靠近硬腭，再送出一口气。",
+        "example": "气球的气",
+        "examplePinyin": "qì",
+        "speech": "气球的气"
+      },
+      {
+        "symbol": "x",
+        "kind": "initial",
+        "hint": "舌面靠近硬腭，让气从窄缝擦过。",
+        "example": "西瓜的西",
+        "examplePinyin": "xī",
+        "speech": "西瓜的西"
+      },
+      {
+        "symbol": "z",
+        "kind": "initial",
+        "hint": "舌尖平伸，抵住上门牙背再放开。",
+        "example": "紫色的紫",
+        "examplePinyin": "zǐ",
+        "speech": "紫色的紫"
+      },
+      {
+        "symbol": "c",
+        "kind": "initial",
+        "hint": "舌尖平伸，抵住上门牙背后送气。",
+        "example": "刺猬的刺",
+        "examplePinyin": "cì",
+        "speech": "刺猬的刺"
+      },
+      {
+        "symbol": "s",
+        "kind": "initial",
+        "hint": "舌尖靠近上门牙背，让气从缝里出来。",
+        "example": "丝线的丝",
+        "examplePinyin": "sī",
+        "speech": "丝线的丝"
+      },
+      {
+        "symbol": "zh",
+        "kind": "initial",
+        "hint": "舌尖翘起靠近硬腭前部，轻轻放开。",
+        "example": "蜘蛛的蜘",
+        "examplePinyin": "zhī",
+        "speech": "蜘蛛的蜘"
+      },
+      {
+        "symbol": "ch",
+        "kind": "initial",
+        "hint": "舌尖翘起靠近硬腭前部，送出一口气。",
+        "example": "吃饭的吃",
+        "examplePinyin": "chī",
+        "speech": "吃饭的吃"
+      },
+      {
+        "symbol": "sh",
+        "kind": "initial",
+        "hint": "舌尖翘起靠近硬腭前部，让气流擦过。",
+        "example": "狮子的狮",
+        "examplePinyin": "shī",
+        "speech": "狮子的狮"
+      },
+      {
+        "symbol": "r",
+        "kind": "initial",
+        "hint": "舌尖翘起，轻轻振动声带发音。",
+        "example": "太阳的日",
+        "examplePinyin": "rì",
+        "speech": "太阳的日"
+      },
+      {
+        "symbol": "y",
+        "kind": "initial",
+        "hint": "口型像i，拼读时轻轻带过。",
+        "example": "大树的叶",
+        "examplePinyin": "yè",
+        "speech": "大树的叶"
+      },
+      {
+        "symbol": "w",
+        "kind": "initial",
+        "hint": "嘴唇拢圆，拼读时轻轻滑向后面的韵母。",
+        "example": "青蛙的蛙",
+        "examplePinyin": "wā",
+        "speech": "青蛙的蛙"
+      },
+      {
+        "symbol": "ai",
+        "kind": "final",
+        "hint": "先张嘴发a，再慢慢滑向i，连成一个音。",
+        "example": "矮小的矮",
+        "examplePinyin": "ǎi",
+        "speech": "矮小的矮"
+      },
+      {
+        "symbol": "ei",
+        "kind": "final",
+        "hint": "从e的口型开始，慢慢滑向i。",
+        "example": "杯子的杯",
+        "examplePinyin": "bēi",
+        "speech": "杯子的杯"
+      },
+      {
+        "symbol": "ui",
+        "kind": "final",
+        "hint": "先拢圆嘴唇，再滑向ei的口型。",
+        "example": "喝水的水",
+        "examplePinyin": "shuǐ",
+        "speech": "喝水的水"
+      },
+      {
+        "symbol": "ao",
+        "kind": "final",
+        "hint": "先张大嘴巴，再慢慢拢圆嘴唇。",
+        "example": "棉袄的袄",
+        "examplePinyin": "ǎo",
+        "speech": "棉袄的袄"
+      },
+      {
+        "symbol": "ou",
+        "kind": "final",
+        "hint": "从圆圆的o开始，再把嘴唇收小。",
+        "example": "海鸥的鸥",
+        "examplePinyin": "ōu",
+        "speech": "海鸥的鸥"
+      },
+      {
+        "symbol": "iu",
+        "kind": "final",
+        "hint": "先展开嘴角发i，再滑向ou的口型。",
+        "example": "小牛的牛",
+        "examplePinyin": "niú",
+        "speech": "小牛的牛"
+      },
+      {
+        "symbol": "ie",
+        "kind": "final",
+        "hint": "先展开嘴角发i，再把嘴巴打开一些。",
+        "example": "大树的叶",
+        "examplePinyin": "yè",
+        "speech": "大树的叶"
+      },
+      {
+        "symbol": "üe",
+        "kind": "final",
+        "hint": "从ü的圆嘴口型开始，再把嘴巴打开。",
+        "example": "月亮的月",
+        "examplePinyin": "yuè",
+        "speech": "月亮的月"
+      },
+      {
+        "symbol": "er",
+        "kind": "final",
+        "hint": "嘴巴半开，舌尖轻轻向上卷起。",
+        "example": "耳朵的耳",
+        "examplePinyin": "ěr",
+        "speech": "耳朵的耳"
+      },
+      {
+        "symbol": "an",
+        "kind": "final",
+        "hint": "先张嘴发a，再用舌尖抵住上牙床收尾。",
+        "example": "安全的安",
+        "examplePinyin": "ān",
+        "speech": "安全的安"
+      },
+      {
+        "symbol": "en",
+        "kind": "final",
+        "hint": "从e开始，舌尖抵住上牙床，用鼻音收尾。",
+        "example": "大门的门",
+        "examplePinyin": "mén",
+        "speech": "大门的门"
+      },
+      {
+        "symbol": "in",
+        "kind": "final",
+        "hint": "先展开嘴角发i，再把舌尖抵住上牙床。",
+        "example": "音乐的音",
+        "examplePinyin": "yīn",
+        "speech": "音乐的音"
+      },
+      {
+        "symbol": "un",
+        "kind": "final",
+        "hint": "先拢圆嘴唇，再滑向en，用舌尖收尾。",
+        "example": "车轮的轮",
+        "examplePinyin": "lún",
+        "speech": "车轮的轮"
+      },
+      {
+        "symbol": "ün",
+        "kind": "final",
+        "hint": "先用ü的圆嘴口型，再把舌尖抵住上牙床。",
+        "example": "白云的云",
+        "examplePinyin": "yún",
+        "speech": "白云的云"
+      },
+      {
+        "symbol": "ang",
+        "kind": "final",
+        "hint": "先张大嘴，再抬起舌根，用后鼻音收尾。",
+        "example": "糖果的糖",
+        "examplePinyin": "táng",
+        "speech": "糖果的糖"
+      },
+      {
+        "symbol": "eng",
+        "kind": "final",
+        "hint": "从e开始，抬起舌根，用后鼻音收尾。",
+        "example": "台灯的灯",
+        "examplePinyin": "dēng",
+        "speech": "台灯的灯"
+      },
+      {
+        "symbol": "ing",
+        "kind": "final",
+        "hint": "先展开嘴角发i，再抬起舌根用鼻音收尾。",
+        "example": "星星的星",
+        "examplePinyin": "xīng",
+        "speech": "星星的星"
+      },
+      {
+        "symbol": "ong",
+        "kind": "final",
+        "hint": "嘴唇拢圆，舌根抬起，用后鼻音收尾。",
+        "example": "时钟的钟",
+        "examplePinyin": "zhōng",
+        "speech": "时钟的钟"
+      }
+    ],
+    "tones": [
+      {
+        "number": 1,
+        "mark": "ˉ",
+        "name": "一声",
+        "hint": "高高平平，声音走平路。",
+        "path": "M12 25H88"
+      },
+      {
+        "number": 2,
+        "mark": "ˊ",
+        "name": "二声",
+        "hint": "从低往高，声音上小坡。",
+        "path": "M12 66L88 22"
+      },
+      {
+        "number": 3,
+        "mark": "ˇ",
+        "name": "三声",
+        "hint": "先降再升，声音拐个弯。",
+        "path": "M12 35L45 72L88 20"
+      },
+      {
+        "number": 4,
+        "mark": "ˋ",
+        "name": "四声",
+        "hint": "从高往低，声音下小坡。",
+        "path": "M12 22L88 72"
+      }
+    ]
+  },
+  "alphabet": {
+    "letters": [
+      {
+        "id": "A",
+        "uppercase": "A",
+        "lowercase": "a",
+        "word": "Apple",
+        "translation": "苹果",
+        "emoji": "🍎",
+        "hint": "大写 A 像一座小山，小写 a 有圆圆的肚子。"
+      },
+      {
+        "id": "B",
+        "uppercase": "B",
+        "lowercase": "b",
+        "word": "Bear",
+        "translation": "小熊",
+        "emoji": "🐻",
+        "hint": "大写 B 挺直腰，两个圆肚子上下排；小写 b 只有一个圆肚子。"
+      },
+      {
+        "id": "C",
+        "uppercase": "C",
+        "lowercase": "c",
+        "word": "Cat",
+        "translation": "小猫",
+        "emoji": "🐱",
+        "hint": "C 和 c 都像张开的小嘴，大写高一点，小写矮一点。"
+      },
+      {
+        "id": "D",
+        "uppercase": "D",
+        "lowercase": "d",
+        "word": "Dog",
+        "translation": "小狗",
+        "emoji": "🐶",
+        "hint": "大写 D 像一扇圆门，小写 d 的小肚子在左边。"
+      },
+      {
+        "id": "E",
+        "uppercase": "E",
+        "lowercase": "e",
+        "word": "Elephant",
+        "translation": "大象",
+        "emoji": "🐘",
+        "hint": "大写 E 有三条横线，小写 e 像带小横线的圆圈。"
+      },
+      {
+        "id": "F",
+        "uppercase": "F",
+        "lowercase": "f",
+        "word": "Fish",
+        "translation": "小鱼",
+        "emoji": "🐟",
+        "hint": "大写 F 有两条横线，小写 f 弯弯头、伸长脚。"
+      },
+      {
+        "id": "G",
+        "uppercase": "G",
+        "lowercase": "g",
+        "word": "Grape",
+        "translation": "葡萄",
+        "emoji": "🍇",
+        "hint": "大写 G 像 C 加一小横，小写 g 的小尾巴往下弯。"
+      },
+      {
+        "id": "H",
+        "uppercase": "H",
+        "lowercase": "h",
+        "word": "House",
+        "translation": "房子",
+        "emoji": "🏠",
+        "hint": "大写 H 像小梯子，小写 h 像一把高背椅。"
+      },
+      {
+        "id": "I",
+        "uppercase": "I",
+        "lowercase": "i",
+        "word": "Ice",
+        "translation": "冰块",
+        "emoji": "🧊",
+        "hint": "大写 I 站得直直的，小写 i 头上有一颗小圆点。"
+      },
+      {
+        "id": "J",
+        "uppercase": "J",
+        "lowercase": "j",
+        "word": "Juice",
+        "translation": "果汁",
+        "emoji": "🧃",
+        "hint": "J 和 j 的小脚都往左弯，小写 j 头上还有小圆点。"
+      },
+      {
+        "id": "K",
+        "uppercase": "K",
+        "lowercase": "k",
+        "word": "Kite",
+        "translation": "风筝",
+        "emoji": "🪁",
+        "hint": "K 和 k 都伸出两条斜线，像一只张开的小手。"
+      },
+      {
+        "id": "L",
+        "uppercase": "L",
+        "lowercase": "l",
+        "word": "Lion",
+        "translation": "狮子",
+        "emoji": "🦁",
+        "hint": "大写 L 像个小拐角，小写 l 是一条高高的直线。"
+      },
+      {
+        "id": "M",
+        "uppercase": "M",
+        "lowercase": "m",
+        "word": "Moon",
+        "translation": "月亮",
+        "emoji": "🌙",
+        "hint": "大写 M 像两座山，小写 m 像两扇挨着的小拱门。"
+      },
+      {
+        "id": "N",
+        "uppercase": "N",
+        "lowercase": "n",
+        "word": "Nest",
+        "translation": "鸟窝",
+        "emoji": "🪺",
+        "hint": "大写 N 的中间有一条斜线，小写 n 只有一扇小拱门。"
+      },
+      {
+        "id": "O",
+        "uppercase": "O",
+        "lowercase": "o",
+        "word": "Orange",
+        "translation": "橙子",
+        "emoji": "🍊",
+        "hint": "O 和 o 都是圆圈，圆圆大圈、圆圆小圈。"
+      },
+      {
+        "id": "P",
+        "uppercase": "P",
+        "lowercase": "p",
+        "word": "Panda",
+        "translation": "熊猫",
+        "emoji": "🐼",
+        "hint": "大写 P 的小肚子在右上方，小写 p 的长脚伸到下面。"
+      },
+      {
+        "id": "Q",
+        "uppercase": "Q",
+        "lowercase": "q",
+        "word": "Queen",
+        "translation": "女王",
+        "emoji": "👑",
+        "hint": "大写 Q 是圆圈加短尾巴，小写 q 的长脚在右边。"
+      },
+      {
+        "id": "R",
+        "uppercase": "R",
+        "lowercase": "r",
+        "word": "Rabbit",
+        "translation": "小兔",
+        "emoji": "🐰",
+        "hint": "大写 R 比 P 多一条斜腿，小写 r 像冒出一枝小芽。"
+      },
+      {
+        "id": "S",
+        "uppercase": "S",
+        "lowercase": "s",
+        "word": "Sun",
+        "translation": "太阳",
+        "emoji": "☀️",
+        "hint": "S 和 s 都弯弯的，像一条快乐扭动的小蛇。"
+      },
+      {
+        "id": "T",
+        "uppercase": "T",
+        "lowercase": "t",
+        "word": "Tiger",
+        "translation": "老虎",
+        "emoji": "🐯",
+        "hint": "大写 T 像一把小雨伞，小写 t 的横线在腰上。"
+      },
+      {
+        "id": "U",
+        "uppercase": "U",
+        "lowercase": "u",
+        "word": "Umbrella",
+        "translation": "雨伞",
+        "emoji": "☂️",
+        "hint": "U 和 u 都像小杯子，注意小写 u 右边的小尾巴。"
+      },
+      {
+        "id": "V",
+        "uppercase": "V",
+        "lowercase": "v",
+        "word": "Violin",
+        "translation": "小提琴",
+        "emoji": "🎻",
+        "hint": "V 和 v 都像尖尖的山谷，两条斜线在下面碰头。"
+      },
+      {
+        "id": "W",
+        "uppercase": "W",
+        "lowercase": "w",
+        "word": "Whale",
+        "translation": "鲸鱼",
+        "emoji": "🐳",
+        "hint": "W 和 w 像两个 V 手拉手，沿着山谷走一走。"
+      },
+      {
+        "id": "X",
+        "uppercase": "X",
+        "lowercase": "x",
+        "word": "Xylophone",
+        "translation": "木琴",
+        "emoji": "🎶",
+        "hint": "X 和 x 都是两条斜线交叉，像打招呼的两只手。"
+      },
+      {
+        "id": "Y",
+        "uppercase": "Y",
+        "lowercase": "y",
+        "word": "Yogurt",
+        "translation": "酸奶",
+        "emoji": "🥣",
+        "hint": "大写 Y 像小树杈，小写 y 的一条小腿往下伸。"
+      },
+      {
+        "id": "Z",
+        "uppercase": "Z",
+        "lowercase": "z",
+        "word": "Zebra",
+        "translation": "斑马",
+        "emoji": "🦓",
+        "hint": "Z 和 z 像一条滑梯：横着走，斜着滑，再横着走。"
+      }
+    ],
+    "groups": [
+      {
+        "id": "a-f",
+        "label": "A – F",
+        "letters": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      {
+        "id": "g-l",
+        "label": "G – L",
+        "letters": [
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L"
+        ]
+      },
+      {
+        "id": "m-r",
+        "label": "M – R",
+        "letters": [
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R"
+        ]
+      },
+      {
+        "id": "s-z",
+        "label": "S – Z",
+        "letters": [
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+          "Z"
+        ]
+      }
+    ]
+  }
+}
