@@ -35,6 +35,13 @@ xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSprout \
 node native/ios/generate-project.cjs
 ```
 
+重新生成 iOS 和 Mac 的不透明图标（在仓库根目录执行，不启动应用）：
+
+```sh
+swift native/ios/scripts/GenerateIcon.swift native/ios/App/Assets.xcassets/AppIcon.appiconset/icon.png
+node native/ios/scripts/GenerateMacIcons.cjs
+```
+
 该脚本仅依赖Node内置库，无需XcodeGen。共享核心的全部Swift文件、App界面、`curriculum.json`、`activities.json`和`illustrations/`均由工程打包。离线PNG在构建内容时由resvg生成，应用运行时无SVG/HTML解析依赖。
 
 ## 交互与兼容
