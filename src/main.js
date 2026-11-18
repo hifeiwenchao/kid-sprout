@@ -379,6 +379,19 @@ function showAchievements() {
   openModal(`<span class="modal-kicker">每一次努力，都闪闪发光</span><h2 id="dialog-title">我的小成就</h2><p class="modal-subtitle">认识 <b>${state.learned.size}</b> 个数字 · 完成 <b>${learning.pinyin.size}</b> 课拼音 · 认识 <b>${learning.alphabet.size}</b> 个字母<br>已经完成 <b>${state.wins}</b> 次小游戏</p><div class="achievement-grid">${achievements.map(a=>`<div class="achievement ${a.earned?'earned':''}"><span class="achievement-symbol">${a.earned ? a.symbol : icon('lock',30)}</span><strong>${a.title}</strong><small>${a.description}</small><span class="achievement-status">${a.earned?'已获得 · 你真棒！':'等待你来点亮'}</span></div>`).join('')}</div><button class="button primary" id="back-to-learn">继续探索${icon('arrow',18)}</button>`, 'achievement-modal');
   document.querySelector('#back-to-learn').onclick = () => { closeModal(); navigate('home'); };
 }
+function showAuthor() {
+  openModal(`
+    <span class="author-badge" aria-hidden="true">${icon('leaf', 29)}</span>
+    <span class="modal-kicker">为孩子做的小应用，分享给更多家庭</span>
+    <h2 id="dialog-title">关于作者</h2>
+    <div class="author-copy">
+      <p>我是一个 90 后程序猿，最初只是想为自家娃做一个有趣的启蒙小应用。</p>
+      <p>希望这些轻松的小练习，也能陪伴更多孩子慢慢探索、快乐成长。如果你有任何建议或问题反馈，欢迎来信交流。</p>
+    </div>
+    <a class="author-email" href="mailto:hi@feiwenchao.com">${icon('mail', 19)}<span>hi@feiwenchao.com</span>${icon('arrow', 17)}</a>
+  `, 'author-modal');
+}
+
 function showParents() {
   openModal(`<span class="modal-symbol parent-symbol">${icon('heart',30)}</span><span class="modal-kicker">写给温柔的大朋友</span><h2 id="dialog-title">陪伴，是最好的启蒙</h2><p class="modal-subtitle">从数字到语言，跟着孩子自己的节奏探索</p><div class="parent-tips"><p><b>01 · 每天一点点</b>一次玩 5–10 分钟就好。低龄孩子先认数字、看看字母；拼音可以在准备好时一起慢慢学。</p><p><b>02 · 把发现带进生活</b>数桌上的苹果、找书里的字母、听一个汉字的声调。屏幕外也有很多小课堂。</p><p><b>03 · 陪孩子一起听读</b>拼音按 2024 新版人教一年级上册顺序组织，是自主制作的辅助练习。例字合成语音用于读音参考；声母要读得轻短，建议结合老师示范。英文字母学习的是字母名和常见单词。</p><p><b>04 · 鼓励每一次尝试</b>答错可以再试，没有倒计时和排名。认识的数字、完成的拼音课、字母和成就自动保存在当前浏览器中。</p></div><button class="button primary" id="parents-close">和宝贝一起出发${icon('heart',18)}</button>`, 'parent-modal');
   document.querySelector('#parents-close').onclick = closeModal;
@@ -416,6 +429,7 @@ const drawingBoard = createDrawingBoard(document.querySelector('#drawing'), { to
 const actions = {
   explore: () => showNumber(nextNumberToLearn(state.learned) ?? 0),
   song: showSong, count: () => startGame('count'), find: () => startGame('find'), trace: () => showTrace(), parents: showParents, achievements: showAchievements,
+  author: showAuthor,
   train: adventures.train, compare: adventures.compare, memory: memoryGarden,
   balloons: balloonParty, picnic: bearPicnic, drum: littleDrum,
 };

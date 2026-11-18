@@ -65,9 +65,9 @@ docker build -t kid-sprout:local .
 docker run -d --name kid-sprout -p 8080:80 kid-sprout:local
 ```
 
-## 联系作者
+## 关于作者
 
-桌面端左侧栏底部的“联系我”入口展示邮箱 `hi@feiwenchao.com`；手机端入口位于公共页脚。点击可通过系统默认邮件应用联系作者。
+桌面端左侧栏底部和手机端公共页脚提供“关于作者”入口，点击弹窗可了解作者为自家娃制作启蒙应用的初衷。欢迎提出建议或反馈问题，弹窗中的邮箱 `hi@feiwenchao.com` 可点击唤起系统默认邮件应用。
 
 ## 功能
 
