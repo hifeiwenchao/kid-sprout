@@ -1,8 +1,79 @@
 import AppKit
+import SwiftUI
 import XCTest
 @testable import KidSproutMac
 
 final class MacDrawingTests: XCTestCase {
+    @MainActor func testTemplateSwitchClearsInkAndUndoRestoresInkAndTemplateTogether() throws {
+        let url = draftURL()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let board = DrawingModel(storageURL: url)
+        drawLine(board)
+        board.selectTemplate("numbers:0")
+        XCTAssertEqual(board.templateID, "numbers:0")
+        XCTAssertTrue(board.strokes.isEmpty)
+        board.undo()
+        XCTAssertNil(board.templateID)
+        XCTAssertEqual(board.strokes.count, 1)
+        board.redo()
+        XCTAssertEqual(board.templateID, "numbers:0")
+        board.selectTemplate("alphabet:Aa")
+        board.undo()
+        XCTAssertEqual(board.templateID, "numbers:0")
+        XCTAssertEqual(DrawingModel(storageURL: url).templateID, "numbers:0")
+        board.selectTemplate("alphabet:AA")
+        XCTAssertEqual(board.templateID, "numbers:0")
+    }
+
+    @MainActor func testLegacySixColorsAndCustomMarkerSurviveNewPaletteAndPersistence() throws {
+        let url = draftURL()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let old = Data(#"{"version":1,"strokes":[{"colorIndex":0,"width":8,"erasing":false,"points":[{"x":100,"y":100}]}]}"#.utf8)
+        try old.write(to: url)
+        let board = DrawingModel(storageURL: url)
+        XCTAssertEqual(board.strokes[0].colorHex, "#000000")
+        XCTAssertEqual(board.colors.count, 12)
+        board.customColor = Color(red: 1, green: 0, blue: 1)
+        board.colorIndex = -1
+        board.selectTool(.marker)
+        board.width = 48
+        drawLine(board)
+        let marker = board.strokes[1]
+        XCTAssertEqual(marker.opacity, 0.32)
+        XCTAssertEqual(marker.colorHex, "#FF00FF")
+        XCTAssertEqual(marker.width, 48)
+        let restored = DrawingModel(storageURL: url)
+        XCTAssertEqual(restored.strokes, board.strokes)
+        XCTAssertNil(restored.saveError)
+    }
+
+    @MainActor func testExportIncludesGuideAndEraserRevealsItWithoutExportingGrid() throws {
+        let url = draftURL()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: 1000, pixelsHigh: 700, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 4000, bitsPerPixel: 32)!
+        let guideColor = NSColor(deviceRed: 0, green: 1, blue: 0, alpha: 1)
+        for x in 490..<510 { for y in 290..<310 { bitmap.setColor(guideColor, atX: x, y: y) } }
+        try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(to: url.deletingLastPathComponent().appendingPathComponent("guide_numbers_30.png"))
+        let board = DrawingModel(storageURL: url, illustrationDirectory: url.deletingLastPathComponent())
+        board.selectTemplate("numbers:0")
+        board.showGrid = true
+        let guidePNG = try board.pngData()
+        board.showGrid = false
+        XCTAssertEqual(try board.pngData(), guidePNG)
+        board.width = 48
+        board.beginStroke(at: CGPoint(x: 500, y: 300)); board.endStroke()
+        board.erasing = true
+        board.beginStroke(at: CGPoint(x: 500, y: 300)); board.endStroke()
+        let image = try XCTUnwrap(NSBitmapImageRep(data: try board.pngData()))
+        let pixel = try XCTUnwrap(image.colorAt(x: 1000, y: 600)?.usingColorSpace(.deviceRGB))
+        XCTAssertGreaterThan(pixel.greenComponent, 0.9)
+        XCTAssertLessThan(pixel.redComponent, 0.1)
+        XCTAssertEqual(board.templateID, "numbers:0")
+        board.clear()
+        XCTAssertEqual(board.templateID, "numbers:0")
+    }
     @MainActor func testStrokeClearUndoRedoAndNewBranchPersistTheVisibleDrawing() throws {
         let url = draftURL()
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
@@ -50,7 +121,7 @@ final class MacDrawingTests: XCTestCase {
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         let fixtures = [
             "not JSON",
-            #"{"version":2,"strokes":[]}"#,
+            #"{"version":3,"strokes":[]}"#,
             #"{"version":1,"strokes":[{"colorIndex":0,"width":8,"erasing":false,"points":[{"x":1001,"y":5}]}]}"#,
             #"{"version":1,"strokes":[{"colorIndex":7,"width":8,"erasing":false,"points":[{"x":3,"y":5}]}]}"#,
             #"{"version":1,"strokes":[{"colorIndex":0,"width":0,"erasing":false,"points":[{"x":3,"y":5}]}]}"#,
@@ -108,6 +179,7 @@ final class MacDrawingTests: XCTestCase {
         let url = draftURL()
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
         let board = DrawingModel(storageURL: url)
+        board.colorIndex = 11
         board.width = 20
         board.beginStroke(at: CGPoint(x: 200, y: 100))
         board.appendPoint(CGPoint(x: 600, y: 100))
@@ -121,7 +193,7 @@ final class MacDrawingTests: XCTestCase {
         XCTAssertEqual(paper.blueComponent, 1, accuracy: 0.001)
         XCTAssertEqual(paper.alphaComponent, 1, accuracy: 0.001)
         let ink = try XCTUnwrap(image.colorAt(x: 800, y: 200)?.usingColorSpace(.deviceRGB))
-        XCTAssertLessThan(ink.redComponent, 0.01)
+        XCTAssertLessThan(ink.redComponent, 0.5)
         board.erasing = true
         board.beginStroke(at: CGPoint(x: 400, y: 100))
         board.endStroke()
@@ -130,7 +202,7 @@ final class MacDrawingTests: XCTestCase {
         XCTAssertEqual(erasedPixel.redComponent, 1, accuracy: 0.001)
         board.undo()
         let undone = try XCTUnwrap(NSBitmapImageRep(data: try board.pngData()))
-        XCTAssertLessThan(try XCTUnwrap(undone.colorAt(x: 800, y: 200)).redComponent, 0.01)
+        XCTAssertLessThan(try XCTUnwrap(undone.colorAt(x: 800, y: 200)).redComponent, 0.5)
     }
 
     @MainActor func testFailedDraftAndPNGSaveShowReadableErrorsAndKeepDrawing() throws {

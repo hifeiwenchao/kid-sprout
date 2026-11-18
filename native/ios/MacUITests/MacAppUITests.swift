@@ -1,3 +1,4 @@
+// 本次仅静态更新；未在当前桌面运行 UI 测试，供后续专用 CI 执行。
 import XCTest
 import AppKit
 
@@ -7,89 +8,189 @@ final class MacAppUITests: XCTestCase {
     override func tearDownWithError() throws { app.terminate() }
 
     func testLearningCountingAndProgressRestore() {
-        navigate("数字乐园")
-        let lesson = app.buttons["lesson3"]
-        XCTAssertTrue(lesson.waitForExistence(timeout: 5))
-        lesson.click()
-        app.buttons["fruit2"].click()
-        app.buttons["fruit0"].click()
-        app.buttons["fruit2"].click()
-        XCTAssertEqual(text(app.staticTexts["countFeedback"]), "已经数了 2 个苹果")
-        app.buttons["markLearned"].click()
-        app.terminate(); app.launch()
-        navigate("数字乐园")
-        XCTAssertTrue(app.buttons["lesson3"].label.contains("已学过"))
-        app.buttons["lesson0"].click()
-        XCTAssertTrue(app.staticTexts["空空的篮子，有 0 个苹果"].exists)
-        app.buttons["zeroApple"].click()
-        XCTAssertTrue(app.staticTexts["放入 1 个，现在有 1 个"].exists)
-        app.buttons["zeroApple"].click()
-        XCTAssertTrue(app.staticTexts["空空的篮子，有 0 个苹果"].exists)
+        navigate("numbers")
+        click(app.buttons["lesson3"])
+        click(app.buttons["fruit2"])
+        click(app.buttons["fruit0"])
+        click(app.buttons["fruit2"])
+        XCTAssertEqual(text(app.staticTexts["countFeedback"]), "已经数过 2 颗草莓")
+        XCTAssertTrue(app.buttons["重播3记忆动画"].exists)
         capture("mac-numbers")
+        click(app.buttons["完成"])
+        app.terminate()
+        app.launch()
+        navigate("numbers")
+        reveal(app.buttons["lesson3"])
+        XCTAssertTrue(app.buttons["lesson3"].label.contains("已认识"))
+        click(app.buttons["lesson0"])
+        click(app.buttons["zeroApple"])
+        XCTAssertTrue(app.staticTexts["1 个苹果"].exists)
+        click(app.buttons["zeroApple"])
+        XCTAssertTrue(app.staticTexts["0 个苹果"].exists)
+        click(app.buttons["完成"])
     }
 
-    func testFiveRoundsRetryAndParentCancellation() {
-        navigate("小游戏")
-        app.buttons["game-findNumber"].click()
-        for round in 0..<5 {
-            let prompt = app.staticTexts.matching(NSPredicate(format: "value BEGINSWITH %@", "找一找：")).firstMatch
-            XCTAssertTrue(prompt.waitForExistence(timeout: 5))
-            let names = ["零","一","二","三","四","五","六","七","八","九","十"]
-            let answer = names.firstIndex(of: text(prompt).replacingOccurrences(of: "找一找：", with: ""))!
+    func testPinyinAlphabetAndCombinedGameFilters() {
+        navigate("pinyin")
+        let firstLesson = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "第1课，")).firstMatch
+        click(firstLesson)
+        XCTAssertTrue(app.buttons["a"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["重播a记忆动画"].exists)
+        click(app.buttons["o"])
+        XCTAssertTrue(app.buttons["重播o记忆动画"].exists)
+        click(app.buttons["完成这一课 ✓"])
+        XCTAssertTrue(text(app.staticTexts["pinyinLessonFeedback"]).contains("第1课的小叶子收好啦"))
+        capture("mac-pinyin")
+        click(app.buttons["完成"])
+        reveal(firstLesson)
+        XCTAssertTrue(firstLesson.label.contains("已学过"))
+        navigate("alphabet")
+        let letterA = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "字母 A，小写 a，")).firstMatch
+        click(letterA)
+        XCTAssertTrue(app.buttons["重播Aa记忆动画"].waitForExistence(timeout: 5))
+        click(app.buttons["听字母名 A"])
+        click(app.buttons["听英文单词 Apple"])
+        reveal(app.buttons["我练好啦 ✓"])
+        XCTAssertTrue(app.buttons["我练好啦 ✓"].exists)
+        capture("mac-alphabet")
+        click(app.buttons["完成"])
+        reveal(letterA)
+        XCTAssertTrue(letterA.label.contains("已认识"))
+
+        navigate("games")
+        assertGameCount(60)
+        click(subjectFilter("数字乐园"))
+        assertGameCount(20)
+        let picker = app.popUpButtons["gameCategory"].exists ? app.popUpButtons["gameCategory"] : app.buttons["gameCategory"]
+        click(picker)
+        let category = app.menuItems["顺序与思考"].exists ? app.menuItems["顺序与思考"] : app.buttons["顺序与思考"]
+        click(category)
+        let categoryCount = gameCount()
+        XCTAssertGreaterThan(categoryCount, 0)
+        XCTAssertLessThan(categoryCount, 20)
+        setGameSearch("气球")
+        assertGameCount(1)
+        XCTAssertTrue(app.buttons["game-numbers-balloons"].exists)
+        setGameSearch("no-matching-sprout-game")
+        assertGameCount(0)
+        reveal(app.staticTexts["小伙伴还没找到"])
+        XCTAssertTrue(app.staticTexts["小伙伴还没找到"].exists)
+        click(app.buttons["显示全部游戏"])
+        assertGameCount(60)
+        capture("mac-game-filters")
+    }
+
+    func testFiveRoundsRetryAndParentCancellation() throws {
+        openGame("numbers-find", search: "数字捉迷藏")
+        let names = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]
+        for round in 1...5 {
+            let prompt = app.staticTexts["activityPrompt"]
+            reveal(prompt)
+            let name = try XCTUnwrap(text(prompt).components(separatedBy: "「").last?.components(separatedBy: "」").first)
+            let answer = try XCTUnwrap(names.firstIndex(of: name))
+            XCTAssertTrue(app.staticTexts["第 \(round) / 5 关"].exists)
             let wrong = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND identifier != %@", "answer", "answer\(answer)")).firstMatch
-            wrong.click()
-            XCTAssertTrue(text(app.staticTexts["gameFeedback"]).contains("再看一看"))
-            app.buttons["answer\(answer)"].click()
-            XCTAssertFalse(app.buttons["answer\(answer)"].isEnabled)
-            app.buttons["nextRound"].click()
-            if round == 4 { XCTAssertTrue(app.buttons["再玩一局"].waitForExistence(timeout: 5), app.debugDescription) }
+            click(wrong)
+            XCTAssertTrue(text(app.staticTexts["gameFeedback"]).contains("再试一次"))
+            XCTAssertFalse(app.buttons["nextRound"].exists)
+            let correct = app.buttons["answer\(answer)"]
+            click(correct)
+            XCTAssertFalse(correct.isEnabled)
+            click(app.buttons["nextRound"])
         }
+        XCTAssertTrue(app.buttons["再玩一局"].waitForExistence(timeout: 5), app.debugDescription)
         capture("mac-game-complete")
-        navigate("家长区")
-        app.buttons["authorEmail"].click()
+        click(app.buttons["再玩一局"])
+        reveal(app.staticTexts["第 1 / 5 关"])
+        XCTAssertTrue(app.staticTexts["第 1 / 5 关"].exists)
+        XCTAssertFalse(app.buttons["nextRound"].exists)
+        click(app.buttons["关闭"])
+        click(app.buttons["给爸爸妈妈的话"])
+        click(app.buttons["authorEmail"])
         XCTAssertTrue(app.textFields["gateAnswer"].waitForExistence(timeout: 5))
-        app.textFields["gateAnswer"].click(); app.textFields["gateAnswer"].typeText("0")
-        app.buttons["gateConfirm"].click()
-        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "value BEGINSWITH %@", "再算一算")).firstMatch.exists)
-        app.buttons["取消"].click()
+        app.textFields["gateAnswer"].click()
+        app.textFields["gateAnswer"].typeText("0")
+        click(app.buttons["gateConfirm"])
+        let error = app.staticTexts.matching(NSPredicate(format: "value BEGINSWITH %@ OR label BEGINSWITH %@", "再算一算", "再算一算")).firstMatch
+        XCTAssertTrue(error.exists)
+        click(app.buttons["取消"])
         XCTAssertFalse(app.textFields["gateAnswer"].exists)
         capture("mac-parents")
+        click(app.buttons["完成"])
+        click(app.buttons["关于作者"])
+        click(app.buttons["authorEmail"])
+        XCTAssertTrue(app.textFields["gateAnswer"].waitForExistence(timeout: 5))
+        click(app.buttons["取消"])
+        XCTAssertFalse(app.textFields["gateAnswer"].exists)
+        click(app.buttons["完成"])
+    }
+
+    func testMemoryAndBalloonGameState() {
+        openGame("numbers-memory", search: "记忆翻翻乐")
+        let hiddenCards = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "翻开第 "))
+        XCTAssertEqual(hiddenCards.count, 6)
+        XCTAssertTrue(app.staticTexts["第 1 / 3 关"].exists)
+        XCTAssertFalse(app.buttons["nextRound"].exists)
+        click(app.buttons["翻开第 1 张卡片"])
+        XCTAssertEqual(hiddenCards.count, 5)
+        XCTAssertTrue(app.staticTexts["已找到 0 / 3 对"].exists)
+        click(app.buttons["重新开始"])
+        XCTAssertEqual(hiddenCards.count, 6)
+        capture("mac-memory-game")
+        click(app.buttons["关闭"])
+        openGame("numbers-balloons", search: "数字气球派对")
+        XCTAssertTrue(app.staticTexts["第 1 / 3 关"].exists)
+        click(app.buttons["数字 2 的气球"])
+        XCTAssertTrue(text(app.staticTexts["gameFeedback"]).contains("先找数字 1"))
+        XCTAssertTrue(app.staticTexts["已经找到 0 / 5 个"].exists)
+        for number in 1...5 { click(app.buttons["数字 \(number) 的气球"]) }
+        XCTAssertFalse(app.buttons["数字 1 的气球"].isEnabled)
+        click(app.buttons["nextRound"])
+        reveal(app.staticTexts["下一位数字朋友：6"])
+        XCTAssertTrue(app.staticTexts["第 2 / 3 关"].exists)
+        XCTAssertTrue(app.staticTexts["下一位数字朋友：6"].exists)
+        capture("mac-balloon-game")
+        click(app.buttons["关闭"])
     }
 
     func testDrawingHistoryRestoreAndGatedPNGSave() {
-        navigate("画板")
+        navigate("drawing")
+        click(app.buttons["drawingToolpen"])
         let paper = app.images["paper"].exists ? app.images["paper"] : app.images["drawingCanvas"]
-        XCTAssertTrue(paper.waitForExistence(timeout: 5), app.debugDescription)
+        reveal(paper)
+        XCTAssertTrue(paper.exists, app.debugDescription)
         let before = text(paper)
-        let start = paper.coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.3))
-        let end = paper.coordinate(withNormalizedOffset: CGVector(dx: 0.6, dy: 0.4))
+        let viewport = app.scrollViews.allElementsBoundByIndex.filter { $0.isHittable }
+            .max(by: { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height })
+        let visiblePaper = paper.frame.intersection(viewport?.frame ?? app.frame)
+        XCTAssertGreaterThan(visiblePaper.height, 0)
+        let origin = paper.coordinate(withNormalizedOffset: .zero)
+        let start = origin.withOffset(CGVector(dx: visiblePaper.minX - paper.frame.minX + visiblePaper.width * 0.2, dy: visiblePaper.minY - paper.frame.minY + visiblePaper.height * 0.3))
+        let end = origin.withOffset(CGVector(dx: visiblePaper.minX - paper.frame.minX + visiblePaper.width * 0.6, dy: visiblePaper.minY - paper.frame.minY + visiblePaper.height * 0.4))
         start.press(forDuration: 0.1, thenDragTo: end)
         XCTAssertNotEqual(text(paper), before)
         let drawn = text(paper)
         capture("mac-drawing")
-        app.scrollViews.firstMatch.scroll(byDeltaX: 0, deltaY: -500)
-        app.buttons["undoDrawing"].click()
+        click(app.buttons["undoDrawing"])
         XCTAssertEqual(text(paper), before)
-        app.buttons["redoDrawing"].click()
+        click(app.buttons["redoDrawing"])
         XCTAssertEqual(text(paper), drawn)
-        app.terminate(); app.launch(); navigate("画板")
+        app.terminate()
+        app.launch()
+        navigate("drawing")
+        reveal(paper)
         XCTAssertEqual(text(paper), drawn)
-        app.scrollViews.firstMatch.scroll(byDeltaX: 0, deltaY: -500)
-        app.buttons["clearDrawing"].click()
+        click(app.buttons["clearDrawing"])
         app.sheets.buttons["清空画纸"].click()
         XCTAssertEqual(text(paper), "0 笔")
-        app.buttons["undoDrawing"].click()
+        click(app.buttons["undoDrawing"])
         XCTAssertEqual(text(paper), drawn)
-        app.buttons["shareDrawing"].click()
-        app.buttons["取消"].click()
+        click(app.buttons["shareDrawing"])
+        XCTAssertTrue(app.textFields["gateAnswer"].waitForExistence(timeout: 5))
+        click(app.buttons["取消"])
         XCTAssertTrue(app.buttons["shareDrawing"].isEnabled)
-        app.buttons["shareDrawing"].click()
-        let question = text(app.staticTexts["gateQuestion"])
-        let values = question.components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap(Int.init)
-        XCTAssertEqual(values.count, 2)
-        app.textFields["gateAnswer"].click()
-        app.textFields["gateAnswer"].typeText("\(values.reduce(0, +))")
-        app.buttons["gateConfirm"].click()
+        click(app.buttons["shareDrawing"])
+        answerParentGate()
         let panel = app.sheets.firstMatch
         XCTAssertTrue(panel.waitForExistence(timeout: 5), app.debugDescription)
         let cancel = panel.buttons["Cancel"].exists ? panel.buttons["Cancel"] : panel.buttons["取消"]
@@ -97,13 +198,8 @@ final class MacAppUITests: XCTestCase {
         capture("mac-save-panel")
         cancel.click()
         XCTAssertTrue(app.buttons["shareDrawing"].isEnabled)
-        app.buttons["shareDrawing"].click()
-        let saveQuestion = text(app.staticTexts["gateQuestion"])
-        let addends = saveQuestion.components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap(Int.init)
-        XCTAssertEqual(addends.count, 2)
-        app.textFields["gateAnswer"].click()
-        app.textFields["gateAnswer"].typeText("\(addends.reduce(0, +))")
-        app.buttons["gateConfirm"].click()
+        click(app.buttons["shareDrawing"])
+        answerParentGate()
         let savePanel = app.sheets["save-panel"]
         XCTAssertTrue(savePanel.waitForExistence(timeout: 5))
         let export = URL(fileURLWithPath: "/private/tmp/sprout-ui-\(UUID()).png")
@@ -114,8 +210,7 @@ final class MacAppUITests: XCTestCase {
         XCTAssertTrue(pathField.waitForExistence(timeout: 5))
         pathField.click()
         app.typeKey("a", modifierFlags: .command)
-        // Go To selects an existing folder; a not-yet-created filename can leave
-        // its completion window open and block the save button underneath.
+        // Go To must select an existing folder before setting the new filename.
         pathField.typeText(export.deletingLastPathComponent().path + "/")
         pathField.typeKey(.return, modifierFlags: [])
         XCTAssertTrue(app.sheets["GoToWindow"].waitForNonExistence(timeout: 5), app.debugDescription)
@@ -140,10 +235,12 @@ final class MacAppUITests: XCTestCase {
         XCTAssertEqual(image?.pixelsWide, 2000)
         XCTAssertEqual(image?.pixelsHigh, 1400)
         let artwork = XCTAttachment(contentsOfFile: export)
-        artwork.name = "mac-exported-artwork"; artwork.lifetime = .keepAlways; add(artwork)
+        artwork.name = "mac-exported-artwork"
+        artwork.lifetime = .keepAlways
+        add(artwork)
         capture("mac-export-complete")
         app.activate()
-        // After restoring the cleared draft, Clear is the available redo action.
+        // After undoing Clear, it remains the available redo action.
         app.typeKey("z", modifierFlags: [.command, .shift])
         XCTAssertEqual(text(paper), "0 笔")
         app.typeKey("z", modifierFlags: .command)
@@ -152,9 +249,10 @@ final class MacAppUITests: XCTestCase {
         let corner = window.coordinate(withNormalizedOffset: CGVector(dx: 1, dy: 1)).withOffset(CGVector(dx: -2, dy: -2))
         corner.press(forDuration: 0.1, thenDragTo: corner.withOffset(CGVector(dx: -330, dy: -190)))
         XCTAssertGreaterThanOrEqual(window.frame.width, 760)
+        reveal(paper)
         XCTAssertGreaterThan(paper.frame.height, 100)
         XCTAssertEqual(text(paper), drawn)
-        XCTAssertEqual(paper.frame.width / paper.frame.height, 1000.0 / 700.0, accuracy: 0.05)
+        XCTAssertEqual(paper.frame.width / paper.frame.height, 10.0 / 7.0, accuracy: 0.05)
         capture("mac-drawing-small-window")
     }
 
@@ -162,31 +260,93 @@ final class MacAppUITests: XCTestCase {
         app.terminate()
         app.launchArguments = ["-AppleInterfaceStyle", "Dark"]
         app.launch()
+        defer { app.launchArguments = [] }
         capture("mac-home-dark")
-        navigate("小游戏")
-        app.buttons["game-countFruit"].click()
-        let fruitCount = app.buttons.matching(NSPredicate(format: "identifier MATCHES %@", "fruit[0-9]+" )).count
-        let correct = app.buttons["answer\(fruitCount)"]
-        XCTAssertTrue(correct.waitForExistence(timeout: 5))
-        correct.click()
+        openGame("numbers-count", search: "数一数水果")
+        let fruitCount = app.buttons.matching(NSPredicate(format: "identifier MATCHES %@", "fruit[0-9]+")).count
+        if fruitCount > 0 {
+            click(app.buttons["fruit0"])
+            click(app.buttons["fruit0"])
+            XCTAssertEqual(text(app.staticTexts["countFeedback"]), "已经数了 1 个水果")
+        }
+        let wrong = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND identifier != %@", "answer", "answer\(fruitCount)")).firstMatch
+        click(wrong)
+        XCTAssertTrue(text(app.staticTexts["gameFeedback"]).contains("再试一次"))
+        click(app.buttons["answer\(fruitCount)"])
         XCTAssertTrue(text(app.staticTexts["gameFeedback"]).contains("答对啦"))
-        let back = app.buttons["chevron.backward"]
-        XCTAssertTrue(back.exists); back.click()
-        app.buttons["game-compareQuantities"].click()
-        XCTAssertTrue(app.buttons["basket0"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["basket1"].exists)
+        click(app.buttons["关闭"])
+        openGame("numbers-compare", search: "小兔分胡萝卜")
+        click(app.buttons["basket0"])
+        if !app.buttons["nextRound"].exists {
+            XCTAssertTrue(text(app.staticTexts["gameFeedback"]).contains("再试一次"))
+            click(app.buttons["basket1"])
+        }
+        XCTAssertTrue(app.buttons["nextRound"].exists)
+        XCTAssertFalse(app.buttons["basket0"].isEnabled)
+        XCTAssertFalse(app.buttons["basket1"].isEnabled)
         capture("mac-compare-dark")
+        click(app.buttons["关闭"])
     }
 
+    private func answerParentGate() {
+        XCTAssertTrue(app.staticTexts["gateQuestion"].waitForExistence(timeout: 5))
+        let values = text(app.staticTexts["gateQuestion"]).components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap(Int.init)
+        XCTAssertEqual(values.count, 2)
+        click(app.textFields["gateAnswer"])
+        app.textFields["gateAnswer"].typeText(String(values.reduce(0, +)))
+        click(app.buttons["gateConfirm"])
+    }
     private func text(_ element: XCUIElement) -> String { (element.value as? String) ?? element.label }
-
-    private func navigate(_ title: String) {
-        let row = app.outlines.staticTexts[title].firstMatch
-        if row.exists { row.click() }
-        else { app.staticTexts[title].firstMatch.click() }
+    private func navigate(_ area: String) { click(app.buttons["nav-\(area)"]) }
+    private func openGame(_ id: String, search: String) {
+        navigate("games")
+        setGameSearch(search)
+        click(app.buttons["game-\(id)"])
+        XCTAssertTrue(app.staticTexts["activityPrompt"].waitForExistence(timeout: 5))
+    }
+    private func setGameSearch(_ query: String) {
+        let field = app.textFields["gameSearch"]
+        click(field)
+        app.typeKey("a", modifierFlags: .command)
+        field.typeText(query)
+    }
+    private func subjectFilter(_ title: String) -> XCUIElement {
+        app.buttons.matching(NSPredicate(format: "label == %@ AND NOT (identifier BEGINSWITH %@)", title, "nav-")).firstMatch
+    }
+    private func gameCount() -> Int {
+        let status = app.staticTexts["gameFilterStatus"]
+        reveal(status)
+        return Int(text(status).components(separatedBy: " ").first ?? "") ?? -1
+    }
+    private func assertGameCount(_ expected: Int) {
+        let status = app.staticTexts["gameFilterStatus"]
+        reveal(status)
+        let prefix = "\(expected) 个小游戏"
+        let predicate = NSPredicate(format: "value BEGINSWITH %@ OR label BEGINSWITH %@", prefix, prefix)
+        expectation(for: predicate, evaluatedWith: status)
+        waitForExpectations(timeout: 5)
+    }
+    private func click(_ element: XCUIElement) {
+        reveal(element)
+        XCTAssertTrue(element.exists && element.isHittable, element.debugDescription)
+        element.click()
+    }
+    private func reveal(_ element: XCUIElement) {
+        if element.exists && element.isHittable { return }
+        for attempt in 0..<16 {
+            let scrolls = app.scrollViews.allElementsBoundByIndex.filter { $0.isHittable }
+            let frame = element.exists ? element.frame : .zero
+            let aligned = scrolls.filter { frame == .zero || ($0.frame.minX <= frame.midX && $0.frame.maxX >= frame.midX) }
+            guard let scroll = (aligned.isEmpty ? scrolls : aligned).max(by: { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }) else { break }
+            let towardTop = frame != .zero ? frame.midY < scroll.frame.midY : attempt >= 10
+            scroll.scroll(byDeltaX: 0, deltaY: towardTop ? -450 : 450)
+            if element.exists && element.isHittable { return }
+        }
     }
     private func capture(_ name: String) {
         let shot = XCTAttachment(screenshot: app.screenshot())
-        shot.name = name; shot.lifetime = .keepAlways; add(shot)
+        shot.name = name
+        shot.lifetime = .keepAlways
+        add(shot)
     }
 }

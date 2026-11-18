@@ -2,6 +2,14 @@ import XCTest
 @testable import KidSproutCore
 
 final class LearningTests: XCTestCase {
+    func testSparseLegacyProgressRetainsExistingLearning() throws {
+        let old = Data(#"{"version":1,"learnedNumbers":[0,4,10],"stars":12}"#.utf8)
+        let saved = try JSONDecoder().decode(LearningProgress.self, from: old)
+        XCTAssertEqual(saved.learnedNumbers, [0, 4, 10])
+        XCTAssertEqual(saved.stars, 12)
+        XCTAssertEqual(saved.lastNumber, 0)
+        XCTAssertTrue(saved.soundEnabled)
+    }
     func testFruitCanBeTappedInAnyOrderAndOnlyCountsOnce() {
         var counter = FruitCounter(total: 4)
         XCTAssertEqual(counter.tap(3), 1)

@@ -56,7 +56,9 @@ class GameSession(val kind: GameKind, private val random: Random = Random.Defaul
 }
 
 data class Progress(val learned: Set<Int> = emptySet(), val stars: Int = 0,
-                    val speech: Boolean = true, val lastNumber: Int = 0)
+                    val speech: Boolean = true, val lastNumber: Int = 0,
+                    val learnedPinyin:Set<String> = emptySet(), val learnedLetters:Set<String> = emptySet(),
+                    val lastPinyin:String="lesson-1", val lastLetter:String="A",val visitDates:Set<String> = emptySet())
 private fun JsonElement?.integer(): Long? = runCatching {
     this?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asString?.toLongOrNull()
 }.getOrNull()
@@ -70,6 +72,12 @@ private fun parseObject(raw: String): JsonObject? = runCatching {
     JsonParser.parseString(raw).takeIf { it.isJsonObject }?.asJsonObject
 }.getOrNull()
 object ProgressCodec {
+    private val pinyin=(1..14).map{"lesson-$it"}.toSet()
+    private val letters=('A'..'Z').map{it.toString()}.toSet()
+    private fun strings(obj:JsonObject,key:String,allowed:Set<String>?=null):Set<String> = obj[key]?.takeIf{it.isJsonArray}?.asJsonArray?.mapNotNull {
+        runCatching { it.takeIf{v -> v.isJsonPrimitive && v.asJsonPrimitive.isString}?.asString }.getOrNull()
+    }?.filter { allowed==null || it in allowed }?.toSet() ?: emptySet()
+    private fun string(obj:JsonObject,key:String,allowed:Set<String>,fallback:String)=runCatching{obj[key].asString.takeIf{it in allowed}}.getOrNull()?:fallback
     fun decode(raw: String): Progress {
         val obj = parseObject(raw) ?: return Progress()
         if (obj["version"].integer() != 1L) return Progress()
@@ -77,25 +85,34 @@ object ProgressCodec {
             ?.mapNotNull { it.integer()?.takeIf { v -> v in 0..10 }?.toInt() }?.toSet() ?: emptySet()
         return Progress(learned, obj["stars"].integer()?.takeIf { it in 0..1_000_000 }?.toInt() ?: 0,
             obj["speech"].boolean() ?: true,
-            obj["lastNumber"].integer()?.takeIf { it in 0..10 }?.toInt() ?: 0)
+            obj["lastNumber"].integer()?.takeIf { it in 0..10 }?.toInt() ?: 0,
+            strings(obj,"learnedPinyin",pinyin),strings(obj,"learnedLetters",letters),
+            string(obj,"lastPinyin",pinyin,"lesson-1"),string(obj,"lastLetter",letters,"A"),
+            strings(obj,"visitDates").filter { it.matches(Regex("\\d{4}-\\d{2}-\\d{2}")) }.toSet())
     }
     fun encode(progress: Progress): String = Gson().toJson(mapOf("version" to 1,
         "learned" to progress.learned.sorted(), "stars" to progress.stars,
-        "speech" to progress.speech, "lastNumber" to progress.lastNumber))
+        "speech" to progress.speech, "lastNumber" to progress.lastNumber,
+        "learnedPinyin" to progress.learnedPinyin.sorted(),"learnedLetters" to progress.learnedLetters.sorted(),
+        "lastPinyin" to progress.lastPinyin,"lastLetter" to progress.lastLetter,"visitDates" to progress.visitDates.sorted()))
 }
 
 data class InkPoint(val x: Float, val y: Float)
-data class InkStroke(val points: List<InkPoint>, val color: Long, val width: Float, val eraser: Boolean)
-class DrawingHistory(initial: List<InkStroke> = emptyList()) {
+data class InkStroke(val points: List<InkPoint>, val color: Long, val width: Float, val eraser: Boolean,val opacity:Float=1f)
+data class DrawingDocument(val strokes:List<InkStroke> = emptyList(),val template:String?=null,val paperWidth:Int=1000,val paperHeight:Int=700)
+class DrawingHistory(initial: List<InkStroke> = emptyList(),initialTemplate:String?=null,initialPaperWidth:Int=1000,initialPaperHeight:Int=700) {
     companion object { const val MAX_STROKES = 10_000 }
     var strokes: List<InkStroke> = initial.toList(); private set
-    private val past = ArrayDeque<List<InkStroke>>()
-    private val future = ArrayDeque<List<InkStroke>>()
+    var template:String?=initialTemplate;private set
+    var paperWidth=initialPaperWidth;private set
+    var paperHeight=initialPaperHeight;private set
+    private val past = ArrayDeque<DrawingDocument>()
+    private val future = ArrayDeque<DrawingDocument>()
     val canRedo get() = future.isNotEmpty()
     val canUndo get() = past.isNotEmpty()
     val canAdd get() = strokes.size < MAX_STROKES
     private fun remember() {
-        past.addLast(strokes)
+        past.addLast(document())
         if (past.size > 100) past.removeFirst()
         future.clear()
     }
@@ -106,19 +123,36 @@ class DrawingHistory(initial: List<InkStroke> = emptyList()) {
     }
     fun undo() {
         if (!canUndo) return
-        future.addLast(strokes); strokes = past.removeLast()
+        future.addLast(document()); restore(past.removeLast())
     }
     fun redo() {
         if (!canRedo) return
-        past.addLast(strokes); strokes = future.removeLast()
+        past.addLast(document()); restore(future.removeLast())
     }
     fun clear() {
         if (strokes.isEmpty()) return
         remember(); strokes = emptyList()
     }
+    fun selectTemplate(id:String?) {
+        if(template==id) return
+        remember();template=id;strokes=emptyList();paperWidth=1000;paperHeight=700
+    }
+    fun document()=DrawingDocument(strokes.toList(),template,paperWidth,paperHeight)
+    private fun restore(document:DrawingDocument){strokes=document.strokes;template=document.template;paperWidth=document.paperWidth;paperHeight=document.paperHeight}
 }
 object DrawingCodec {
     fun encode(strokes: List<InkStroke>): String = Gson().toJson(mapOf("version" to 1, "strokes" to strokes))
+    fun encodeDocument(document:DrawingDocument):String=Gson().toJson(mapOf("version" to 1,"strokes" to document.strokes,"template" to document.template,"paperWidth" to document.paperWidth,"paperHeight" to document.paperHeight))
+    fun decodeDocument(raw:String):DrawingDocument {
+        val obj=parseObject(raw)
+        val template=runCatching{obj?.get("template")?.asString?.takeIf{it.matches(Regex("numbers:(10|[0-9])|alphabet:[A-Z][a-z]"))}}.getOrNull()
+        val strokes=decode(raw)
+        val width=obj?.get("paperWidth").integer()?.takeIf{it==1000L}?.toInt()?:1000
+        // The first Android release used square paper. Preserve those drawings
+        // until the user deliberately switches to a new tracing template.
+        val height=obj?.get("paperHeight").integer()?.takeIf{it in listOf(700L,1000L)}?.toInt()?:if(strokes.isNotEmpty())1000 else 700
+        return DrawingDocument(strokes,template,width,height)
+    }
     fun decode(raw: String): List<InkStroke> {
         val obj = parseObject(raw) ?: return emptyList()
         if (obj["version"].integer() != 1L) return emptyList()
@@ -139,7 +173,7 @@ object DrawingCodec {
                     val y = p["y"].decimal()?.takeIf { it in 0f..1f } ?: return@mapNotNull null
                     InkPoint(x,y)
                 }
-                InkStroke(points,color,width,eraser)
+                InkStroke(points,color,width,eraser,stroke["opacity"].decimal()?.takeIf{it in .01f..1f} ?: 1f)
             }.getOrNull()
         }
     }

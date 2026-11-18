@@ -14,13 +14,15 @@ const phase = (isa,files=[]) => add(isa,{buildActionMask:2147483647,files,runOnl
 const products=[]; const targets=[];
 const mainGroup=add('PBXGroup',{children:[],sourceTree:'<group>'});
 const productGroup=add('PBXGroup',{name:'Products',children:products,sourceTree:'<group>'});
-const coreFiles=['Sources/KidSproutCore/Models.swift'].map(p=>file(p,'sourcecode.swift'));
+const coreFiles=fs.readdirSync('Sources/KidSproutCore').filter(n=>n.endsWith('.swift')).map(p=>file('Sources/KidSproutCore/'+p,'sourcecode.swift'));
 const appFiles=fs.readdirSync('App').filter(n=>n.endsWith('.swift')).map(p=>file('App/'+p,'sourcecode.swift'));
-const unitFiles=[file('Tests/KidSproutCoreTests/LearningTests.swift','sourcecode.swift'),file('KidSproutTests/DrawingTests.swift','sourcecode.swift')];
+const unitFiles=[...fs.readdirSync('Tests/KidSproutCoreTests').filter(n=>n.endsWith('.swift')).map(p=>file('Tests/KidSproutCoreTests/'+p,'sourcecode.swift')),file('KidSproutTests/DrawingTests.swift','sourcecode.swift')];
 const uiFiles=[file('KidSproutUITests/AppUITests.swift','sourcecode.swift')];
 const curriculum=file('../shared/curriculum.json','text.json');
+const activities=file('../shared/activities.json','text.json');
+const illustrations=file('../shared/illustrations','folder');
 const assets=file('App/Assets.xcassets','folder.assetcatalog');
-objects[mainGroup].children=[...coreFiles,...appFiles,...unitFiles,...uiFiles,curriculum,assets,productGroup].map(ref);
+objects[mainGroup].children=[...coreFiles,...appFiles,...unitFiles,...uiFiles,curriculum,activities,illustrations,assets,productGroup].map(ref);
 function configList(settings) {
   return ref(add('XCConfigurationList',{buildConfigurations:['Debug','Release'].map(name=>ref(add('XCBuildConfiguration',{name,buildSettings:{...settings,...(settings.SDKROOT==='macosx'?{ENABLE_TESTABILITY:name==='Debug'?'YES':'NO',CODE_SIGN_INJECT_BASE_ENTITLEMENTS:name==='Debug'?'YES':'NO',...(name==='Debug'?{SWIFT_ACTIVE_COMPILATION_CONDITIONS:'$(inherited) DEBUG'}:{})}:{}),SWIFT_OPTIMIZATION_LEVEL:name==='Debug'?'-Onone':'-O'}}))),defaultConfigurationIsVisible:0,defaultConfigurationName:'Release'}));
 }
@@ -34,7 +36,7 @@ function target(name,type,files,settings,extraPhases=[],base=common) {
 }
 const core=target('KidSproutCore','framework',coreFiles,{PRODUCT_BUNDLE_IDENTIFIER:'com.feiwenchao.kidsprout.core',DEFINES_MODULE:'YES',DYLIB_INSTALL_NAME_BASE:'@rpath',SKIP_INSTALL:'YES',ENABLE_TESTABILITY:'YES'},[ref(phase('PBXFrameworksBuildPhase'))]);
 const linkCore=()=>ref(phase('PBXFrameworksBuildPhase',[ref(add('PBXBuildFile',{fileRef:ref(core.product)}))]));
-const resource=phase('PBXResourcesBuildPhase',[ref(add('PBXBuildFile',{fileRef:ref(curriculum)})),ref(add('PBXBuildFile',{fileRef:ref(assets)}))]);
+const resource=phase('PBXResourcesBuildPhase',[curriculum,activities,illustrations,assets].map(asset=>ref(add('PBXBuildFile',{fileRef:ref(asset)}))));
 const embed=add('PBXCopyFilesBuildPhase',{buildActionMask:2147483647,dstPath:'',dstSubfolderSpec:10,name:'Embed Frameworks',files:[ref(add('PBXBuildFile',{fileRef:ref(core.product),settings:{ATTRIBUTES:['CodeSignOnCopy','RemoveHeadersOnCopy']}}))],runOnlyForDeploymentPostprocessing:0});
 const app=target('KidSprout','application',appFiles,{PRODUCT_BUNDLE_IDENTIFIER:'com.feiwenchao.kidsprout',ASSETCATALOG_COMPILER_APPICON_NAME:'AppIcon',ENABLE_TESTABILITY:'YES',INFOPLIST_KEY_CFBundleDisplayName:'萌芽启蒙',INFOPLIST_KEY_LSApplicationCategoryType:'public.app-category.education',INFOPLIST_KEY_UILaunchScreen_Generation:'YES',INFOPLIST_FILE:'App/Info.plist',INFOPLIST_KEY_UISupportedInterfaceOrientations:'UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight',INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad:'UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight',LD_RUNPATH_SEARCH_PATHS:'$(inherited) @executable_path/Frameworks'},[linkCore(),ref(resource),ref(embed)]);
 const tests=target('KidSproutTests','bundle.unit-test',unitFiles,{PRODUCT_BUNDLE_IDENTIFIER:'com.feiwenchao.kidsprout.tests',TEST_HOST:'$(BUILT_PRODUCTS_DIR)/KidSprout.app/KidSprout',BUNDLE_LOADER:'$(TEST_HOST)',LD_RUNPATH_SEARCH_PATHS:'$(inherited) @executable_path/Frameworks @loader_path/Frameworks'},[linkCore()]);
@@ -44,7 +46,7 @@ const macFiles=fs.readdirSync('MacApp').filter(n=>n.endsWith('.swift')).map(p=>f
 const macUnitFiles=fs.readdirSync('MacTests').filter(n=>n.endsWith('.swift')).map(p=>file('MacTests/'+p,'sourcecode.swift'));
 const macUIFiles=fs.readdirSync('MacUITests').filter(n=>n.endsWith('.swift')).map(p=>file('MacUITests/'+p,'sourcecode.swift'));
 objects[mainGroup].children.push(...[...macFiles,...macUnitFiles,...macUIFiles].map(ref));
-const macResource=phase('PBXResourcesBuildPhase',[ref(add('PBXBuildFile',{fileRef:ref(curriculum)})),ref(add('PBXBuildFile',{fileRef:ref(assets)}))]);
+const macResource=phase('PBXResourcesBuildPhase',[curriculum,activities,illustrations,assets].map(asset=>ref(add('PBXBuildFile',{fileRef:ref(asset)}))));
 const macSharedFiles=appFiles.filter(f=>objects[f].path!=='App/DrawingView.swift');
 const macApp=target('KidSproutMac','application',[...macSharedFiles,...macFiles,...coreFiles],{PRODUCT_BUNDLE_IDENTIFIER:'com.feiwenchao.kidsprout.mac',INFOPLIST_KEY_CFBundleName:'萌芽启蒙',ASSETCATALOG_COMPILER_APPICON_NAME:'AppIcon',ENABLE_TESTABILITY:'YES',INFOPLIST_KEY_CFBundleDisplayName:'萌芽启蒙',INFOPLIST_KEY_LSApplicationCategoryType:'public.app-category.education',ENABLE_APP_SANDBOX:'YES',CODE_SIGN_ENTITLEMENTS:'Mac.entitlements',LD_RUNPATH_SEARCH_PATHS:'$(inherited) @executable_path/../Frameworks'},[ref(phase('PBXFrameworksBuildPhase')),ref(macResource)],macCommon);
 const macTests=target('KidSproutMacTests','bundle.unit-test',macUnitFiles,{PRODUCT_BUNDLE_IDENTIFIER:'com.feiwenchao.kidsprout.mac.tests',TEST_HOST:'$(BUILT_PRODUCTS_DIR)/KidSproutMac.app/Contents/MacOS/KidSproutMac',BUNDLE_LOADER:'$(TEST_HOST)',LD_RUNPATH_SEARCH_PATHS:'$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks'},[ref(phase('PBXFrameworksBuildPhase'))],macCommon);

@@ -85,13 +85,52 @@ public struct LearningProgress: Codable, Equatable, Sendable {
     public var stars = 0
     public var gamesCompleted = 0
     public var soundEnabled = true
+    public var learnedPinyin: Set<String> = []
+    public var learnedLetters: Set<String> = []
+    public var lastPinyin = "lesson-1"
+    public var lastLetter = "A"
+    public var visitDates: Set<String> = []
     public init() {}
+    private enum CodingKeys: String, CodingKey {
+        case version, learnedNumbers, lastNumber, stars, gamesCompleted, soundEnabled
+        case learnedPinyin, learnedLetters, lastPinyin, lastLetter, visitDates
+    }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        version = try values.decodeIfPresent(Int.self, forKey: .version) ?? 1
+        learnedNumbers = try values.decodeIfPresent(Set<Int>.self, forKey: .learnedNumbers) ?? []
+        lastNumber = try values.decodeIfPresent(Int.self, forKey: .lastNumber) ?? 0
+        stars = try values.decodeIfPresent(Int.self, forKey: .stars) ?? 0
+        gamesCompleted = try values.decodeIfPresent(Int.self, forKey: .gamesCompleted) ?? 0
+        soundEnabled = try values.decodeIfPresent(Bool.self, forKey: .soundEnabled) ?? true
+        learnedPinyin = try values.decodeIfPresent(Set<String>.self, forKey: .learnedPinyin) ?? []
+        learnedLetters = try values.decodeIfPresent(Set<String>.self, forKey: .learnedLetters) ?? []
+        lastPinyin = try values.decodeIfPresent(String.self, forKey: .lastPinyin) ?? "lesson-1"
+        lastLetter = try values.decodeIfPresent(String.self, forKey: .lastLetter) ?? "A"
+        visitDates = try values.decodeIfPresent(Set<String>.self, forKey: .visitDates) ?? []
+    }
     public func validated() -> Self {
         var result = self
         result.learnedNumbers = learnedNumbers.filter { (0...10).contains($0) }
         result.lastNumber = (0...10).contains(lastNumber) ? lastNumber : 0
         result.stars = max(0, min(stars, 1_000_000))
         result.gamesCompleted = max(0, min(gamesCompleted, 200_000))
+        let lessons = Set((1...14).map { "lesson-\($0)" })
+        let letters = Set((65...90).compactMap { UnicodeScalar($0).map(String.init) })
+        result.learnedPinyin = learnedPinyin.intersection(lessons)
+        result.learnedLetters = learnedLetters.intersection(letters)
+        result.lastPinyin = lessons.contains(lastPinyin) ? lastPinyin : "lesson-1"
+        result.lastLetter = letters.contains(lastLetter) ? lastLetter : "A"
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.isLenient = false
+        result.visitDates = Set(visitDates.filter { value in
+            guard value.count == 10, let date = formatter.date(from: value) else { return false }
+            return formatter.string(from: date) == value
+        }.sorted().suffix(3660))
         return result
     }
 }
@@ -112,16 +151,50 @@ public struct ProgressRepository {
 public struct NumberLesson: Codable, Equatable, Identifiable, Sendable {
     public let value: Int
     public let name: String
+    public let motifAsset: String
+    public let fruit: String
+    public let unit: String
     public var id: Int { value }
+    private enum CodingKeys: String, CodingKey { case value, name, motifAsset, fruit, unit }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        value = try values.decode(Int.self, forKey: .value)
+        name = try values.decode(String.self, forKey: .name)
+        motifAsset = try values.decodeIfPresent(String.self, forKey: .motifAsset) ?? (value == 0 ? "empty_basket" : "number_motif_\(max(0, value - 1))")
+        fruit = try values.decodeIfPresent(String.self, forKey: .fruit) ?? "苹果"
+        unit = try values.decodeIfPresent(String.self, forKey: .unit) ?? "个"
+    }
 }
 public struct Curriculum: Decodable, Sendable {
     public let schemaVersion: Int
     public let brand: String
     public let numbers: [NumberLesson]
+    public let pinyin: PinyinCurriculum
+    public let alphabet: AlphabetCurriculum
+    public let memoryScenes: [MemoryScene]
+    public let tracingTemplates: [TracingTemplate]
+    private enum CodingKeys: String, CodingKey { case schemaVersion, brand, numbers, pinyin, alphabet, memoryScenes, tracingTemplates }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        schemaVersion = try values.decode(Int.self, forKey: .schemaVersion)
+        brand = try values.decode(String.self, forKey: .brand)
+        numbers = try values.decode([NumberLesson].self, forKey: .numbers)
+        pinyin = try values.decodeIfPresent(PinyinCurriculum.self, forKey: .pinyin) ?? .empty
+        alphabet = try values.decodeIfPresent(AlphabetCurriculum.self, forKey: .alphabet) ?? .empty
+        memoryScenes = try values.decodeIfPresent([MemoryScene].self, forKey: .memoryScenes) ?? []
+        tracingTemplates = try values.decodeIfPresent([TracingTemplate].self, forKey: .tracingTemplates) ?? []
+    }
     public enum ContentError: Error { case invalidContent }
     public static func decode(_ data: Data) throws -> Curriculum {
         let result = try JSONDecoder().decode(Self.self, from: data)
         guard result.schemaVersion == 1, !result.brand.isEmpty, result.numbers.map(\.value) == Array(0...10), result.numbers.allSatisfy({ !$0.name.isEmpty }) else { throw ContentError.invalidContent }
+        if !result.pinyin.lessons.isEmpty {
+            guard result.pinyin.lessons.map(\.number) == Array(1...14), Set(result.pinyin.items.map(\.symbol)).count == 47, result.pinyin.tones.map(\.number) == [1, 2, 3, 4] else { throw ContentError.invalidContent }
+        }
+        if !result.alphabet.letters.isEmpty {
+            guard result.alphabet.letters.map(\.id) == (65...90).compactMap({ UnicodeScalar($0).map(String.init) }), result.alphabet.groups.count == 4 else { throw ContentError.invalidContent }
+        }
+        guard result.memoryScenes.allSatisfy({ $0.frames.count == 3 && Set($0.frames).count == 3 }), Set(result.tracingTemplates.map(\.id)).count == result.tracingTemplates.count else { throw ContentError.invalidContent }
         return result
     }
 }

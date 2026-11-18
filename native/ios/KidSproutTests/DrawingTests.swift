@@ -3,6 +3,48 @@ import PencilKit
 @testable import KidSprout
 
 final class DrawingTests: XCTestCase {
+    @MainActor func testLegacyPencilDraftMigratesWithoutChangingInkAndTemplateHistoryRoundTrips() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("drawing-test-\(UUID()).pkdrawing")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let original = drawing()
+        try original.dataRepresentation().write(to: url)
+        let board = DrawingModel(storageURL: url)
+        XCTAssertEqual(board.canvas.drawing.bounds, original.bounds)
+        board.canvas.undoManager?.groupsByEvent = false
+        board.canvas.undoManager?.beginUndoGrouping()
+        board.selectTemplate("alphabet:Aa")
+        board.canvas.undoManager?.endUndoGrouping()
+        XCTAssertTrue(board.canvas.drawing.strokes.isEmpty)
+        XCTAssertEqual(board.templateID, "alphabet:Aa")
+        board.undo()
+        XCTAssertNil(board.templateID)
+        XCTAssertEqual(board.canvas.drawing.bounds, original.bounds)
+        board.redo()
+        let restored = DrawingModel(storageURL: url)
+        XCTAssertEqual(restored.templateID, "alphabet:Aa")
+        XCTAssertTrue(restored.canvas.drawing.strokes.isEmpty)
+        XCTAssertEqual(board.colors.count, 12)
+        board.selectTool(.marker)
+        board.width = 48
+        board.updateTool()
+        let marker = try XCTUnwrap(board.canvas.tool as? PKInkingTool)
+        XCTAssertEqual(marker.inkType, .marker)
+        XCTAssertEqual(marker.width, 48)
+        XCTAssertEqual(board.canvas.drawingPolicy, .anyInput)
+    }
+
+    @MainActor func testGridNeverChangesExportAndClearRetainsTheGuide() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("drawing-test-\(UUID()).pkdrawing")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let board = DrawingModel(storageURL: url)
+        board.selectTemplate("numbers:0")
+        board.canvas.drawing = drawing()
+        board.clear()
+        XCTAssertEqual(board.templateID, "numbers:0")
+        let plain = try Data(contentsOf: XCTUnwrap(board.exportPNG()))
+        board.showGrid = true
+        XCTAssertEqual(try Data(contentsOf: XCTUnwrap(board.exportPNG())), plain)
+    }
     @MainActor func testDraftSurvivesRecreationAndCorruptDraftFallsBackSafely() throws {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("drawing-test-\(UUID()).pkdrawing")
         defer { try? FileManager.default.removeItem(at: url) }
@@ -19,13 +61,6 @@ final class DrawingTests: XCTestCase {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("drawing-test-\(UUID()).pkdrawing")
         defer { try? FileManager.default.removeItem(at: url) }
         let board = DrawingModel(storageURL: url)
-        let controller = UIViewController()
-        let window = UIWindow(frame: CGRect(x: 0,y: 0,width: 1000,height: 700))
-        window.rootViewController = controller
-        controller.view.addSubview(board.canvas)
-        board.canvas.frame = controller.view.bounds
-        window.makeKeyAndVisible()
-        board.canvas.becomeFirstResponder()
         let undo = try XCTUnwrap(board.canvas.undoManager)
         undo.groupsByEvent = false
         board.canvas.drawing = drawing()
@@ -41,7 +76,6 @@ final class DrawingTests: XCTestCase {
         board.redo()
         XCTAssertTrue(board.canvas.drawing.strokes.isEmpty)
         XCTAssertTrue(DrawingModel(storageURL: url).canvas.drawing.strokes.isEmpty)
-        window.isHidden = true
     }
     @MainActor func testPNGUsesStablePaperSizeAndWhiteBackground() throws {
         let board = DrawingModel(storageURL: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))

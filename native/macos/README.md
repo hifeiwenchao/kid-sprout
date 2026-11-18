@@ -1,54 +1,43 @@
-# 萌芽启蒙 · Mac 原生版
+# 萌芽启蒙 · Mac
 
-支持 macOS 14 及以上，使用 SwiftUI、AppKit 和系统中文语音。包含与 iPhone/iPad 首版一致的数字0–10、三款五关游戏、离线记录和家长区，Mac 画板支持鼠标及触控板拖动。没有 WebView、广告、收费或账号。拼音、字母及其余小游戏尚未迁移。
+macOS14+，SwiftUI/AppKit原生实现，离线免费，无WebView。与网页采用同一学习地图、配色、插画、三科课程与60款游戏，完整范围见[原生说明](../README.md)。Mac画板支持鼠标/触控板、原生快捷键及系统PNG保存面板。
 
-## 运行与构建
+## 运行
 
-在 Finder 中进入仓库的 `native/ios/` 目录，双击 [KidSprout.xcodeproj](../ios/KidSprout.xcodeproj)，或在仓库根目录通过终端打开：
+在Finder双击`native/ios/KidSprout.xcodeproj`，或从仓库根目录执行：
 
 ```sh
 open native/ios/KidSprout.xcodeproj
 ```
 
-在 Xcode 顶部选择 **KidSproutMac** scheme 和 **My Mac**，然后点击运行；运行 iPhone/iPad 版则选择 **KidSprout + iPhone / iPad Simulator**。
+选择 **KidSproutMac + My Mac** 运行；**KidSprout + iPhone / iPad Simulator**用于移动端。`Package.swift`只含KidSproutCore共享库，没有App入口，不能用它运行客户端。
 
-请打开 **KidSprout.xcodeproj**。同目录的 `Package.swift` 只包含 **KidSproutCore** 核心库及其测试，没有可运行的 App；如果 Xcode 中只看到 KidSproutCore，关闭该包窗口后重新打开上述工程。
-
-在仓库根目录可执行：
+## 不操作桌面的后台构建
 
 ```sh
+swift test --package-path native/ios
+npm run native:test:mac-drawing
 node native/ios/generate-project.cjs
-xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
-  -destination 'platform=macOS' -derivedDataPath /tmp/kid-sprout-macos test
 xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
   -configuration Release -destination 'generic/platform=macOS' \
   -derivedDataPath /tmp/kid-sprout-macos-release \
   ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO build
-open /tmp/kid-sprout-macos-release/Build/Products/Release/KidSproutMac.app
 ```
 
-首次运行 Xcode UI 测试时，系统可能要求允许开发工具进行测试；模型和画板单元测试无需控制其他应用。通用 Release 产物同时包含 Apple 芯片与 Intel 架构，本机实际运行验证以当前 Mac 架构为准。
+产物在`/tmp/kid-sprout-macos-release/Build/Products/Release/KidSproutMac.app`，可自行双击运行。仅编译测试用`build-for-testing`；`xcodebuild test`会启动宿主App与UI测试、操作当前桌面，应在专用机器/CI运行。本轮默认只进行CLI模型测试与后台构建，不自动打开Xcode或App。
 
-该工程默认使用本机 ad hoc 签名，不需要 Apple 开发者团队。正式向其他用户分发时，需另外配置 Developer ID 签名与 Apple 公证或 Mac App Store 发布；当前包用于本地测试。
+本地交付包为`native/artifacts/萌芽启蒙-macOS.zip`，解压后双击`KidSproutMac.app`。artifacts目录已被Git忽略，其他电脑需重新构建。当前为ad hoc本地签名，无需开发者团队；向其他用户正式分发仍需Developer ID签名/公证或Mac App Store发布。通用包含Apple芯片和Intel架构，Intel未实机验收。
 
-本地交付包位于 `native/artifacts/萌芽启蒙-macOS.zip`，解压后双击 `KidSproutMac.app`。该目录已被 Git 忽略，需要在其他电脑按上述命令重新构建。界面及真实导出作品见 [screenshots/](screenshots/)。
+`native:test:mac-drawing`将实际画板模型及测试复制到临时SwiftPM包，直接运行XCTest，结束后清理临时文件；不编译或启动App入口，也不操作鼠标、键盘或窗口。
 
-## 桌面交互
+## 桌面交互与数据
 
-- 单窗口侧栏导航，默认1100×800，最小760×600；可缩放或全屏，内容超出时滚动。
-- 点击苹果按已点过的不同苹果数量播报；重复点击不会多算。课程、三种五关游戏和奖励逻辑与 iOS 共用。
-- 白色画纸使用固定1000×700逻辑坐标等比显示；鼠标/触控板按住拖动绘画。六色、粗细、橡皮擦、撤销（⌘Z）、重做（⇧⌘Z）、清空均可用，清空可撤销。
-- 每笔完成、历史操作、离开画板或后台时原子保存草稿，重启恢复当前画作；撤销栈不跨重启恢复。新增上限为10,000笔，达到上限提示并保留已有内容，旧版本有效超限稿仍可读取。
-- “保存 PNG”经过家长验证后打开系统保存窗口，选择文件名和位置；输出2000×1400白底PNG，无工具栏。取消不会导出外部文件，保存失败时画作仍保留。
-- 邮箱`hi@feiwenchao.com`通过家长验证后打开系统邮件应用；不会自动发送邮件。
-- 支持深浅外观，画纸始终白底；系统没有中文声音时仍可用图文学习。
+- 单窗口、可滚动学习地图侧栏与完整六入口；默认1200×850，最小760×600。内容随窗口变化滚动/重排，支持深浅外观和减少动态。
+- 完整数字/拼音/字母课程、原生记忆场景和课内练写；共享游戏题库，保留翻牌、气球、火车、胡萝卜比较、装点心、听鼓的专用玩法。详情见统一原生说明。
+- 画板与网页相同工具/12色/自选/荧光笔/网格/37底稿，1000×700固定坐标等比显示。支持⌘Z/⇧⌘Z、可撤销清空和底稿切换；历史不跨进程重启保存。新笔迹上限10,000，旧有效超限稿完整保留。
+- 每笔和历史操作原子保存。旧v1六色及橡皮按原外观迁移到v2，坏稿不因打开页面而覆盖，首次编辑前备份原文件。
+- 保存PNG先经过家长验证，再打开系统保存面板；等待验证sheet在主窗口结束后呈现，避免挂到临时验证窗口。导出2000×1400白底、含底稿，无网格/辅助线。取消不写外部文件。
+- 记录保存在`com.feiwenchao.kidsprout.mac`沙盒及本机偏好；草稿位于私有Application Support子目录的`drawing-v1.json`（文件内容版本2）。移除`.app`不会自动移除数据，与网页/其他客户端不联网同步。
+- 邮箱经家长确认后打开系统邮件，不自动发送；沙盒仅启用用户所选文件读写，不申请网络/相机/麦克风权限。
 
-## 本地数据
-
-Mac bundle ID 为 `com.feiwenchao.kidsprout.mac`，系统偏好保存学习记录；App Sandbox 私有 Application Support 子目录保存 `com.feiwenchao.kidsprout.mac/drawing-v1.json`。与网页和移动端存档独立，不联网同步。
-
-损坏/不兼容的画稿不会仅因打开页面而被覆盖；继续绘画时先备份原文件再保存新稿。移除`.app`不会自动清理Mac的偏好和草稿；需要清理时应先退出应用，再通过Finder管理该应用的数据目录。
-
-应用只启用沙盒和用户主动选择文件的读写权限，不申请网络、摄像头或麦克风权限。NSSavePanel授权选中的位置；不读取其他个人文件。
-
-共享颜色、课程、游戏和家长界面位于`native/ios/App/`；Mac画板位于`native/ios/MacApp/`；画板单测位于`MacTests/`，桌面流程位于`MacUITests/`。AppKit画板与iOS PencilKit分别编译，核心模型直接编译进Mac目标，不链接iOS framework。
+`screenshots/`保留扩展前的历史首版截图，本轮没有执行新UI截图验收。后台测试和验证边界见[验证记录](../VALIDATION.md)。

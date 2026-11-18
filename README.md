@@ -15,7 +15,7 @@ npm run dev
 
 ## 原生客户端
 
-Mac 与 iPhone/iPad 的 SwiftUI 工程、Android 手机/平板的 Kotlin/Jetpack Compose 工程位于 [native/](native/README.md)。Mac 使用 AppKit 画板与系统文件保存，支持 macOS 14+。第一阶段包含数字 0–10 学习、三种五关小游戏、原生画板及离线进度；拼音、字母和其余游戏继续通过网页使用，后续逐步迁移。运行与打包方式见各平台说明。
+Mac 与 iPhone/iPad 的 SwiftUI 工程、Android 手机/平板的 Kotlin/Jetpack Compose 工程位于 [native/](native/README.md)。所有端以网页版设计为基准，包含数字0–10、2024新版人教顺序的拼音14课、A–Z字母、60个小游戏、88个记忆场景、课程临摹和自由画板，共用离线课程/题库/插画，不使用WebView。支持iOS17+、macOS14+与Android8+，运行、打包和本轮后台验证边界见各平台说明。
 
 ## 学习地图
 

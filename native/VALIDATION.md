@@ -1,4 +1,32 @@
-# 原生首版验证记录
+# 原生验证记录
+
+## 完整课程与网页设计对齐（2026-11-18）
+
+本阶段将 iPhone/iPad、Mac、Android 手机/平板从数字首版扩展为网页版完整范围：六个入口、三科学习空间、60 个游戏、88 个记忆场景、课内临摹与自由画板。三端共用离线 JSON 和 317 张 PNG；拼音按 2024 新版人教 14 课顺序组织。
+
+遵照用户要求，本阶段**没有打开 Xcode、模拟器或应用，没有运行 UI 自动化或操作鼠标键盘**。以下都是后台 CLI 测试、编译与文件检查，不能代替新界面的实际视觉和触控验收。下方首版与 macOS 初期的 UI 结果属于历史记录。
+
+| 检查 | 本阶段实际结果 |
+| --- | --- |
+| 网页回归 | `npm test`：125/125；`npm run build` 成功 |
+| 内容导出 | `npm run native:content -- --check` 成功；60 款、每科 20 款、每款 8 套，共 2,336 关；317 张 PNG 可逐字节重生 |
+| Apple 共享核心 | `swift test --package-path native/ios`：12/12；覆盖全部题组可解、重试/锁定/奖励一次、翻牌/顺序状态与旧存档 |
+| Mac 画板模型 | `npm run native:test:mac-drawing`：10/10；直接执行 SwiftPM XCTest，无 App 宿主；验证旧色板、坏稿保护、笔迹/底稿撤销、PNG 分层与橡皮、尺寸/上限/保存失败 |
+| iPhone / iPad 编译 | `KidSprout`、`generic/platform=iOS Simulator` 的 `build-for-testing CODE_SIGNING_ALLOWED=NO` 成功；应用、单测和 UI 测试均只编译，未执行宿主/UI 测试 |
+| Mac 编译 | `KidSproutMac` 的 `build-for-testing` 成功；Universal Release 构建成功，二进制同时含 arm64 / x86_64 |
+| Android | `testDebugUnitTest assembleDebug lintDebug` 成功；17/17 JVM 单测；lint 无错误、4 条依赖版本提示 |
+| 实际包内资源 | iOS bundle、Mac Release bundle 和 Android APK 各 319 个资源文件（2 JSON + 317 PNG）SHA-256 均与仓库一致 |
+| Mac 签名 | `codesign --verify --deep --strict` 成功；本地 ad hoc 签名只含沙盒和用户所选文件读写权限，Release 无 get-task-allow |
+
+审查修复了课程内启动游戏的弹窗层级、继续学习直达第一未学内容、重复点击水果不多播、听鼓未完整播放便可作答/重复播放、Android 多音字 o 的错误点读风险和离开页面后旧语音继续播放。三端均将课程进度与游戏奖励分开，拼音按 `lesson-1` 至 `lesson-14` 保存。
+
+画稿兼容：iOS 接受旧 raw PKDrawing，v2 原子保存笔迹与底稿；Mac 保留 1000×700 坐标，旧六色与三倍橡皮显式迁移；Android 保留旧方稿 1000×1000 比例，新稿使用 1000×700，切底稿可撤销找回旧比例与墨迹。导出保留底稿，排除网格/辅助线。Mac 仍等待家长验证 sheet 完全关闭后呈现系统保存面板。
+
+交付产物位于被 Git 忽略的 `native/artifacts/`：`kid-sprout-debug.apk`、`KidSproutMac.app`、`萌芽启蒙-macOS.zip`；本机后台日志与资源摘要保存在 `validation-web-parity/`。Xcode 必须打开 `native/ios/KidSprout.xcodeproj`，不能用只含核心库的 `Package.swift` 运行应用。
+
+**尚未验证**：本版实际 UI/键盘焦点/触控、字体放大后的视觉效果、实体触控笔、不同系统的离线语音与分享/邮件应用、最低系统与 Intel 实机。更新后的 UI 测试仅完成编译，需在专用设备/CI 执行；历史截图不能作为本版验收证据。iOS 真机签名、Mac Developer ID/公证、商店发布及跨端同步均未配置。
+
+## 历史：原生数字首版
 
 验证日期：2026-11-18。范围为数字 0–10、三款五关游戏、原生画板、本地进度和家长区。当前为模拟器/debug 阶段，尚未发布商店。
 

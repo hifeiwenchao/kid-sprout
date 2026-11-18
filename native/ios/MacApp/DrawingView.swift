@@ -27,15 +27,13 @@ private final class MacCanvasView: NSView {
     }
     override func draw(_ dirtyRect: NSRect) {
         guard let context = NSGraphicsContext.current?.cgContext else { return }
-        context.setFillColor(NSColor.white.cgColor)
-        context.fill(bounds)
         let rect = paperRect
         context.saveGState()
         context.clip(to: rect)
         context.translateBy(x: rect.minX, y: rect.minY)
         context.scaleBy(x: rect.width / 1000, y: rect.height / 700)
-        DrawingModel.render(board.strokes, in: context)
-        if let stroke = board.currentStroke { DrawingModel.render([stroke], in: context) }
+        board.drawBackground(in: context)
+        DrawingModel.render(board.strokes + (board.currentStroke.map { [$0] } ?? []), in: context)
         context.restoreGState()
     }
     override func mouseDown(with event: NSEvent) {
@@ -76,6 +74,7 @@ private struct PaperCanvas: NSViewRepresentable {
 
 struct DrawingView: View {
     @EnvironmentObject private var board: DrawingModel
+    @EnvironmentObject private var model: AppModel
     @Environment(\.scenePhase) private var scenePhase
     @State private var showGate = false
     @State private var pendingExport = false
@@ -85,45 +84,33 @@ struct DrawingView: View {
     @State private var exportHostWindow: NSWindow?
     @State private var sheetEndObserver: NSObjectProtocol?
     @State private var activeSavePanel: NSSavePanel?
+    @State private var expanded = false
 
     var body: some View {
         Page {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 7) {
-                    Text("今天的灵感，画在这里").font(.title2.bold())
-                    Text("鼠标或触控板按住拖动 · 草稿自动保存").font(.subheadline).foregroundStyle(.secondary)
-                }
+            HStack(alignment: .top, spacing: 15) {
+                SectionHeader(eyebrow: "LITTLE ARTIST · 自由创作", title: "小小画板 ✧", detail: "让想象力，跟着小手自由生长。")
                 Spacer()
-                Image(systemName: "pencil.and.scribble").font(.largeTitle).foregroundStyle(Sprout.green)
+                Button { toggleFullScreen() } label: { Label(expanded ? "退出全屏" : "全屏", systemImage: expanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right") }.controlSize(.large).accessibilityIdentifier("drawingFullscreen")
+                exportButton
             }
-            Panel {
-                HStack(spacing: 12) {
-                    ForEach(board.colors.indices, id: \.self) { index in
-                        Button { board.colorIndex = index; board.erasing = false } label: {
-                            Circle().fill(Color(nsColor: board.colors[index])).frame(width: 26, height: 26).padding(7)
-                                .overlay(Circle().stroke(board.colorIndex == index && !board.erasing ? Sprout.green : .clear, lineWidth: 3))
-                                .frame(width: 44, height: 44).contentShape(Rectangle())
-                        }.buttonStyle(.plain).accessibilityLabel("\(board.colorNames[index])画笔")
-                            .accessibilityAddTraits(board.colorIndex == index && !board.erasing ? .isSelected : []).accessibilityIdentifier("color\(index)")
+            DrawingWorkspaceLayout {
+                DrawingToolbox(selectedTool: Binding(get: { board.tool }, set: board.selectTool), colorIndex: $board.colorIndex, customColor: $board.customColor, width: $board.width)
+            } paper: {
+                VStack(alignment: .leading, spacing: 16) {
+                    DrawingTracingPicker(templates: model.curriculum?.tracingTemplates ?? [], selectedID: board.templateID, select: board.selectTemplate)
+                    HStack(spacing: 9) {
+                        Label("我的画纸", systemImage: "circle.fill").font(.caption).foregroundStyle(Sprout.muted)
+                        Spacer(minLength: 0)
+                        historyButtons
                     }
-                    Button { board.erasing.toggle() } label: {
-                        Image(systemName: "eraser.fill").font(.title2).frame(width: 44, height: 44).background(board.erasing ? Sprout.mint : .clear, in: RoundedRectangle(cornerRadius: 12))
-                    }.buttonStyle(.plain).accessibilityLabel("橡皮擦").accessibilityIdentifier("eraser")
-                    Spacer(minLength: 0)
+                    DrawingPaperMat {
+                        PaperCanvas(board: board).aspectRatio(10.0 / 7.0, contentMode: .fit).background(.white)
+                            .overlay { if board.strokes.isEmpty && board.currentStroke == nil && board.templateID == nil { DrawingEmptyPrompt() } }
+                            .clipShape(RoundedRectangle(cornerRadius: 6)).accessibilityIdentifier("paper")
+                    }
+                    Text(board.templateID == nil ? "选一支喜欢的颜色，画下第一个小灵感吧" : "临摹底稿会保留在作品里；网格和辅助线不会导出。").font(.caption).foregroundStyle(Sprout.muted)
                 }
-                HStack {
-                    Text(board.erasing ? "橡皮大小" : "画笔粗细").font(.subheadline)
-                    Slider(value: $board.width, in: 3...24, step: 1).accessibilityLabel("画笔粗细").accessibilityIdentifier("drawingWidth")
-                    Text("\(Int(board.width))").font(.caption.monospacedDigit()).frame(width: 24)
-                }
-            }
-            PaperCanvas(board: board).aspectRatio(10.0 / 7.0, contentMode: .fit)
-                .background(.white).clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.gray.opacity(0.3)))
-                .accessibilityIdentifier("paper")
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 12) { historyButtons; Spacer(); exportButton }
-                VStack(spacing: 15) { HStack { historyButtons; Spacer() }; exportButton }
             }
             if let message = board.saveError { feedback(message, error: true) }
             if let message = board.limitMessage { feedback(message, error: true) }
@@ -131,6 +118,9 @@ struct DrawingView: View {
             Text("画纸大小固定，调整窗口也不会挤坏画作。作品只保存在这台 Mac。").font(.footnote).foregroundStyle(.secondary)
         }
         .navigationTitle("小小画板")
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didEnterFullScreenNotification)) { _ in expanded = true }
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didExitFullScreenNotification)) { _ in expanded = false }
+        .onExitCommand { if expanded { toggleFullScreen() } }
         .onDisappear { board.endStroke(); board.save() }
         .onChange(of: scenePhase) { _, state in if state != .active { board.endStroke(); board.save() } }
         .confirmationDialog("清空画纸？清空后可以点撤销找回。", isPresented: $confirmClear, titleVisibility: .visible) {
@@ -152,9 +142,10 @@ struct DrawingView: View {
                 .disabled(!board.canUndo).keyboardShortcut("z", modifiers: .command).help("撤销（⌘Z）").accessibilityIdentifier("undoDrawing")
             Button { board.redo() } label: { Label("重做", systemImage: "arrow.uturn.forward").frame(minHeight: 36) }
                 .disabled(!board.canRedo).keyboardShortcut("z", modifiers: [.command, .shift]).help("重做（⇧⌘Z）").accessibilityIdentifier("redoDrawing")
+            Button { board.showGrid.toggle(); board.save() } label: { Label("网格", systemImage: "square.grid.3x3").frame(minHeight: 36) }.tint(board.showGrid ? Sprout.green : Sprout.muted).accessibilityIdentifier("drawingGrid").accessibilityAddTraits(board.showGrid ? .isSelected : [])
             Button { confirmClear = true } label: { Label("清空", systemImage: "trash").frame(minHeight: 36) }
                 .disabled(board.strokes.isEmpty).accessibilityIdentifier("clearDrawing")
-        }.font(.subheadline)
+        }.font(.caption).buttonStyle(.borderless)
     }
 
     private var exportButton: some View {
@@ -177,6 +168,11 @@ struct DrawingView: View {
 
     private func feedback(_ message: String, error: Bool) -> some View {
         Text(message).font(.footnote).foregroundStyle(error ? Sprout.orange : Sprout.green).accessibilityIdentifier("drawingFeedback")
+    }
+    private func toggleFullScreen() {
+        guard let window = NSApp.keyWindow ?? NSApp.mainWindow else { return }
+        window.toggleFullScreen(nil)
+        expanded.toggle()
     }
 
     private func presentAfterGateEnds() {

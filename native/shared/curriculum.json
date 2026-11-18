@@ -4,47 +4,80 @@
   "numbers": [
     {
       "value": 0,
-      "name": "零"
+      "name": "零",
+      "motifAsset": "empty_basket",
+      "fruit": "苹果",
+      "unit": "个"
     },
     {
       "value": 1,
-      "name": "一"
+      "name": "一",
+      "motifAsset": "number_motif_0",
+      "fruit": "苹果",
+      "unit": "个"
     },
     {
       "value": 2,
-      "name": "二"
+      "name": "二",
+      "motifAsset": "number_motif_1",
+      "fruit": "橘子",
+      "unit": "个"
     },
     {
       "value": 3,
-      "name": "三"
+      "name": "三",
+      "motifAsset": "number_motif_2",
+      "fruit": "草莓",
+      "unit": "颗"
     },
     {
       "value": 4,
-      "name": "四"
+      "name": "四",
+      "motifAsset": "number_motif_3",
+      "fruit": "小花",
+      "unit": "朵"
     },
     {
       "value": 5,
-      "name": "五"
+      "name": "五",
+      "motifAsset": "number_motif_4",
+      "fruit": "星星",
+      "unit": "颗"
     },
     {
       "value": 6,
-      "name": "六"
+      "name": "六",
+      "motifAsset": "number_motif_5",
+      "fruit": "樱桃",
+      "unit": "颗"
     },
     {
       "value": 7,
-      "name": "七"
+      "name": "七",
+      "motifAsset": "number_motif_6",
+      "fruit": "小树",
+      "unit": "棵"
     },
     {
       "value": 8,
-      "name": "八"
+      "name": "八",
+      "motifAsset": "number_motif_7",
+      "fruit": "胡萝卜",
+      "unit": "根"
     },
     {
       "value": 9,
-      "name": "九"
+      "name": "九",
+      "motifAsset": "number_motif_8",
+      "fruit": "气球",
+      "unit": "个"
     },
     {
       "value": 10,
-      "name": "十"
+      "name": "十",
+      "motifAsset": "number_motif_9",
+      "fruit": "蓝莓",
+      "unit": "颗"
     }
   ],
   "pinyin": {
@@ -1047,5 +1080,1199 @@
         ]
       }
     ]
-  }
+  },
+  "memoryScenes": [
+    {
+      "subject": "numbers",
+      "symbol": "0",
+      "title": "0 像圆圆的鸡蛋",
+      "description": "沿着鸡蛋的轮廓，找一找圆圆的 0。一个也没有，可以用 0 表示。",
+      "frames": [
+        "memory_numbers_30_0",
+        "memory_numbers_30_1",
+        "memory_numbers_30_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "1",
+      "title": "1 像细长的铅笔",
+      "description": "小铅笔细又长，看看它怎样变成数字 1。",
+      "frames": [
+        "memory_numbers_31_0",
+        "memory_numbers_31_1",
+        "memory_numbers_31_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "2",
+      "title": "2 像水上的小鸭",
+      "description": "圆圆的头，弯弯的脖子，小鸭的模样里藏着 2。",
+      "frames": [
+        "memory_numbers_32_0",
+        "memory_numbers_32_1",
+        "memory_numbers_32_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "3",
+      "title": "3 像弯弯的小耳朵",
+      "description": "上面弯一弯，下面再弯一弯，耳朵帮我们记住 3。",
+      "frames": [
+        "memory_numbers_33_0",
+        "memory_numbers_33_1",
+        "memory_numbers_33_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "4",
+      "title": "4 像迎风的小旗",
+      "description": "三角小旗，直直旗杆，看看 4 藏在哪里。",
+      "frames": [
+        "memory_numbers_34_0",
+        "memory_numbers_34_1",
+        "memory_numbers_34_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "5",
+      "title": "5 像弯弯的小钩子",
+      "description": "先看平平的顶，再看弯弯的钩，记住数字 5 的模样。",
+      "frames": [
+        "memory_numbers_35_0",
+        "memory_numbers_35_1",
+        "memory_numbers_35_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "6",
+      "title": "6 像卷卷的小口哨",
+      "description": "上面弯下来，下面围个圈，小口哨像数字 6。",
+      "frames": [
+        "memory_numbers_36_0",
+        "memory_numbers_36_1",
+        "memory_numbers_36_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "7",
+      "title": "7 像弯弯的小镰刀",
+      "description": "割麦子的镰刀，弯弯的刀头，斜斜的长柄，模样像数字 7。",
+      "frames": [
+        "memory_numbers_37_0",
+        "memory_numbers_37_1",
+        "memory_numbers_37_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "8",
+      "title": "8 像圆圆的小葫芦",
+      "description": "上面一个圆肚子，下面一个圆肚子，连起来像数字 8。",
+      "frames": [
+        "memory_numbers_38_0",
+        "memory_numbers_38_1",
+        "memory_numbers_38_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "9",
+      "title": "9 像带线的小气球",
+      "description": "上面圆圆，下面拖着小尾巴，气球的模样像数字 9。",
+      "frames": [
+        "memory_numbers_39_0",
+        "memory_numbers_39_1",
+        "memory_numbers_39_2"
+      ]
+    },
+    {
+      "subject": "numbers",
+      "symbol": "10",
+      "title": "1 和 0 手拉手，就是 10",
+      "description": "左边是 1，右边是 0，两位朋友排在一起写成 10。10 表示十个。",
+      "frames": [
+        "memory_numbers_31_30_0",
+        "memory_numbers_31_30_1",
+        "memory_numbers_31_30_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "a",
+      "title": "张大嘴巴 a a a",
+      "description": "嘴巴张大像小圆门，记住 a 的圆肚子和右边小竖。",
+      "frames": [
+        "memory_pinyin_61_0",
+        "memory_pinyin_61_1",
+        "memory_pinyin_61_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "o",
+      "title": "圆圆嘴巴像个 o",
+      "description": "看看圆圆的 o，嘴唇也拢成圆形，再请大人示范。",
+      "frames": [
+        "memory_pinyin_6f_0",
+        "memory_pinyin_6f_1",
+        "memory_pinyin_6f_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "e",
+      "title": "半开嘴巴，记住 e",
+      "description": "嘴巴半开、嘴角展开；字形里面有一条小横线。",
+      "frames": [
+        "memory_pinyin_65_0",
+        "memory_pinyin_65_1",
+        "memory_pinyin_65_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "i",
+      "title": "一根小竖戴圆点",
+      "description": "i 上面只有一个点；读的时候牙齿靠近，嘴角向两边。",
+      "frames": [
+        "memory_pinyin_69_0",
+        "memory_pinyin_69_1",
+        "memory_pinyin_69_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "u",
+      "title": "小杯子，圆嘴巴",
+      "description": "u 像一个小杯子，读的时候嘴唇向前拢成小圆洞。",
+      "frames": [
+        "memory_pinyin_75_0",
+        "memory_pinyin_75_1",
+        "memory_pinyin_75_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ü",
+      "title": "小鱼吐出两颗泡泡",
+      "description": "u 上面多两点就是 ü；先摆 i 的口型，再拢圆嘴唇。",
+      "frames": [
+        "memory_pinyin_fc_0",
+        "memory_pinyin_fc_1",
+        "memory_pinyin_fc_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "b",
+      "title": "右下圆肚子是 b",
+      "description": "高高的竖像鼓架，圆鼓在右下；别和 p、d、q 混淆。",
+      "frames": [
+        "memory_pinyin_62_0",
+        "memory_pinyin_62_1",
+        "memory_pinyin_62_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "p",
+      "title": "右上圆肚子是 p",
+      "description": "小旗的圆肚子在右上，长竖伸到下面；读时送出一口气。",
+      "frames": [
+        "memory_pinyin_70_0",
+        "memory_pinyin_70_1",
+        "memory_pinyin_70_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "m",
+      "title": "两扇小门 m m m",
+      "description": "m 有两扇小拱门；双唇闭住，让声音从鼻子里出来。",
+      "frames": [
+        "memory_pinyin_6d_0",
+        "memory_pinyin_6d_1",
+        "memory_pinyin_6d_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "f",
+      "title": "弯头拐杖加一横",
+      "description": "f 上面弯弯，腰间有一横；上牙轻碰下唇。",
+      "frames": [
+        "memory_pinyin_66_0",
+        "memory_pinyin_66_1",
+        "memory_pinyin_66_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "d",
+      "title": "左下圆肚子是 d",
+      "description": "圆鼓在左下，长竖站右边；和 b 的肚子方向相反。",
+      "frames": [
+        "memory_pinyin_64_0",
+        "memory_pinyin_64_1",
+        "memory_pinyin_64_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "t",
+      "title": "小伞弯柄加一横",
+      "description": "t 的竖有弯脚，腰间穿过一横；舌尖放开时送一口气。",
+      "frames": [
+        "memory_pinyin_74_0",
+        "memory_pinyin_74_1",
+        "memory_pinyin_74_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "n",
+      "title": "一扇小门 n n n",
+      "description": "n 只有一扇门，m 有两扇；舌尖抵上牙床，声音从鼻子走。",
+      "frames": [
+        "memory_pinyin_6e_0",
+        "memory_pinyin_6e_1",
+        "memory_pinyin_6e_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "l",
+      "title": "一根小棍站得直",
+      "description": "l 是高高的一竖；舌尖抵上牙床，气从舌头两边走。",
+      "frames": [
+        "memory_pinyin_6c_0",
+        "memory_pinyin_6c_1",
+        "memory_pinyin_6c_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "g",
+      "title": "圆肚子拖条小尾巴",
+      "description": "g 的圆肚子下面有弯尾巴；发音时舌根抬起再放开。",
+      "frames": [
+        "memory_pinyin_67_0",
+        "memory_pinyin_67_1",
+        "memory_pinyin_67_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "k",
+      "title": "树干伸出两条斜枝",
+      "description": "k 一边直直，一边分成两条斜线；舌根放开时送气。",
+      "frames": [
+        "memory_pinyin_6b_0",
+        "memory_pinyin_6b_1",
+        "memory_pinyin_6b_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "h",
+      "title": "高背椅子 h h h",
+      "description": "高高的竖旁边接一扇小门，像一把高背椅。",
+      "frames": [
+        "memory_pinyin_68_0",
+        "memory_pinyin_68_1",
+        "memory_pinyin_68_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "j",
+      "title": "小钩头上一个点",
+      "description": "j 的脚往左弯，头上有一个点；舌面抬高后轻轻放开。",
+      "frames": [
+        "memory_pinyin_6a_0",
+        "memory_pinyin_6a_1",
+        "memory_pinyin_6a_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "q",
+      "title": "左上气球拖长线",
+      "description": "q 的圆肚子在左上，长竖在右边往下伸，和 p 方向不同。",
+      "frames": [
+        "memory_pinyin_71_0",
+        "memory_pinyin_71_1",
+        "memory_pinyin_71_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "x",
+      "title": "两条斜线来交叉",
+      "description": "x 像两只小手交叉；舌面靠近硬腭，让气从缝里擦过。",
+      "frames": [
+        "memory_pinyin_78_0",
+        "memory_pinyin_78_1",
+        "memory_pinyin_78_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "z",
+      "title": "小滑梯，舌尖放平",
+      "description": "z 上横、斜滑、下横；读时舌尖平伸，不翘起来。",
+      "frames": [
+        "memory_pinyin_7a_0",
+        "memory_pinyin_7a_1",
+        "memory_pinyin_7a_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "c",
+      "title": "半个圆圈张开嘴",
+      "description": "c 像张开的小嘴，右边留空；舌尖平伸后送气。",
+      "frames": [
+        "memory_pinyin_63_0",
+        "memory_pinyin_63_1",
+        "memory_pinyin_63_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "s",
+      "title": "弯弯丝线像小蛇",
+      "description": "s 上下弯一弯；舌尖平伸，让气从窄缝出来。",
+      "frames": [
+        "memory_pinyin_73_0",
+        "memory_pinyin_73_1",
+        "memory_pinyin_73_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "zh",
+      "title": "z 带上 h，舌尖翘起",
+      "description": "看清后面多了 h。zh 读时舌尖翘起，和 z 的平舌不同。",
+      "frames": [
+        "memory_pinyin_7a_68_0",
+        "memory_pinyin_7a_68_1",
+        "memory_pinyin_7a_68_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ch",
+      "title": "c 带上 h，翘舌送气",
+      "description": "ch 后面跟着 h，舌尖翘起后送出一口气。",
+      "frames": [
+        "memory_pinyin_63_68_0",
+        "memory_pinyin_63_68_1",
+        "memory_pinyin_63_68_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "sh",
+      "title": "s 带上 h，翘舌擦气",
+      "description": "sh 后面跟着 h，舌尖翘起，让气流轻轻擦过。",
+      "frames": [
+        "memory_pinyin_73_68_0",
+        "memory_pinyin_73_68_1",
+        "memory_pinyin_73_68_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "r",
+      "title": "小芽弯头，舌尖翘起",
+      "description": "r 像小芽弯弯头；舌尖翘起，轻轻振动声带。",
+      "frames": [
+        "memory_pinyin_72_0",
+        "memory_pinyin_72_1",
+        "memory_pinyin_72_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "y",
+      "title": "小树杈伸长脚",
+      "description": "y 的两条斜线相遇，一条腿伸到下面；口型像 i。",
+      "frames": [
+        "memory_pinyin_79_0",
+        "memory_pinyin_79_1",
+        "memory_pinyin_79_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "w",
+      "title": "两座小山谷手拉手",
+      "description": "w 像两座相连的山谷；嘴唇拢圆，轻轻滑向后面的韵母。",
+      "frames": [
+        "memory_pinyin_77_0",
+        "memory_pinyin_77_1",
+        "memory_pinyin_77_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ai",
+      "title": "a 慢慢滑向 i",
+      "description": "a、i 排好队，口型从张大滑向展开，连成一个音。",
+      "frames": [
+        "memory_pinyin_61_69_0",
+        "memory_pinyin_61_69_1",
+        "memory_pinyin_61_69_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ei",
+      "title": "e 慢慢滑向 i",
+      "description": "从 e 开始，再滑向 i；两个字母记成一位韵母朋友。",
+      "frames": [
+        "memory_pinyin_65_69_0",
+        "memory_pinyin_65_69_1",
+        "memory_pinyin_65_69_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ui",
+      "title": "u、i 并排，口型会滑动",
+      "description": "ui 是 uei 的简写，先拢圆嘴唇，再滑向 ei，声调标在 i 上。",
+      "frames": [
+        "memory_pinyin_75_69_0",
+        "memory_pinyin_75_69_1",
+        "memory_pinyin_75_69_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ao",
+      "title": "张大嘴，再慢慢拢圆",
+      "description": "先发 a，再滑向 o；看看 a、o 一前一后排整齐。",
+      "frames": [
+        "memory_pinyin_61_6f_0",
+        "memory_pinyin_61_6f_1",
+        "memory_pinyin_61_6f_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ou",
+      "title": "从圆嘴 o 滑向 u",
+      "description": "先圆圆的 o，再把嘴唇收小，连起来读成 ou。",
+      "frames": [
+        "memory_pinyin_6f_75_0",
+        "memory_pinyin_6f_75_1",
+        "memory_pinyin_6f_75_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "iu",
+      "title": "i 开头，滑向 ou",
+      "description": "iu 是 iou 的简写；从 i 滑向 ou，声调标在后面的 u 上。",
+      "frames": [
+        "memory_pinyin_69_75_0",
+        "memory_pinyin_69_75_1",
+        "memory_pinyin_69_75_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ie",
+      "title": "i 的小嘴慢慢打开",
+      "description": "先展开嘴角发 i，再张开一点滑向 e，连成 ie。",
+      "frames": [
+        "memory_pinyin_69_65_0",
+        "memory_pinyin_69_65_1",
+        "memory_pinyin_69_65_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "üe",
+      "title": "两点 ü 带着 e",
+      "description": "看清 ü 的两点；从圆嘴口型开始，再慢慢打开嘴巴。",
+      "frames": [
+        "memory_pinyin_fc_65_0",
+        "memory_pinyin_fc_65_1",
+        "memory_pinyin_fc_65_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "er",
+      "title": "卷起舌尖，记住 er",
+      "description": "e 后面跟着 r；嘴巴半开，舌尖轻轻卷起，er 可独立成音节。",
+      "frames": [
+        "memory_pinyin_65_72_0",
+        "memory_pinyin_65_72_1",
+        "memory_pinyin_65_72_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "an",
+      "title": "a 开头，舌尖收尾",
+      "description": "an 最后是 n。先张嘴发 a，再用舌尖抵住上牙床收尾。",
+      "frames": [
+        "memory_pinyin_61_6e_0",
+        "memory_pinyin_61_6e_1",
+        "memory_pinyin_61_6e_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "en",
+      "title": "e 开头，舌尖收尾",
+      "description": "en 最后是 n。从 e 开始，舌尖抵住上牙床，用鼻音收尾。",
+      "frames": [
+        "memory_pinyin_65_6e_0",
+        "memory_pinyin_65_6e_1",
+        "memory_pinyin_65_6e_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "in",
+      "title": "i 开头，舌尖收尾",
+      "description": "in 最后是 n。先展开嘴角，再把舌尖抵住上牙床。",
+      "frames": [
+        "memory_pinyin_69_6e_0",
+        "memory_pinyin_69_6e_1",
+        "memory_pinyin_69_6e_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "un",
+      "title": "圆嘴开头，舌尖收尾",
+      "description": "un 是 uen 的简写。先拢圆嘴唇，滑向 en，用舌尖收尾。",
+      "frames": [
+        "memory_pinyin_75_6e_0",
+        "memory_pinyin_75_6e_1",
+        "memory_pinyin_75_6e_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ün",
+      "title": "两点 ü，舌尖 n",
+      "description": "看清 ü 的两点；先用 ü 的圆嘴口型，再把舌尖抵住上牙床。",
+      "frames": [
+        "memory_pinyin_fc_6e_0",
+        "memory_pinyin_fc_6e_1",
+        "memory_pinyin_fc_6e_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ang",
+      "title": "a 开头，舌根收尾",
+      "description": "ang 最后是 ng。张大嘴后抬起舌根，用一个后鼻音收尾。",
+      "frames": [
+        "memory_pinyin_61_6e_67_0",
+        "memory_pinyin_61_6e_67_1",
+        "memory_pinyin_61_6e_67_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "eng",
+      "title": "e 开头，舌根收尾",
+      "description": "eng 最后是 ng。从 e 开始抬起舌根，ng 不分成两个音。",
+      "frames": [
+        "memory_pinyin_65_6e_67_0",
+        "memory_pinyin_65_6e_67_1",
+        "memory_pinyin_65_6e_67_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ing",
+      "title": "i 开头，舌根收尾",
+      "description": "ing 最后是 ng。先展开嘴角，再抬起舌根，用后鼻音收尾。",
+      "frames": [
+        "memory_pinyin_69_6e_67_0",
+        "memory_pinyin_69_6e_67_1",
+        "memory_pinyin_69_6e_67_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ong",
+      "title": "圆圆嘴，舌根收尾",
+      "description": "ong 最后是 ng。嘴唇拢圆，抬起舌根，用一个后鼻音收尾。",
+      "frames": [
+        "memory_pinyin_6f_6e_67_0",
+        "memory_pinyin_6f_6e_67_1",
+        "memory_pinyin_6f_6e_67_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ā",
+      "title": "小车开上平平路",
+      "description": "一声：高高平平，声音走平路。跟着线条从左往右比划一下。",
+      "frames": [
+        "memory_pinyin_101_0",
+        "memory_pinyin_101_1",
+        "memory_pinyin_101_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "á",
+      "title": "小车慢慢上山坡",
+      "description": "二声：从低往高，声音上小坡。跟着线条从左往右比划一下。",
+      "frames": [
+        "memory_pinyin_e1_0",
+        "memory_pinyin_e1_1",
+        "memory_pinyin_e1_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "ǎ",
+      "title": "小车下坡再上坡",
+      "description": "三声：先降再升，声音拐个弯。跟着线条从左往右比划一下。",
+      "frames": [
+        "memory_pinyin_1ce_0",
+        "memory_pinyin_1ce_1",
+        "memory_pinyin_1ce_2"
+      ]
+    },
+    {
+      "subject": "pinyin",
+      "symbol": "à",
+      "title": "小车沿着山坡下",
+      "description": "四声：从高往低，声音下小坡。跟着线条从左往右比划一下。",
+      "frames": [
+        "memory_pinyin_e0_0",
+        "memory_pinyin_e0_1",
+        "memory_pinyin_e0_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Aa",
+      "title": "A 像小山，a 有圆肚子",
+      "description": "大写 A 像一座小山，小写 a 有圆圆的肚子。",
+      "frames": [
+        "memory_alphabet_41_61_0",
+        "memory_alphabet_41_61_1",
+        "memory_alphabet_41_61_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Bb",
+      "title": "B 两个肚子，b 一个肚子",
+      "description": "大写 B 挺直腰，两个圆肚子上下排；小写 b 只有一个圆肚子。",
+      "frames": [
+        "memory_alphabet_42_62_0",
+        "memory_alphabet_42_62_1",
+        "memory_alphabet_42_62_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Cc",
+      "title": "C 和 c，张开小嘴巴",
+      "description": "C 和 c 都像张开的小嘴，大写高一点，小写矮一点。",
+      "frames": [
+        "memory_alphabet_43_63_0",
+        "memory_alphabet_43_63_1",
+        "memory_alphabet_43_63_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Dd",
+      "title": "D 像圆门，d 肚子朝左",
+      "description": "大写 D 像一扇圆门，小写 d 的小肚子在左边。",
+      "frames": [
+        "memory_alphabet_44_64_0",
+        "memory_alphabet_44_64_1",
+        "memory_alphabet_44_64_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Ee",
+      "title": "E 三条横，e 圆圈里一小横",
+      "description": "大写 E 有三条横线，小写 e 像带小横线的圆圈。",
+      "frames": [
+        "memory_alphabet_45_65_0",
+        "memory_alphabet_45_65_1",
+        "memory_alphabet_45_65_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Ff",
+      "title": "F 两条横，f 弯弯头",
+      "description": "大写 F 有两条横线，小写 f 弯弯头、伸长脚。",
+      "frames": [
+        "memory_alphabet_46_66_0",
+        "memory_alphabet_46_66_1",
+        "memory_alphabet_46_66_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Gg",
+      "title": "G 加一小横，g 尾巴向下弯",
+      "description": "大写 G 像 C 加一小横，小写 g 的小尾巴往下弯。",
+      "frames": [
+        "memory_alphabet_47_67_0",
+        "memory_alphabet_47_67_1",
+        "memory_alphabet_47_67_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Hh",
+      "title": "H 像梯子，h 像高背椅",
+      "description": "大写 H 像小梯子，小写 h 像一把高背椅。",
+      "frames": [
+        "memory_alphabet_48_68_0",
+        "memory_alphabet_48_68_1",
+        "memory_alphabet_48_68_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Ii",
+      "title": "I 站得直，i 戴小圆点",
+      "description": "大写 I 站得直直的，小写 i 头上有一颗小圆点。",
+      "frames": [
+        "memory_alphabet_49_69_0",
+        "memory_alphabet_49_69_1",
+        "memory_alphabet_49_69_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Jj",
+      "title": "J 和 j，小脚向左弯",
+      "description": "J 和 j 的小脚都往左弯，小写 j 头上还有小圆点。",
+      "frames": [
+        "memory_alphabet_4a_6a_0",
+        "memory_alphabet_4a_6a_1",
+        "memory_alphabet_4a_6a_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Kk",
+      "title": "K 和 k，伸出斜斜的小手",
+      "description": "K 和 k 都伸出两条斜线，像一只张开的小手。",
+      "frames": [
+        "memory_alphabet_4b_6b_0",
+        "memory_alphabet_4b_6b_1",
+        "memory_alphabet_4b_6b_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Ll",
+      "title": "L 小拐角，l 高直线",
+      "description": "大写 L 像个小拐角，小写 l 是一条高高的直线。",
+      "frames": [
+        "memory_alphabet_4c_6c_0",
+        "memory_alphabet_4c_6c_1",
+        "memory_alphabet_4c_6c_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Mm",
+      "title": "M 两座山，m 两扇小拱门",
+      "description": "大写 M 像两座山，小写 m 像两扇挨着的小拱门。",
+      "frames": [
+        "memory_alphabet_4d_6d_0",
+        "memory_alphabet_4d_6d_1",
+        "memory_alphabet_4d_6d_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Nn",
+      "title": "N 斜斜桥，n 一扇小拱门",
+      "description": "大写 N 的中间有一条斜线，小写 n 只有一扇小拱门。",
+      "frames": [
+        "memory_alphabet_4e_6e_0",
+        "memory_alphabet_4e_6e_1",
+        "memory_alphabet_4e_6e_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Oo",
+      "title": "O 大圆圈，o 小圆圈",
+      "description": "O 和 o 都是圆圈，圆圆大圈、圆圆小圈。",
+      "frames": [
+        "memory_alphabet_4f_6f_0",
+        "memory_alphabet_4f_6f_1",
+        "memory_alphabet_4f_6f_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Pp",
+      "title": "P 肚子在右上，p 长脚向下",
+      "description": "大写 P 的小肚子在右上方，小写 p 的长脚伸到下面。",
+      "frames": [
+        "memory_alphabet_50_70_0",
+        "memory_alphabet_50_70_1",
+        "memory_alphabet_50_70_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Qq",
+      "title": "Q 圆圈带短尾，q 长脚在右边",
+      "description": "大写 Q 是圆圈加短尾巴，小写 q 的长脚在右边。",
+      "frames": [
+        "memory_alphabet_51_71_0",
+        "memory_alphabet_51_71_1",
+        "memory_alphabet_51_71_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Rr",
+      "title": "R 伸斜腿，r 冒一枝小芽",
+      "description": "大写 R 比 P 多一条斜腿，小写 r 像冒出一枝小芽。",
+      "frames": [
+        "memory_alphabet_52_72_0",
+        "memory_alphabet_52_72_1",
+        "memory_alphabet_52_72_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Ss",
+      "title": "S 和 s，弯弯小蛇扭一扭",
+      "description": "S 和 s 都弯弯的，像一条快乐扭动的小蛇。",
+      "frames": [
+        "memory_alphabet_53_73_0",
+        "memory_alphabet_53_73_1",
+        "memory_alphabet_53_73_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Tt",
+      "title": "T 像雨伞，t 横线在腰上",
+      "description": "大写 T 像一把小雨伞，小写 t 的横线在腰上。",
+      "frames": [
+        "memory_alphabet_54_74_0",
+        "memory_alphabet_54_74_1",
+        "memory_alphabet_54_74_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Uu",
+      "title": "U 和 u，像两个小杯子",
+      "description": "U 和 u 都像小杯子，注意小写 u 右边的小尾巴。",
+      "frames": [
+        "memory_alphabet_55_75_0",
+        "memory_alphabet_55_75_1",
+        "memory_alphabet_55_75_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Vv",
+      "title": "V 和 v，走进尖尖小山谷",
+      "description": "V 和 v 都像尖尖的山谷，两条斜线在下面碰头。",
+      "frames": [
+        "memory_alphabet_56_76_0",
+        "memory_alphabet_56_76_1",
+        "memory_alphabet_56_76_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Ww",
+      "title": "W 和 w，两个山谷手拉手",
+      "description": "W 和 w 像两个 V 手拉手，沿着山谷走一走。",
+      "frames": [
+        "memory_alphabet_57_77_0",
+        "memory_alphabet_57_77_1",
+        "memory_alphabet_57_77_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Xx",
+      "title": "X 和 x，斜斜小手碰一碰",
+      "description": "X 和 x 都是两条斜线交叉，像打招呼的两只手。",
+      "frames": [
+        "memory_alphabet_58_78_0",
+        "memory_alphabet_58_78_1",
+        "memory_alphabet_58_78_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Yy",
+      "title": "Y 像树杈，y 小腿往下伸",
+      "description": "大写 Y 像小树杈，小写 y 的一条小腿往下伸。",
+      "frames": [
+        "memory_alphabet_59_79_0",
+        "memory_alphabet_59_79_1",
+        "memory_alphabet_59_79_2"
+      ]
+    },
+    {
+      "subject": "alphabet",
+      "symbol": "Zz",
+      "title": "Z 和 z，坐上小滑梯",
+      "description": "Z 和 z 像一条滑梯：横着走，斜着滑，再横着走。",
+      "frames": [
+        "memory_alphabet_5a_7a_0",
+        "memory_alphabet_5a_7a_1",
+        "memory_alphabet_5a_7a_2"
+      ]
+    }
+  ],
+  "tracingTemplates": [
+    {
+      "id": "numbers:0",
+      "group": "numbers",
+      "label": "0",
+      "asset": "guide_numbers_30"
+    },
+    {
+      "id": "numbers:1",
+      "group": "numbers",
+      "label": "1",
+      "asset": "guide_numbers_31"
+    },
+    {
+      "id": "numbers:2",
+      "group": "numbers",
+      "label": "2",
+      "asset": "guide_numbers_32"
+    },
+    {
+      "id": "numbers:3",
+      "group": "numbers",
+      "label": "3",
+      "asset": "guide_numbers_33"
+    },
+    {
+      "id": "numbers:4",
+      "group": "numbers",
+      "label": "4",
+      "asset": "guide_numbers_34"
+    },
+    {
+      "id": "numbers:5",
+      "group": "numbers",
+      "label": "5",
+      "asset": "guide_numbers_35"
+    },
+    {
+      "id": "numbers:6",
+      "group": "numbers",
+      "label": "6",
+      "asset": "guide_numbers_36"
+    },
+    {
+      "id": "numbers:7",
+      "group": "numbers",
+      "label": "7",
+      "asset": "guide_numbers_37"
+    },
+    {
+      "id": "numbers:8",
+      "group": "numbers",
+      "label": "8",
+      "asset": "guide_numbers_38"
+    },
+    {
+      "id": "numbers:9",
+      "group": "numbers",
+      "label": "9",
+      "asset": "guide_numbers_39"
+    },
+    {
+      "id": "numbers:10",
+      "group": "numbers",
+      "label": "10",
+      "asset": "guide_numbers_31_30"
+    },
+    {
+      "id": "alphabet:Aa",
+      "group": "alphabet",
+      "label": "Aa",
+      "asset": "guide_alphabet_41_61"
+    },
+    {
+      "id": "alphabet:Bb",
+      "group": "alphabet",
+      "label": "Bb",
+      "asset": "guide_alphabet_42_62"
+    },
+    {
+      "id": "alphabet:Cc",
+      "group": "alphabet",
+      "label": "Cc",
+      "asset": "guide_alphabet_43_63"
+    },
+    {
+      "id": "alphabet:Dd",
+      "group": "alphabet",
+      "label": "Dd",
+      "asset": "guide_alphabet_44_64"
+    },
+    {
+      "id": "alphabet:Ee",
+      "group": "alphabet",
+      "label": "Ee",
+      "asset": "guide_alphabet_45_65"
+    },
+    {
+      "id": "alphabet:Ff",
+      "group": "alphabet",
+      "label": "Ff",
+      "asset": "guide_alphabet_46_66"
+    },
+    {
+      "id": "alphabet:Gg",
+      "group": "alphabet",
+      "label": "Gg",
+      "asset": "guide_alphabet_47_67"
+    },
+    {
+      "id": "alphabet:Hh",
+      "group": "alphabet",
+      "label": "Hh",
+      "asset": "guide_alphabet_48_68"
+    },
+    {
+      "id": "alphabet:Ii",
+      "group": "alphabet",
+      "label": "Ii",
+      "asset": "guide_alphabet_49_69"
+    },
+    {
+      "id": "alphabet:Jj",
+      "group": "alphabet",
+      "label": "Jj",
+      "asset": "guide_alphabet_4a_6a"
+    },
+    {
+      "id": "alphabet:Kk",
+      "group": "alphabet",
+      "label": "Kk",
+      "asset": "guide_alphabet_4b_6b"
+    },
+    {
+      "id": "alphabet:Ll",
+      "group": "alphabet",
+      "label": "Ll",
+      "asset": "guide_alphabet_4c_6c"
+    },
+    {
+      "id": "alphabet:Mm",
+      "group": "alphabet",
+      "label": "Mm",
+      "asset": "guide_alphabet_4d_6d"
+    },
+    {
+      "id": "alphabet:Nn",
+      "group": "alphabet",
+      "label": "Nn",
+      "asset": "guide_alphabet_4e_6e"
+    },
+    {
+      "id": "alphabet:Oo",
+      "group": "alphabet",
+      "label": "Oo",
+      "asset": "guide_alphabet_4f_6f"
+    },
+    {
+      "id": "alphabet:Pp",
+      "group": "alphabet",
+      "label": "Pp",
+      "asset": "guide_alphabet_50_70"
+    },
+    {
+      "id": "alphabet:Qq",
+      "group": "alphabet",
+      "label": "Qq",
+      "asset": "guide_alphabet_51_71"
+    },
+    {
+      "id": "alphabet:Rr",
+      "group": "alphabet",
+      "label": "Rr",
+      "asset": "guide_alphabet_52_72"
+    },
+    {
+      "id": "alphabet:Ss",
+      "group": "alphabet",
+      "label": "Ss",
+      "asset": "guide_alphabet_53_73"
+    },
+    {
+      "id": "alphabet:Tt",
+      "group": "alphabet",
+      "label": "Tt",
+      "asset": "guide_alphabet_54_74"
+    },
+    {
+      "id": "alphabet:Uu",
+      "group": "alphabet",
+      "label": "Uu",
+      "asset": "guide_alphabet_55_75"
+    },
+    {
+      "id": "alphabet:Vv",
+      "group": "alphabet",
+      "label": "Vv",
+      "asset": "guide_alphabet_56_76"
+    },
+    {
+      "id": "alphabet:Ww",
+      "group": "alphabet",
+      "label": "Ww",
+      "asset": "guide_alphabet_57_77"
+    },
+    {
+      "id": "alphabet:Xx",
+      "group": "alphabet",
+      "label": "Xx",
+      "asset": "guide_alphabet_58_78"
+    },
+    {
+      "id": "alphabet:Yy",
+      "group": "alphabet",
+      "label": "Yy",
+      "asset": "guide_alphabet_59_79"
+    },
+    {
+      "id": "alphabet:Zz",
+      "group": "alphabet",
+      "label": "Zz",
+      "asset": "guide_alphabet_5a_7a"
+    }
+  ]
 }
