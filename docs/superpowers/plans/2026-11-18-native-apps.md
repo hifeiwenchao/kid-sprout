@@ -59,4 +59,4 @@
 - [x] 记录每端启动、测试、安装命令、当前范围、后续迁移范围与签名边界；忽略 SDK、签名密钥与构建产物。
 - [x] 独立审查共享数据、两端状态机、保存恢复、儿童区入口及布局，修复发现的问题。
 - [x] 运行 `npm test && npm run build && npm run native:content -- --check` 与两端适当的构建测试。
-- [ ] 使用 `feature: 添加iOS与安卓原生应用首版` 提交。确认原 main 无未提交改动并快进集成，推送用户已授权的 `origin main`。
+- [x] 使用 `feature: 添加iOS与安卓原生启蒙应用首版` 提交。确认原 main 无未提交改动并快进集成，推送用户已授权的 `origin main`。实现提交为 `2229601`，测试环境与边界记录在 `native/VALIDATION.md`。
