@@ -2,7 +2,7 @@
 
 采集日期：2026-11-19。现有专用素材包括 iPhone 2 张、iPad 1 张和 Mac 1 张，Bundle ID 均为 `com.feiwenchao.mengya`，版本 `1.0.0`（build `1`）。移动端来自原生 `Release` 模拟器构建；Mac 来自实际签名归档 app 的后台窗口捕获。截图展示真实应用首页，不是设计稿或网页。素材已经查看，中屏 iPhone、iPad 和 Mac 图曾分别在旧记录 `6836726939` 保存 1 张（各 `1/10`）并用于旧 build `1` 提交；大屏 iPhone 图保留本地。
 
-当前工程已迁移为 `com.feiwenchao.kid-sprout` / `1.0.0 (2)`，旧记录两端均已撤回。以上素材的真实来源仍是 `com.feiwenchao.mengya` / `1.0.0 (1)`，不能改写为新标识截图。本轮只改标识及构建号，界面未变，可在新记录复用；新记录是否已上传保存另以[发布记录](../README.md)为准。
+当前工程已迁移为 `com.feiwenchao.kid-sprout` / `1.0.0 (2)`，旧记录两端均已撤回。以上素材的真实来源仍是 `com.feiwenchao.mengya` / `1.0.0 (1)`，不能改写为新标识截图。本轮只改标识及构建号，界面未变，已在新记录复用；新 build `2` 的上传、处理和审核提交状态见[发布记录](../README.md)。
 
 ## iPhone / iPad 原始 JPG
 
@@ -38,6 +38,6 @@ Mac 源图去掉顶部 31px 系统标题栏后，将剩余应用内容等比例�
 
 ## 验证范围
 
-旧 `com.feiwenchao.mengya` / `1.0.0 (1)` 两端曾实际提交至 [旧统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 并等待审核，均为手动发布，未上线。iOS 历史提交 ID 为 `7c3e17f1-1197-4576-a6c7-febe2e305494`，Mac 为 `529d3f28-7a86-4807-9f30-3e85a58cbf53`。迁移时两端原提交均已撤回，旧版本显示“被开发者拒绝”，记录更名“萌呀启蒙旧标识存档”并保留。新标识 build `2` 两端均因 Xcode 账户问题等待重新登录，尚未上传成功或重新提审，不沿用旧记录的等待审核结论。
+旧 `com.feiwenchao.mengya` / `1.0.0 (1)` 两端曾实际提交至 [旧统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 并等待审核，均为手动发布，未上线。iOS 历史提交 ID 为 `7c3e17f1-1197-4576-a6c7-febe2e305494`，Mac 为 `529d3f28-7a86-4807-9f30-3e85a58cbf53`。迁移时两端原提交均已撤回，旧版本显示“被开发者拒绝”，记录更名“萌呀启蒙旧标识存档”并保留。新标识 build `2` 已完成上传并提交审核：iOS 提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323`、macOS 提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc`，当前均显示“等待审核”。
 
 截图查看仅证明旧 build `1` 首页的实际显示，不代表新构建已完成 UI 验收，也不代表全课程、交互或真机体验已完成验收。历史 `native/ios/screenshots/` 与 `native/macos/screenshots/` 不属于这次专用素材。完整迁移、历史上传、警告与测试记录见 [原生验证记录](../../VALIDATION.md)。

@@ -1,6 +1,6 @@
 # 萌呀启蒙 · Apple 商店发布记录
 
-本目录记录 iPhone/iPad 与 Mac 的发布迁移和历史提审证据。更新日期：2026-11-19。按用户要求，两端主应用 Bundle ID 已由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本 `1.0.0`、build `2`。新标识已在 Apple Developer 注册，[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建；Mac 新签名归档成功，iOS 归档因本机 Xcode 账户凭据失效及缺少新标识开发描述文件失败。Mac 归档是 development 签名，后续导出上传也因缺少 Xcode 账户令牌失败。**两端均等待本机 Xcode 重新登录，尚未上传成功或重新提审，未上线。**
+本目录记录 iPhone/iPad 与 Mac 的发布迁移和历史提审证据。更新日期：2026-11-19。按用户要求，两端主应用 Bundle ID 已由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本 `1.0.0`、build `2`。新标识已在 Apple Developer 注册，[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建；iOS 与 Mac 新归档均完成，构建已上传并处理完成。iOS 审核提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323`、macOS 审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 均显示“等待审核”，版本为手动发布，尚未上线。
 
 旧记录 `6836726939` 已更名“萌呀启蒙旧标识存档”并保留。其两端 build `1` 曾提交成功并等待审核，现原提交均已撤回，两端显示“被开发者拒绝”。旧记录的等待审核截图仅为历史凭据，不代表当前状态。
 
@@ -16,9 +16,9 @@
 | 新记录 SKU | `KID-SPROUT-2026-001` |
 | 当前版本 / 构建号 | `1.0.0` / `2` |
 | 开发团队 | `5A9Z4D7HV3`（wenchao fei） |
-| 定价与业务 | 目标仍为免费，无账号、广告、打赏、内购或订阅；新后台设置待核对 |
-| 供应范围 / 发布方式 | 目标含中国大陆、手动发布；旧记录设置不视为自动迁移 |
-| 当前上传 / 审核状态 | 两端新构建均未上传成功；等待 Xcode 重新登录，尚未重新提审，未上线 |
+| 定价与业务 | 免费，无账号、广告、打赏、内购或订阅 |
+| 供应范围 / 发布方式 | 全球 175 个国家/地区（含中国大陆）；手动发布 |
+| 当前上传 / 审核状态 | iOS/macOS build `2` 已上传并处理完成；两端提交均显示“等待审核”，尚未上线 |
 | 隐私政策 URL | [https://kid.feiwenchao.com/privacy.html](https://kid.feiwenchao.com/privacy.html) |
 | 支持 URL | [https://kid.feiwenchao.com/support.html](https://kid.feiwenchao.com/support.html) |
 | 公开支持邮箱 | `hi@feiwenchao.com` |
@@ -34,17 +34,21 @@
 | 工程与生成器 | 两端主标识 `com.feiwenchao.kid-sprout`，`1.0.0 (2)` |
 | Apple Developer 标识 | 已注册新主应用标识 |
 | 新商店记录 | `6836774748`，SKU `KID-SPROUT-2026-001`，两端共用新 Bundle ID |
-| 新 iOS 版本资料 | `1.0.0` 元数据、审核联系资料及手动发布已保存；其余配置继续迁移 |
-| Mac build 2 签名归档 | `ARCHIVE SUCCEEDED`；`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`；日志 `/tmp/kidsprout-macos-archive-2.log`；实际标识/版本/build 2、arm64/x86_64 双架构及严格 codesign 校验通过；当前为 development 签名，尚未完成商店分发导出 |
-| Mac build 2 导出上传 | `xcodebuild -exportArchive -allowProvisioningUpdates` 失败，exit `70`；`/tmp/kidsprout-macos-upload-2.log` 显示 `Failed to Use Accounts`、缺少 `Xcode-Token`；等待恢复本机 Xcode 账户 |
-| 新年龄分级 | 已选择儿童 `6–8 岁` 并点保存，页面挂起，尚未确认持久化，不能记为完成 |
-| iOS build 2 签名归档 | 因 Xcode 账户凭据失效及缺少新标识开发描述文件失败；需恢复团队账户后继续 |
-| 新构建上传 / 提审 | 尚未完成；不沿用旧构建的上传、审核或地区设置结论 |
+| 新 iOS 版本资料 | `1.0.0` 元数据、审核联系资料、手动发布与构建已保存；已加入审核提交 |
+| iOS build 2 签名归档 | `ARCHIVE SUCCEEDED`；`native/artifacts/app-store/KidSprout-iOS-1.0.0-2b.xcarchive`；实际标识/版本/build 2 校验通过 |
+| iOS build 2 上传 | 已处理完成并关联版本；build UUID `b36c2e1f-908b-4a0e-95d7-7706b0572742`；日志 `/tmp/kidsprout-ios-export-2.log` |
+| Mac build 2 签名归档 | `ARCHIVE SUCCEEDED`；`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`；日志 `/tmp/kidsprout-macos-archive-2.log`；实际标识/版本/build 2、arm64/x86_64 双架构及严格 codesign 校验通过 |
+| Mac build 2 上传 | 已处理完成并关联版本；build UUID `5d57ebfa-5008-48a5-8c64-d66d44287bf9`；日志 `/tmp/kidsprout-macos-export-2b.log` |
+| 新年龄分级 | App Store Connect 显示 `4+`，儿童年龄组 `6–8 岁` |
+| App Privacy | 隐私政策已发布；已发布“不收集数据”答复 |
+| 价格与供应范围 | 免费；全球 175 个国家/地区，含中国大陆 |
+| iOS 审核提交 | `a198cc45-3460-4ce3-adb9-f9ab97e63323`；提交后显示“等待审核” |
+| macOS 审核提交 | `d20238f9-2c11-4871-9bde-bf90db8d18fc`；提交后显示“等待审核” |
 | 旧 Mac 提交撤回 | 已撤回，旧版本显示“被开发者拒绝”；原提交 `529d3f28-7a86-4807-9f30-3e85a58cbf53` |
 | 旧 iOS 提交撤回 | 已撤回，旧版本显示“被开发者拒绝”；原提交 `7c3e17f1-1197-4576-a6c7-febe2e305494` |
 | 素材复用 | 界面未改，可复用旧标识 `1.0.0 (1)` 首页截图；不是 build 2 新采集图 |
 
-旧记录的版本元数据、私人审核联系资料、App Privacy、分类/年龄、免费定价、地区、截图和手动发布设置，均需在新记录逐项核对，不能因旧记录已保存而写成新记录已完成。完整证据与未验证项见 [验证记录](../VALIDATION.md)。
+新记录的版本元数据、私人审核联系资料、App Privacy、分类/年龄、免费定价、地区、截图和手动发布设置已完成逐项核对；审核通过与实际发布仍需等待 Apple 后续结果。完整证据与未验证项见 [验证记录](../VALIDATION.md)。
 
 ## 历史：旧标识 build 1 上传与提审
 
@@ -73,11 +77,11 @@
 
 ## 工程准备与后续步骤
 
-- iOS 使用自动签名；Mac Release 使用自动签名，Debug 保持本地 ad hoc。恢复 Xcode 团队账户和新标识描述文件后继续 iOS 归档，再分别导出、上传并核对实际处理结果。
+- iOS 使用自动签名；Mac Release 使用自动签名，Debug 保持本地 ad hoc。build `2` 两端归档、导出上传、版本关联和审核提交已完成。
 - Debug `ENABLE_TESTABILITY=YES`，Release 为 `NO`。Mac Release 不注入 Debug 的基础调试权限。
 - `PrivacyInfo.xcprivacy` 在 iOS app、嵌入的 Core framework 和 Mac app 中声明自身 UserDefaults（`NSPrivacyAccessedAPICategoryUserDefaults` / `CA92.1`）、不跟踪且无数据收集类型。
 - 应用内提供离线隐私政策；拼音资料外链、邮件、作品分享/保存经过家长算术验证。课程、题库与插画随包离线提供，无账号、广告或分析 SDK。
-- 新记录须逐项确认元数据、审核联系资料、截图、App Privacy、分类/年龄、免费定价、含中国大陆的供应范围和手动发布。保存完成后再重新提交；提交、审核通过及实际发布分别记录。
+- 审核提交已记录；审核通过、手动发布和实际上架仍分别记录，不能把“等待审核”写成审核通过或已上线。
 - 首页截图和后台测试不能代替完整课程、语音、家长验证、辅助功能、最低系统、实体触控笔或 Intel 实机验收。保留现有归档和日志，避免覆盖历史证据。
 
 ## 归档命令参考
@@ -95,7 +99,7 @@ xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
   ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO archive
 ```
 
-Mac 上述 development 签名归档已完成，但后续商店导出上传因账户令牌缺失失败；iOS 归档尚未成功。两端均等待本机 Xcode 重新登录。重试或重建前检查路径，保留已有验证归档；上传和发布验证是独立步骤。`native/artifacts/` 已被 Git 忽略，不提交 archive、安装包、证书、描述文件或账户凭据。
+上述 iOS 与 Mac development 签名归档均已完成，导出上传和 App Store Connect 处理均已完成。`native/artifacts/` 已被 Git 忽略，不提交 archive、安装包、证书、描述文件或账户凭据。
 
 ## 专用商店截图
 

@@ -2,22 +2,26 @@
 
 ## 当前：Apple Bundle ID 迁移（2026-11-19）
 
-Apple iPhone/iPad 与 Mac 主应用按用户要求由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本仍为 `1.0.0`，构建号递增为 `2`。工程及生成器已同步，新标识已在 Apple Developer 注册。[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。Mac development 签名归档成功，但导出上传因 Xcode 账户令牌缺失失败；iOS 归档也受账户及描述文件阻断。两端均等待本机 Xcode 重新登录，尚未上传成功或重新提审，未上线。
+Apple iPhone/iPad 与 Mac 主应用按用户要求由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本仍为 `1.0.0`，构建号递增为 `2`。工程及生成器已同步，新标识已在 Apple Developer 注册。[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。iOS 与 Mac build `2` 均完成签名归档、上传和 App Store Connect 处理，并分别提交审核；当前两端均显示“等待审核”，版本为手动发布，尚未上线。
 
 | 检查 | 迁移实际状态 / 证据 |
 | --- | --- |
 | 新记录 / SKU | `6836774748` / `KID-SPROUT-2026-001`；旧记录改名“萌呀启蒙旧标识存档”并保留 |
-| 新 iOS 版本资料 | `1.0.0` 元数据、审核联系资料与手动发布已保存；其余配置继续迁移 |
-| Mac build 2 签名归档 | `ARCHIVE SUCCEEDED`；`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`；日志 `/tmp/kidsprout-macos-archive-2.log`；实际标识/版本/build 2、arm64/x86_64 双架构及严格 codesign 校验通过；当前为 development 签名，尚未完成商店分发导出 |
-| Mac build 2 导出上传 | `xcodebuild -exportArchive -allowProvisioningUpdates` 失败，exit `70`；`/tmp/kidsprout-macos-upload-2.log` 显示 `Failed to Use Accounts`、缺少 `Xcode-Token`；等待恢复本机 Xcode 账户 |
-| 新年龄分级 | 已选择儿童 `6–8 岁` 并点保存，页面挂起，尚未确认持久化，不能记为完成 |
-| iOS build 2 签名归档 | 本机 Xcode 账户凭据失效，新标识缺少开发描述文件，归档失败；需恢复团队账户再继续 |
-| 新标识上传 / 提审 | 尚未完成，不能沿用旧记录的上传或等待审核结论 |
+| 新 iOS 版本资料 | `1.0.0` 元数据、审核联系资料、手动发布与构建已保存；已加入审核提交 |
+| iOS build 2 签名归档 | `ARCHIVE SUCCEEDED`；`native/artifacts/app-store/KidSprout-iOS-1.0.0-2b.xcarchive`；实际标识/版本/build 2 校验通过 |
+| iOS build 2 上传 | 已处理完成并关联版本；build UUID `b36c2e1f-908b-4a0e-95d7-7706b0572742`；日志 `/tmp/kidsprout-ios-export-2.log` |
+| Mac build 2 签名归档 | `ARCHIVE SUCCEEDED`；`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`；日志 `/tmp/kidsprout-macos-archive-2.log`；实际标识/版本/build 2、arm64/x86_64 双架构及严格 codesign 校验通过 |
+| Mac build 2 上传 | 已处理完成并关联版本；build UUID `5d57ebfa-5008-48a5-8c64-d66d44287bf9`；日志 `/tmp/kidsprout-macos-export-2b.log` |
+| 新年龄分级 | App Store Connect 显示 `4+`，儿童年龄组 `6–8 岁` |
+| App Privacy | 隐私政策已发布；已发布“不收集数据”答复 |
+| 价格与供应范围 | 免费；全球 175 个国家/地区，含中国大陆 |
+| iOS 审核提交 | `a198cc45-3460-4ce3-adb9-f9ab97e63323`；提交后显示“等待审核” |
+| macOS 审核提交 | `d20238f9-2c11-4871-9bde-bf90db8d18fc`；提交后显示“等待审核” |
 | 旧 Mac 审核提交 | 原提交 `529d3f28-7a86-4807-9f30-3e85a58cbf53` 已撤回，旧版本显示“被开发者拒绝” |
 | 旧 iOS 审核提交 | 原提交 `7c3e17f1-1197-4576-a6c7-febe2e305494` 已撤回，旧版本显示“被开发者拒绝” |
 | 商店截图 | 保留旧 `com.feiwenchao.mengya` / `1.0.0 (1)` 的真实首页素材；界面未改，可复用但不是 build 2 重新采集 |
 
-跨 Bundle ID 的学习记录和画稿迁移未实现，新标识使用独立应用容器。旧记录的商店元数据、隐私、价格、地区和截图保存状态属于旧记录，新记录需逐项核对。未重复运行产品测试或 UI 自动化，本轮文档校验不替代最终构建验收。迁移详情见 [Apple 发布记录](app-store/README.md)。
+跨 Bundle ID 的学习记录和画稿迁移未实现，新标识使用独立应用容器。审核通过和实际上线仍待 Apple 后续处理；未重复运行产品测试或 UI 自动化，本轮文档校验不替代最终构建验收。迁移详情见 [Apple 发布记录](app-store/README.md)。
 
 ## 历史：旧标识首发归档、上传与提审（2026-11-19）
 

@@ -27,7 +27,7 @@ xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
 
 产物在`/tmp/kid-sprout-macos-release/Build/Products/Release/KidSproutMac.app`。上述命令显式关闭签名，仅用于后台编译验证，不能作为商店上传物或跨机器分发包。仅编译测试时改用 `-configuration Debug` 和 `build-for-testing`；Release 已关闭 testability。`xcodebuild test` 会启动宿主 App 与 UI 测试、操作当前桌面，应在专用机器/CI运行。上述后台构建命令不启动 Xcode 或 App；发布素材的后台窗口截图另见 [专用截图记录](../app-store/screenshots/README.md)。
 
-历史本地交付包为 `native/artifacts/萌呀启蒙-macOS.zip`，不能视作商店版本；artifacts 目录已被 Git 忽略，其他电脑需重新构建。当前工程 Debug 保持本地 ad hoc，Release 使用团队 `5A9Z4D7HV3` 自动签名，当前已改为 `com.feiwenchao.kid-sprout` / `1.0.0`（build `2`），新标识签名归档成功：`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`（日志 `/tmp/kidsprout-macos-archive-2.log`）。归档实际为 development 签名，标识/版本/build 2、arm64/x86_64 双架构和严格 codesign 校验通过；商店导出上传失败，两端均等待本机 Xcode 账户重新登录，尚未上传成功或重新提审，未上线。通用构建目标包含 Apple 芯片和 Intel 架构，Intel 未实机验收。
+历史本地交付包为 `native/artifacts/萌呀启蒙-macOS.zip`，不能视作商店版本；artifacts 目录已被 Git 忽略，其他电脑需重新构建。当前工程 Debug 保持本地 ad hoc，Release 使用团队 `5A9Z4D7HV3` 自动签名，当前已改为 `com.feiwenchao.kid-sprout` / `1.0.0`（build `2`），新标识签名归档成功：`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`（日志 `/tmp/kidsprout-macos-archive-2.log`）。归档实际为 development 签名，标识/版本/build 2、arm64/x86_64 双架构和严格 codesign 校验通过；商店导出上传日志为 `/tmp/kidsprout-macos-export-2b.log`，构建已处理并关联版本。macOS 审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 当前显示“等待审核”，版本为手动发布，尚未上线。通用构建目标包含 Apple 芯片和 Intel 架构，Intel 未实机验收。
 
 `native:test:mac-drawing`将实际画板模型及测试复制到临时SwiftPM包，直接运行XCTest，结束后清理临时文件；不编译或启动App入口，也不操作鼠标、键盘或窗口。
 
@@ -43,10 +43,10 @@ xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
 
 ## Mac App Store 迁移
 
-当前 `com.feiwenchao.kid-sprout` / `1.0.0 (2)` 的 [App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建，正在迁移资料准备重新提交。Mac development 签名归档成功；`xcodebuild -exportArchive -allowProvisioningUpdates` 导出上传失败（exit `70`），日志 `/tmp/kidsprout-macos-upload-2.log` 显示 `Failed to Use Accounts` 和缺少 `Xcode-Token`。iOS 归档也受本机账户凭据及描述文件问题阻断。两端均等待 Xcode 重新登录，尚未上传成功或重新提审，未上线。
+当前 `com.feiwenchao.kid-sprout` / `1.0.0 (2)` 的 [App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。Mac build `2` 已完成归档、导出上传、处理和版本关联，审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 当前显示“等待审核”；iOS build `2` 也已提交审核，提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323` 当前显示“等待审核”。版本为手动发布，尚未上线。
 
 旧 [统一记录 `6836726939`“萌呀启蒙旧标识存档”](https://appstoreconnect.apple.com/apps/6836726939/distribution) 曾以 `com.feiwenchao.mengya` / `1.0.0 (1)` 完成两端提交并等待审核。迁移时已执行撤回；旧两端均显示“被开发者拒绝”，Mac 提交 `529d3f28-7a86-4807-9f30-3e85a58cbf53` 和 iOS 原提交均已撤回。旧记录的元数据、审核联系资料、免费定价、全部 175 个国家/地区（含 CHN）和手动发布设置不能代表新记录已配置。
 
-Release 已关闭 testability，并打包声明自身 UserDefaults `CA92.1` 用途的隐私清单。公开的隐私/支持页仍可使用；旧记录的 App Privacy 已发布“不收集数据”，旧 App ICP 栏为空且自动校验未阻断原提交，不表示备案豁免或中国大陆上线已获批准。当前迁移、旧上传日志与归档参考命令见 [Apple 发布记录](../app-store/README.md)；旧 build `1` 上传缺少 app dSYM 的警告见 [验证记录](../VALIDATION.md)，不据此推定新构建上传结果。Mac App Store 分发与 Developer ID 网站分发是不同流程，本轮没有完成 Developer ID 公证。
+Release 已关闭 testability，并打包声明自身 UserDefaults `CA92.1` 用途的隐私清单。公开的隐私/支持页仍可使用；新记录的 App Privacy 已发布“不收集数据”，旧 App ICP 栏为空且自动校验未阻断原提交，不表示备案豁免或中国大陆上线已获批准。当前迁移、旧上传日志与归档参考命令见 [Apple 发布记录](../app-store/README.md)；旧 build `1` 上传缺少 app dSYM 的警告见 [验证记录](../VALIDATION.md)，不据此推定新构建上传结果。Mac App Store 分发与 Developer ID 网站分发是不同流程，本轮没有完成 Developer ID 公证。
 
 `screenshots/` 保留历史首版截图；[专用 Mac 目录](../app-store/screenshots/macos/) 的 `01-explore.png`（1440×900、RGB、无 alpha）来自旧标识 `com.feiwenchao.mengya` / `1.0.0 (1)` 实际归档 app 的后台窗口捕获，曾在旧后台保存 `1/10` 并用于原提交。图像仅去掉 31px 系统标题栏后等比例居中适配，没有改变应用内容。本轮界面未变，可复用，但不是 build `2` 新截图；来源见 [截图记录](../app-store/screenshots/README.md)。该图不代表完整交互或实机验收。
