@@ -2,7 +2,7 @@
 
 > **For agentic workers:** Use superpowers:subagent-driven-development to implement and review the tasks in this plan. Each platform owns a disjoint directory; independent platform implementation may run in parallel.
 
-**Goal:** 交付萌芽启蒙第一阶段的两套真正原生应用。
+**Goal:** 交付萌呀启蒙第一阶段的两套真正原生应用。
 
 **Architecture:** 由现有网页课程导出带版本的离线 JSON。SwiftUI 与 Compose 分别实现界面、游戏状态与持久化，原生画板保留草稿并通过系统分享导出图片。
 
@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- 品牌为“萌芽启蒙”，免费、无账号、无广告、无打赏，不使用 WebView。
+- 品牌为“萌呀启蒙”，免费、无账号、无广告、无打赏，不使用 WebView。
 - 第一阶段实现数字 0–10、数一数水果/寻找数字/比比多少（三种五关游戏）、画板、离线记录与家长区。
 - iOS 最低 iOS 17，bundle ID `com.feiwenchao.kidsprout`；Android 最低 API 26，application ID 相同。
 - 外部分享与邮件经过家长算术验证；语音不可用时保留文字、图形反馈。

@@ -24,7 +24,7 @@ struct KidSproutApp: App {
     }
     var body: some Scene {
         #if os(macOS)
-        Window("萌芽启蒙", id: "main") { RootView().environmentObject(model).environmentObject(board).tint(Sprout.accent).frame(minWidth: 760, minHeight: 600) }
+        Window("萌呀启蒙", id: "main") { RootView().environmentObject(model).environmentObject(board).tint(Sprout.accent).frame(minWidth: 760, minHeight: 600) }
             .defaultSize(width: 1200, height: 850).windowResizability(.contentMinSize)
         #else
         WindowGroup { RootView().environmentObject(model).environmentObject(board).tint(Sprout.accent) }
@@ -120,7 +120,7 @@ struct RootView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 10) {
                 Image(systemName: "leaf.fill").font(.system(size: 28)).foregroundStyle(Sprout.green)
-                VStack(alignment: .leading, spacing: 5) { Text("萌芽启蒙").font(.title3.bold()); Text("SPROUT · 每天一点点").font(.system(size: 8)).tracking(1).foregroundStyle(Sprout.muted) }
+                VStack(alignment: .leading, spacing: 5) { Text("萌呀启蒙").font(.title3.bold()); Text("SPROUT · 每天一点点").font(.system(size: 8)).tracking(1).foregroundStyle(Sprout.muted) }
             }.padding(.vertical, 16)
             Text("学习地图 / LET’S EXPLORE").font(.system(size: 9, weight: .medium)).foregroundStyle(Sprout.muted).padding(.top, 14)
             ForEach(Area.learning) { destination in
@@ -147,7 +147,7 @@ struct RootView: View {
     }
     private func topbar(wide: Bool) -> some View {
         HStack(spacing: 12) {
-            Text(wide ? "萌芽启蒙  /  \(area.title)" : area.title).font(.caption).foregroundStyle(Sprout.muted).lineLimit(1)
+            Text(wide ? "萌呀启蒙  /  \(area.title)" : area.title).font(.caption).foregroundStyle(Sprout.muted).lineLimit(1)
             Spacer(minLength: 0)
             if wide { Label("第 \(model.progress.visitDates.count) 天打卡", systemImage: "flame").font(.caption2).foregroundStyle(Sprout.gold).padding(8).background(Sprout.goldWash, in: Capsule()) }
             Button { model.progress.soundEnabled.toggle(); if !model.progress.soundEnabled { model.stopSpeaking() } } label: { Image(systemName: model.progress.soundEnabled ? "speaker.wave.2" : "speaker.slash").frame(width: 40, height: 44) }.buttonStyle(.plain).accessibilityLabel(model.progress.soundEnabled ? "关闭声音" : "开启声音")

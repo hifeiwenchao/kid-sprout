@@ -1,5 +1,11 @@
 # 原生验证记录
 
+## 名称与开发团队更新（2026-11-19）
+
+网页与 iOS/iPadOS、Mac、Android 的显示名称统一为“萌呀启蒙”，同步作者文案、画作导出/分享名称和共享课程品牌。Apple 工程与生成器的开发团队均设为 `5A9Z4D7HV3`（wenchao fei）。Mac 使用显式 Info.plist，防止自动生成配置将系统短名称覆盖成内部构建名。
+
+网页 125 项测试、Vite 构建和共享资源一致性检查通过；iOS 模拟器后台构建、Mac arm64/x86_64 Release 与 Android APK 构建通过。直接检查产物确认 iOS 显示名、Mac 显示名/短名称与 Android application label 均为新名称；Mac 本地签名校验通过，测试包已重打。没有运行 UI 自动化或启动设备。iOS 真机签名需先在本机 Xcode 登录团队账户；Mac 交付包仍是本地 ad hoc 签名，未进行商店发布或公证。
+
 ## 完整课程与网页设计对齐（2026-11-18）
 
 本阶段将 iPhone/iPad、Mac、Android 手机/平板从数字首版扩展为网页版完整范围：六个入口、三科学习空间、60 个游戏、88 个记忆场景、课内临摹与自由画板。三端共用离线 JSON 和 317 张 PNG；拼音按 2024 新版人教 14 课顺序组织。
@@ -22,7 +28,7 @@
 
 画稿兼容：iOS 接受旧 raw PKDrawing，v2 原子保存笔迹与底稿；Mac 保留 1000×700 坐标，旧六色与三倍橡皮显式迁移；Android 保留旧方稿 1000×1000 比例，新稿使用 1000×700，切底稿可撤销找回旧比例与墨迹。导出保留底稿，排除网格/辅助线。Mac 仍等待家长验证 sheet 完全关闭后呈现系统保存面板。
 
-交付产物位于被 Git 忽略的 `native/artifacts/`：`kid-sprout-debug.apk`、`KidSproutMac.app`、`萌芽启蒙-macOS.zip`；本机后台日志与资源摘要保存在 `validation-web-parity/`。Xcode 必须打开 `native/ios/KidSprout.xcodeproj`，不能用只含核心库的 `Package.swift` 运行应用。
+交付产物位于被 Git 忽略的 `native/artifacts/`：`kid-sprout-debug.apk`、`KidSproutMac.app`、`萌呀启蒙-macOS.zip`；本机后台日志与资源摘要保存在 `validation-web-parity/`。Xcode 必须打开 `native/ios/KidSprout.xcodeproj`，不能用只含核心库的 `Package.swift` 运行应用。
 
 实现提交 `6e622ed` 与 macOS 基础提交 `d400420` 已快进合并并推送 `origin/main`。在原项目目录重新安装依赖后，网页 125 项、Swift 核心 12 项及 iOS 后台构建再次通过；用户本地的 Xcode 开发团队、图标与搜索路径设置已备份并保留为未提交改动。
 

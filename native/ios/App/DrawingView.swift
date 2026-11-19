@@ -138,7 +138,7 @@ final class PersistentPKCanvasView: PKCanvasView {
             canvas.drawing.image(from: CGRect(origin: .zero, size: Self.paper), scale: 2).draw(in: CGRect(origin: .zero, size: Self.paper))
         }
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent("sprout-export-\(UUID().uuidString)", isDirectory: true)
-        let url = directory.appendingPathComponent("萌芽小画家.png")
+        let url = directory.appendingPathComponent("萌呀小画家.png")
         do {
             guard let data = image.pngData() else { throw CocoaError(.fileWriteUnknown) }
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

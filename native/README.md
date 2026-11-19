@@ -1,4 +1,4 @@
-# 萌芽启蒙 · 全端原生应用
+# 萌呀启蒙 · 全端原生应用
 
 iPhone/iPad/Mac使用SwiftUI，iOS画板使用PencilKit，Mac画板使用AppKit；Android手机/平板使用Kotlin、Jetpack Compose和Canvas。所有端以本仓库网页版为设计、课程和玩法基准，使用相同离线资源，不使用WebView或运行网页JavaScript。免费，无账号、广告、打赏、内购或后端。
 

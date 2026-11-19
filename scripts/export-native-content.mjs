@@ -35,7 +35,7 @@ const tracingTemplates = () => TRACING_GROUPS.flatMap(group => group.characters.
 export function buildCurriculum() {
   return structuredClone({
     schemaVersion: 1,
-    brand: '萌芽启蒙',
+    brand: '萌呀启蒙',
     numbers: NUMBER_VALUES.map(value => ({ value, name: numberName(value), motifAsset: value === 0 ? 'empty_basket' : `number_motif_${value - 1}`, fruit: value === 0 ? '苹果' : fruits[value - 1], unit: value === 0 ? '个' : units[value - 1] })),
     pinyin: {
       edition: '2024 新版人教版一年级上册',

@@ -3,7 +3,7 @@
     <queries>
         <intent><action android:name="android.intent.action.TTS_SERVICE" /></intent>
     </queries>
-    <application android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:label="萌芽启蒙" android:icon="@drawable/ic_sprout" android:supportsRtl="true" android:theme="@style/Theme.KidSprout">
+    <application android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:label="萌呀启蒙" android:icon="@drawable/ic_sprout" android:supportsRtl="true" android:theme="@style/Theme.KidSprout">
         <activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

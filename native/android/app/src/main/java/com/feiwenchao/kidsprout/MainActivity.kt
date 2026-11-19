@@ -44,7 +44,7 @@ class MainActivity:ComponentActivity(){
             val wide=maxWidth>=800.dp && maxHeight>=480.dp
             Row(Modifier.fillMaxSize()){
                 if(wide && !fullDrawing) Column(Modifier.width(218.dp).fillMaxHeight().background(MaterialTheme.colorScheme.surface).padding(18.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)){
-                    Text("🌱  萌芽启蒙",fontSize=23.sp,fontWeight=FontWeight.Bold,color=MaterialTheme.colorScheme.primary,modifier=Modifier.padding(vertical=20.dp))
+                    Text("🌱  萌呀启蒙",fontSize=23.sp,fontWeight=FontWeight.Bold,color=MaterialTheme.colorScheme.primary,modifier=Modifier.padding(vertical=20.dp))
                     Text("KID SPROUT · 快乐长大",style=MaterialTheme.typography.labelSmall)
                     Spacer(Modifier.height(12.dp));Text("学习地图",style=MaterialTheme.typography.labelMedium)
                     destinations.forEach{destination ->
@@ -60,7 +60,7 @@ class MainActivity:ComponentActivity(){
                 }
                 Column(Modifier.weight(1f)){
                     if(!fullDrawing) Row(Modifier.fillMaxWidth().padding(horizontal=20.dp,vertical=6.dp),verticalAlignment=Alignment.CenterVertically){
-                        Text("萌芽启蒙  /  ${vm.page.label}",Modifier.weight(1f),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("萌呀启蒙  /  ${vm.page.label}",Modifier.weight(1f),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
                         TextButton(onClick={showAchievements=true}){Text("✦ ${vm.progress.stars} · 成就")}
                         IconButton(onClick={vm.setSpeech(!vm.progress.speech)}){Icon(if(vm.progress.speech)Icons.AutoMirrored.Filled.VolumeUp else Icons.AutoMirrored.Filled.VolumeOff,if(vm.progress.speech)"关闭点读" else "开启点读")}
                         IconButton(onClick={vm.page=Page.PARENTS}){Icon(Icons.Default.FamilyRestroom,"家长说明")}
@@ -96,7 +96,7 @@ class MainActivity:ComponentActivity(){
     if(gateAction!=null)ParentGate({gateAction=null}){val action=gateAction;gateAction=null;action?.invoke()}
     if(showAchievements)AchievementsDialog(vm){showAchievements=false}
     if(author)AlertDialog(onDismissRequest={author=false},title={Text("关于作者")},text={Column(verticalArrangement=Arrangement.spacedBy(14.dp)){
-        Text("萌芽启蒙，最初是我为自家娃制作的小小学习空间。希望用温柔的画面和轻松的小游戏，让孩子在家长陪伴下保留好奇、快乐探索。")
+        Text("萌呀启蒙，最初是我为自家娃制作的小小学习空间。希望用温柔的画面和轻松的小游戏，让孩子在家长陪伴下保留好奇、快乐探索。")
         Text("欢迎提出建议，或反馈使用中遇到的问题。")
         OutlinedButton(onClick={gate{vm.emailAuthor()}}){Text("hi@feiwenchao.com  ↗")}
     }},confirmButton={TextButton(onClick={author=false}){Text("回到学习")}})

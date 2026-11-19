@@ -100,9 +100,9 @@ await click('清空画布');await click('清空');assert.equal(draft().strokes.l
 await click('撤销');assert.equal(draft().strokes.length,2);await snap('phone-drawing');
 await relaunch();await click('画板');assert.equal(draft().strokes.length,2);
 await click('分享画作');assert(has('请家长来帮忙'));await snap('phone-parent-gate');await solveGate(true);
-await delay(800);const png=execFileSync(adb,['exec-out','run-as',app,'cat','cache/artwork/萌芽小画家.png']);
+await delay(800);const png=execFileSync(adb,['exec-out','run-as',app,'cat','cache/artwork/萌呀小画家.png']);
 assert.equal(png.subarray(1,4).toString(),'PNG');fs.writeFileSync(path.join(out,'shared-artwork.png'),png);
-await dump();assert(nodes.some(n=>n.package==='com.android.intentresolver'||n.text==='分享萌芽画作'));await snap('phone-share-sheet');
+await dump();assert(nodes.some(n=>n.package==='com.android.intentresolver'||n.text==='分享萌呀画作'));await snap('phone-share-sheet');
 shell('input','keyevent','4');await dump();
 await click('家长');await click('家长验证 · 了解作者');await solveGate();assert(has('关于作者'));await snap('phone-parents');
 // Tablet dimensions trigger the adaptive navigation rail while preserving this same drawing.

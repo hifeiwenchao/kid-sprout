@@ -3,7 +3,7 @@
 `curriculum.json` 为两端打包使用的 UTF-8 JSON，不包含联网地址加载或执行脚本。由仓库根目录运行 `npm run native:content` 从网页课程生成，不手动修改。
 
 - `schemaVersion: 1`：客户端读取内容前检查版本；不支持的版本应显示可理解的提示。
-- `brand: String`：萌芽启蒙。
+- `brand: String`：萌呀启蒙。
 - `numbers: [{ value: Int, name, motifAsset, fruit, unit: String }]`：按 0–10 顺序排列，保留原课程各自的数量插画。0 使用空篮子。
 - `pinyin: { edition, sources, lessons, items, tones }`：2024 新版人教版课程内容，保留网页课程字段。
 - `alphabet: { letters, groups }`：26 个字母及分组，保留网页课程字段。

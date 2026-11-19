@@ -90,7 +90,7 @@ final class LearningTests: XCTestCase {
     }
 
     func testCurriculumRejectsMissingDuplicateOrUnsupportedContent() throws {
-        let json = "{\"schemaVersion\":1,\"brand\":\"萌芽启蒙\",\"numbers\":[" + (0...10).map { "{\"value\":\($0),\"name\":\"数字\"}" }.joined(separator: ",") + "]}"
+        let json = "{\"schemaVersion\":1,\"brand\":\"萌呀启蒙\",\"numbers\":[" + (0...10).map { "{\"value\":\($0),\"name\":\"数字\"}" }.joined(separator: ",") + "]}"
         XCTAssertEqual(try Curriculum.decode(Data(json.utf8)).numbers.map(\.value), Array(0...10))
         XCTAssertThrowsError(try Curriculum.decode(Data(json.replacingOccurrences(of: "schemaVersion\":1", with: "schemaVersion\":2").utf8)))
         XCTAssertThrowsError(try Curriculum.decode(Data(json.replacingOccurrences(of: "value\":10", with: "value\":9").utf8)))

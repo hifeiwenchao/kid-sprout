@@ -1,4 +1,4 @@
-# 萌芽启蒙 · iPhone / iPad
+# 萌呀启蒙 · iPhone / iPad
 
 SwiftUI、PencilKit与AVFoundation实现，最低iOS17。按网页版设计组织六入口、三个完整学科、60游戏、88记忆场景、课内临摹和自由画板。所有内容离线，无WebView或第三方运行依赖，详细范围见[原生说明](../README.md)。
 
@@ -14,7 +14,7 @@ open native/ios/KidSprout.xcodeproj
 
 **不要把`Package.swift`当作应用工程打开。**它只包含KidSproutCore共享库及模型测试，没有可运行的App。若顶部只有KidSproutCore，关闭该包窗口并打开上述`.xcodeproj`。
 
-真机需在Signing & Capabilities选择自己的开发团队。应用bundle ID为`com.feiwenchao.kidsprout`，此阶段未配置App Store发布签名。
+工程开发团队为 `wenchao fei`（Team ID：`5A9Z4D7HV3`）。真机运行前在 Xcode 的 Settings → Accounts 登录该团队所属 Apple 账户，并在 Signing & Capabilities 确认团队。应用bundle ID为`com.feiwenchao.kidsprout`，此阶段未配置App Store发布签名。
 
 ## 后台构建与模型测试
 

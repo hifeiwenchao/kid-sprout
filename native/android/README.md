@@ -1,4 +1,4 @@
-# 萌芽启蒙 · Android
+# 萌呀启蒙 · Android
 
 Kotlin / Jetpack Compose 原生应用，支持 Android 8.0（API 26）及以上的手机和平板。与网页共用构建时导出的课程、60 款游戏题库、记忆小剧场和本地 PNG 插画；运行时不执行 JavaScript、不使用 WebView。免费、离线、无账号、广告、内购和分析服务。
 
@@ -48,7 +48,7 @@ sdk.dir=/your/path/to/android-sdk
 
 私有 SharedPreferences `sprout-native-v1` 的版本化记录兼容首版数字、星星、最后数字和语音开关，追加 14 课拼音、26 字母及访问日期；非法值和未来版本会被过滤或安全回退。私有 `drawing-v1.json` 继续由后台串行写入和 AtomicFile 保存，新增透明度、底稿和稿纸尺寸字段，旧墨迹默认不透明。每笔及历史操作均保存并显示结果。卸载应用会移除这些记录，网页 localStorage 与原生记录独立，无跨设备同步。
 
-没有 INTERNET、存储、相机或麦克风权限。已禁用系统备份和设备迁移。PNG 临时文件为 `cache/artwork/萌芽小画家.png`，系统可清理缓存。邮箱为 `hi@feiwenchao.com`。
+没有 INTERNET、存储、相机或麦克风权限。已禁用系统备份和设备迁移。PNG 临时文件为 `cache/artwork/萌呀小画家.png`，系统可清理缓存。邮箱为 `hi@feiwenchao.com`。
 
 ## 验证记录与限制
 

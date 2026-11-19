@@ -2,7 +2,7 @@
 
 > **For agentic workers:** Use subagent-driven-development for the independent AppKit drawing subsystem and code review. Shared UI and Xcode integration are owned by the root agent.
 
-**Goal:** 为萌芽启蒙增加可运行的 macOS 原生客户端。
+**Goal:** 为萌呀启蒙增加可运行的 macOS 原生客户端。
 
 **Architecture:** 复用现有 SwiftUI 数字课程与游戏，并通过条件编译适配平台颜色、导航与家长输入。AppKit 画板单独实现，和核心模型一起编译进 Mac target。
 

@@ -1,4 +1,4 @@
-# 萌芽启蒙 · Mac
+# 萌呀启蒙 · Mac
 
 macOS14+，SwiftUI/AppKit原生实现，离线免费，无WebView。与网页采用同一学习地图、配色、插画、三科课程与60款游戏，完整范围见[原生说明](../README.md)。Mac画板支持鼠标/触控板、原生快捷键及系统PNG保存面板。
 
@@ -26,7 +26,7 @@ xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
 
 产物在`/tmp/kid-sprout-macos-release/Build/Products/Release/KidSproutMac.app`，可自行双击运行。仅编译测试用`build-for-testing`；`xcodebuild test`会启动宿主App与UI测试、操作当前桌面，应在专用机器/CI运行。本轮默认只进行CLI模型测试与后台构建，不自动打开Xcode或App。
 
-本地交付包为`native/artifacts/萌芽启蒙-macOS.zip`，解压后双击`KidSproutMac.app`。artifacts目录已被Git忽略，其他电脑需重新构建。当前为ad hoc本地签名，无需开发者团队；向其他用户正式分发仍需Developer ID签名/公证或Mac App Store发布。通用包含Apple芯片和Intel架构，Intel未实机验收。
+本地交付包为`native/artifacts/萌呀启蒙-macOS.zip`，解压后双击`KidSproutMac.app`。artifacts目录已被Git忽略，其他电脑需重新构建。当前为ad hoc本地签名，无需开发者团队；向其他用户正式分发仍需Developer ID签名/公证或Mac App Store发布。通用包含Apple芯片和Intel架构，Intel未实机验收。
 
 `native:test:mac-drawing`将实际画板模型及测试复制到临时SwiftPM包，直接运行XCTest，结束后清理临时文件；不编译或启动App入口，也不操作鼠标、键盘或窗口。
 

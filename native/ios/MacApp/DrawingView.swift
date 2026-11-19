@@ -198,7 +198,7 @@ struct DrawingView: View {
     private func chooseExportLocation(in window: NSWindow) {
         let panel = NSSavePanel()
         panel.title = "保存小画家的作品"
-        panel.nameFieldStringValue = "萌芽小画家.png"
+        panel.nameFieldStringValue = "萌呀小画家.png"
         panel.allowedContentTypes = [.png]
         panel.canCreateDirectories = true
         panel.isExtensionHidden = false

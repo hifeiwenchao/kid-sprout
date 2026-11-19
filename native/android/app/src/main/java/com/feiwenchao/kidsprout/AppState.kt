@@ -153,14 +153,14 @@ class AppState(application:Application):AndroidViewModel(application) {
             val result=runCatching {
                 val bitmap=renderDrawing(getApplication(),document,curriculum)
                 val folder=File(getApplication<Application>().cacheDir,"artwork").apply{mkdirs()}
-                val file=File(folder,"萌芽小画家.png")
+                val file=File(folder,"萌呀小画家.png")
                 file.outputStream().use{bitmap.compress(Bitmap.CompressFormat.PNG,100,it)};bitmap.recycle()
                 FileProvider.getUriForFile(getApplication(),"com.feiwenchao.kidsprout.files",file)
             }
             main.post {
                 result.onSuccess{uri ->
-                    val send=Intent(Intent.ACTION_SEND).apply{type="image/png";putExtra(Intent.EXTRA_STREAM,uri);clipData=ClipData.newRawUri("萌芽画作",uri);addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)}
-                    runCatching{getApplication<Application>().startActivity(Intent.createChooser(send,"保存或分享萌芽画作").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))}.onFailure{message="当前没有可用的分享应用"}
+                    val send=Intent(Intent.ACTION_SEND).apply{type="image/png";putExtra(Intent.EXTRA_STREAM,uri);clipData=ClipData.newRawUri("萌呀画作",uri);addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)}
+                    runCatching{getApplication<Application>().startActivity(Intent.createChooser(send,"保存或分享萌呀画作").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))}.onFailure{message="当前没有可用的分享应用"}
                 }.onFailure{message="图片生成失败，请稍后重试"}
             }
         }

@@ -379,7 +379,7 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
       const link = document.createElement('a');
       const today = new Date();
       const date = [today.getFullYear(), today.getMonth() + 1, today.getDate()].map((part, index) => index === 0 ? part : String(part).padStart(2, '0')).join('-');
-      link.download = `萌芽画作-${date}.png`;
+      link.download = `萌呀画作-${date}.png`;
       link.href = url;
       document.body.append(link);
       link.click();

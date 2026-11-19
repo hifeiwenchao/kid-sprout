@@ -12,7 +12,7 @@ const { buildCurriculum } = nativeExport;
 test('native offline curriculum preserves every number, 2024 pinyin lesson, and letter', () => {
   const data = buildCurriculum();
   assert.equal(data.schemaVersion, 1);
-  assert.equal(data.brand, '萌芽启蒙');
+  assert.equal(data.brand, '萌呀启蒙');
   assert.deepEqual(data.numbers.map(({ value, name }) => ({ value, name })), NUMBER_VALUES.map(value => ({ value, name: numberName(value) })));
   assert.equal(data.numbers.length, 11);
   assert.deepEqual(data.pinyin.lessons, PINYIN_LESSONS);

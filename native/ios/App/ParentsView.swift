@@ -116,7 +116,7 @@ struct AuthorView: View {
                 Image(systemName: "leaf").font(.system(size: 33)).foregroundStyle(Sprout.green).padding(18).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 18)).frame(maxWidth: .infinity)
                 SectionHeader(eyebrow: "A LITTLE APP, MADE WITH LOVE", title: "关于作者", detail: "一个爸爸写给孩子的小小启蒙世界。")
                 Panel {
-                    Text("我是一个 90 后程序员，也是一个孩子的爸爸。萌芽启蒙最初是我为自家娃做的小应用：希望把数字、拼音、字母和画画，变成一段轻松、有趣的亲子时光。").lineSpacing(7)
+                    Text("我是一个 90 后程序员，也是一个孩子的爸爸。萌呀启蒙最初是我为自家娃做的小应用：希望把数字、拼音、字母和画画，变成一段轻松、有趣的亲子时光。").lineSpacing(7)
                     Text("如果它也陪伴了你的孩子，或你有任何建议、意见反馈，欢迎写信给我。每一个小想法，都可能让这里再长出一片新叶子。").lineSpacing(7)
                     Button { showGate = true } label: { HStack { Image(systemName: "envelope"); Text(verbatim: "hi@feiwenchao.com"); Spacer(); Image(systemName: "arrow.up.right") }.font(.subheadline).padding(16).frame(minHeight: 50).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 13)) }.buttonStyle(.plain).foregroundStyle(Sprout.green).accessibilityIdentifier("authorEmail")
                     Text("点击邮箱后，请家长确认，再由系统邮件应用继续。").font(.caption).foregroundStyle(Sprout.muted)
