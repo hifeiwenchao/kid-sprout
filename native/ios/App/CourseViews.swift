@@ -238,9 +238,14 @@ private struct NumberLessonView: View {
 
 struct PinyinView: View {
     @EnvironmentObject private var model: AppModel
+    @Environment(\.openURL) private var openURL
     @State private var selected: PinyinLesson?
     @State private var tone: PinyinTone?
     @State private var toneGame: NativeGame?
+    @State private var sourceURL: URL?
+    @State private var showSourceGate = false
+    @State private var sourceApproved = false
+    @State private var sourceUnavailable = false
     private var lessons: [PinyinLesson] { model.curriculum?.pinyin.lessons ?? [] }
     var body: some View {
         Page {
@@ -292,8 +297,18 @@ struct PinyinView: View {
             .sheet(item: $toneGame) { GamePlayerView(game: $0).environmentObject(model) }
             .onDisappear { model.stopSpeaking() }
         }
+        .sheet(isPresented: $showSourceGate, onDismiss: openApprovedSource) {
+            ParentGate { sourceApproved = true; showSourceGate = false }
+        }
+        .alert("暂时无法打开网页", isPresented: $sourceUnavailable) { Button("知道了", role: .cancel) {} } message: { Text("请稍后重试，学习内容仍可离线使用。") }
         .onAppear { resumeIfRequested() }
         .onChange(of: model.resumeSubject) { _, _ in resumeIfRequested() }
+    }
+    private func openApprovedSource() {
+        let approvedURL = sourceApproved ? sourceURL : nil
+        sourceURL = nil
+        sourceApproved = false
+        if let approvedURL { openURL(approvedURL) { accepted in sourceUnavailable = !accepted } }
     }
     private func resumeIfRequested() {
         guard model.resumeSubject == .pinyin else { return }
@@ -333,7 +348,11 @@ struct PinyinView: View {
                 Text("按2024新版人教一年级上册第二至第四单元的14课顺序编排，第9课为 y w。口型提示、例字和游戏由本站自主设计。")
                 Text("按钮播放的是系统中文语音提供的例字读音参考，不是独立拼音标准录音。声母发音应轻而短，例字含完整音节；请结合口型提示，由大人陪读。设备无声时，也可全程看提示学习。")
                 ForEach(Array((model.curriculum?.pinyin.sources ?? []).enumerated()), id: \.offset) { _, source in
-                    if let url = URL(string: source.url) { Link(source.title, destination: url) }
+                    if let url = URL(string: source.url) {
+                        Button(source.title) { sourceURL = url; sourceApproved = false; showSourceGate = true }
+                            .buttonStyle(.plain).foregroundStyle(Sprout.purple)
+                            .accessibilityHint("请家长验证后打开外部网页")
+                    }
                 }
             }.font(.caption).foregroundStyle(Sprout.muted).padding(.top, 12)
         }.padding(17).background(Sprout.purpleWash.opacity(0.5), in: RoundedRectangle(cornerRadius: 17)).tint(Sprout.purple)

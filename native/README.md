@@ -39,7 +39,7 @@ npm run native:test:mac-drawing
 
 课程、题组与PNG在构建时从网页源数据导出，各端打包同一目录；内容不依赖CDN或在线网站。网页Docker构建排除`native/`。每游戏包含8套确定种子题组，每局随机选一套。
 
-自动化默认不操作当前桌面：运行模型测试、Gradle单测/lint和Xcode后台构建。Mac UI测试会使用鼠标/键盘并抢焦点，应放在专用机器/CI；本轮没有在当前桌面执行新UI测试或自动打开应用。
+上述后台验证命令运行模型测试、Gradle 单测/lint 和 Xcode 构建，不启动应用或操作当前桌面。Mac UI 测试会使用鼠标/键盘并抢焦点，应放在专用机器/CI；本轮没有在当前桌面执行新 UI 测试。发布素材的后台截图采集另见 [专用截图记录](app-store/screenshots/README.md)。
 
 ## 数据与分发
 
@@ -47,4 +47,6 @@ npm run native:test:mac-drawing
 
 移动端卸载/清除应用数据会移除本地记录；Mac移除`.app`后数据仍保留。点读音色/离线可用性取决于系统语音，静音时可用图文和游戏提示。邮件和作品导出需先经过家长算术验证，再由系统邮件/分享/保存面板继续，不会自动发送邮件或作品。
 
-本地测试包在Git忽略的`native/artifacts/`。iOS真机需选开发团队；Mac当前ad hoc签名，未做Developer ID公证；Android为debug签名。正式商店分发、签名、公证、商店隐私/备案资料与跨设备实机验收需另行完成。具体已执行检查与边界见[验证记录](VALIDATION.md)。
+本地测试包在Git忽略的`native/artifacts/`，旧测试包不等同于商店交付物。Apple 两端主应用统一使用 `com.feiwenchao.mengya`，`1.0.0`（build `1`）均已在 [App Store Connect 统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 实际提交成功，iOS 与 macOS 均显示“正在等待审核”。两端均为手动发布，尚未审核通过、尚未上线。iOS 自动签名，Mac Release 自动签名、Debug 保持本地 ad hoc；Android 交付物仍为 debug 签名。
+
+iPhone/iPad 与 Mac 均计划首发，且须包含中国大陆。后台定价已设免费，供应范围已设全部 175 个国家/地区，中国大陆（CHN）明确显示“App 发布时供应”。两端 build `1`、版本元数据、审核联系资料和截图均已保存；中屏 iPhone、iPad 与 Mac 截图后台各为 `1/10`。隐私/支持页已公开发布，App Privacy 已按用户确认发布“不收集数据”。App ICP 栏仍为空，自动校验未阻断提交，但不代表备案豁免或已批准中国大陆上线。审核提交 ID 与后续状态见 [Apple 发布记录](app-store/README.md)，检查证据与边界见 [验证记录](VALIDATION.md)；历史截图不能代替最终发布版本验收。

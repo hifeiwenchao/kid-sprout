@@ -42,9 +42,9 @@ struct ParentGate: View {
     }
     private var gateExplanation: String {
         #if os(macOS)
-        "即将选择 PNG 保存位置或打开邮件功能。\n请家长完成小算术后继续。"
+        "即将选择 PNG 保存位置、打开邮件或外部网页。\n请家长完成小算术后继续。"
         #else
-        "即将打开系统分享或邮件功能。\n请家长完成小算术后继续。"
+        "即将打开系统分享、邮件或外部网页。\n请家长完成小算术后继续。"
         #endif
     }
 }
@@ -55,6 +55,7 @@ struct ParentsView: View {
     @State private var showGate = false
     @State private var pendingMail = false
     @State private var mailUnavailable = false
+    @State private var showPrivacy = false
     var body: some View {
         Page {
             Panel {
@@ -80,6 +81,10 @@ struct ParentsView: View {
                 Text(storageExplanation).font(.footnote).foregroundStyle(.secondary)
             }
             Panel {
+                Button { showPrivacy = true } label: { Label("隐私政策", systemImage: "hand.raised.fill").frame(minHeight: 44) }
+                    .accessibilityIdentifier("privacyPolicy")
+            }
+            Panel {
                 Text("关于作者").font(.title3.bold())
                 Text("欢迎提出建议，或告诉我使用中遇到的问题。")
                 Button { showGate = true } label: { Label { Text(verbatim: "hi@feiwenchao.com") } icon: { Image(systemName: "envelope.fill") }.frame(minHeight: 44) }.accessibilityIdentifier("authorEmail")
@@ -87,6 +92,7 @@ struct ParentsView: View {
             }
         }.navigationTitle("家长区")
             .sheet(isPresented: $showGate, onDismiss: { if pendingMail { pendingMail = false; openURL(URL(string: "mailto:hi@feiwenchao.com")!) { accepted in mailUnavailable = !accepted } } }) { ParentGate { pendingMail = true; showGate = false } }
+            .sheet(isPresented: $showPrivacy) { PrivacyPolicyView() }
             .alert("暂时无法打开邮件", isPresented: $mailUnavailable) { Button("知道了", role: .cancel) {} } message: { Text("请先在设备上设置邮件应用，也可以手动发送邮件到 hi@feiwenchao.com。") }
     }
     private var tips: [(String, String)] {
@@ -110,6 +116,7 @@ struct AuthorView: View {
     @State private var showGate = false
     @State private var pendingMail = false
     @State private var unavailable = false
+    @State private var showPrivacy = false
     var body: some View {
         NavigationStack {
             Page {
@@ -121,10 +128,58 @@ struct AuthorView: View {
                     Button { showGate = true } label: { HStack { Image(systemName: "envelope"); Text(verbatim: "hi@feiwenchao.com"); Spacer(); Image(systemName: "arrow.up.right") }.font(.subheadline).padding(16).frame(minHeight: 50).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 13)) }.buttonStyle(.plain).foregroundStyle(Sprout.green).accessibilityIdentifier("authorEmail")
                     Text("点击邮箱后，请家长确认，再由系统邮件应用继续。").font(.caption).foregroundStyle(Sprout.muted)
                 }
+                Button { showPrivacy = true } label: { Label("隐私政策", systemImage: "hand.raised.fill").frame(minHeight: 44) }
+                    .accessibilityIdentifier("privacyPolicy")
                 Text("免费使用 · 没有广告、打赏或内购").font(.caption).foregroundStyle(Sprout.muted).frame(maxWidth: .infinity)
             }.navigationTitle("关于作者").toolbar { ToolbarItem(placement: .confirmationAction) { Button("完成") { dismiss() } } }
         }.frame(idealWidth: 570, idealHeight: 670)
             .sheet(isPresented: $showGate, onDismiss: { if pendingMail { pendingMail = false; openURL(URL(string: "mailto:hi@feiwenchao.com")!) { unavailable = !$0 } } }) { ParentGate { pendingMail = true; showGate = false } }
+            .sheet(isPresented: $showPrivacy) { PrivacyPolicyView() }
             .alert("暂时无法打开邮件", isPresented: $unavailable) { Button("知道了", role: .cancel) {} } message: { Text("请先设置系统邮件应用，也可以手动发邮件至 hi@feiwenchao.com。") }
+    }
+}
+
+struct PrivacyPolicyView: View {
+    @Environment(\.dismiss) private var dismiss
+    private let sections: [(String, [String])] = [
+        ("一、我们收集什么信息", [
+            "本应用不要求注册或登录，不收集姓名、电话、地址、照片、精确位置、联系人、设备广告标识符，也不包含广告、分析 SDK、社交功能或在线账户。",
+            "学习进度、游戏完成记录和画板草稿只保存在使用本应用的设备本地，用于恢复学习状态。我们无法读取这些本地内容，也不会将其上传到服务器。"
+        ]),
+        ("二、语音与系统功能", [
+            "点读功能调用设备系统提供的中文或英文合成语音。语音文本由本应用在设备上生成；本应用不保存录音，也不主动上传语音内容。邮件、系统分享和保存图片仅在家长主动操作并确认后交由操作系统处理。"
+        ]),
+        ("三、儿童隐私", [
+            "本应用面向儿童与家长共同使用，提供离线学习内容，不以收集儿童个人信息为目的。涉及发送邮件、系统分享或打开外部网页的功能，会先提示家长确认。请家长陪伴孩子使用，并帮助孩子不要在邮件或其他外部服务中提交个人信息。"
+        ]),
+        ("四、第三方网站", [
+            "课程说明中可能提供教材资料来源链接。打开外部网站前会进行家长确认；这些网站由其运营者独立负责，请在访问前阅读相应的隐私政策。"
+        ]),
+        ("五、政策更新与联系我们", [
+            "如果本政策发生变化，我们会在公开隐私政策页面更新日期和内容，并同步本应用内的说明。对隐私或产品有任何问题，欢迎发送邮件至 hi@feiwenchao.com。"
+        ])
+    ]
+    var body: some View {
+        NavigationStack {
+            Page {
+                SectionHeader(title: "萌呀启蒙隐私政策", detail: "更新日期：2026 年 11 月 19 日")
+                Text("萌呀启蒙（以下简称“本应用”）是一款由个人开发者制作的儿童启蒙学习应用，提供数字、拼音、英文字母、小游戏和画板练习。我们重视孩子和家长的隐私，并按本政策说明数据处理方式。").lineSpacing(6)
+                ForEach(Array(sections.enumerated()), id: \.offset) { _, section in
+                    Panel {
+                        Text(section.0).font(.headline).foregroundStyle(Sprout.green)
+                        ForEach(Array(section.1.enumerated()), id: \.offset) { _, paragraph in
+                            Text(verbatim: paragraph).font(.subheadline).lineSpacing(6)
+                        }
+                    }
+                }
+                Text("© 2026 萌呀启蒙 · 免费、无账号、无广告").font(.caption).foregroundStyle(Sprout.muted)
+            }.navigationTitle("隐私政策")
+                .toolbar { ToolbarItem(placement: .confirmationAction) { Button("完成") { dismiss() } } }
+        }
+        #if os(macOS)
+        .frame(minWidth: 500, idealWidth: 650, minHeight: 500, idealHeight: 760)
+        #else
+        .presentationDetents([.large]).presentationCompactAdaptation(.fullScreenCover)
+        #endif
     }
 }
