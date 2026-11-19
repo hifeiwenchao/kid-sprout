@@ -14,9 +14,9 @@ open native/ios/KidSprout.xcodeproj
 
 **不要把`Package.swift`当作应用工程打开。**它只包含KidSproutCore共享库及模型测试，没有可运行的App。若顶部只有KidSproutCore，关闭该包窗口并打开上述`.xcodeproj`。
 
-工程开发团队为 `wenchao fei`（Team ID：`5A9Z4D7HV3`）。真机运行前在 Xcode 的 Settings → Accounts 登录该团队所属 Apple 账户，并在 Signing & Capabilities 确认团队。iOS 与 Mac 主应用 Bundle ID 统一为 `com.feiwenchao.mengya`，首发版本 `1.0.0`、构建号 `1`。旧 `com.feiwenchao.kidsprout` 已被其他产品占用，不能继续用于本产品商店记录；更换标识后本地数据容器也会变化，本轮未实现旧标识数据迁移。
+工程开发团队为 `wenchao fei`（Team ID：`5A9Z4D7HV3`）。真机运行前在 Xcode 的 Settings → Accounts 登录该团队所属 Apple 账户，并在 Signing & Capabilities 确认团队。iOS 与 Mac 主应用 Bundle ID 已由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本 `1.0.0`、构建号 `2`。新标识已在 Apple Developer 注册。旧 `com.feiwenchao.kidsprout` 已被其他产品占用，不能用于本产品商店记录；更换标识后本地数据容器也会变化，本轮未实现跨 Bundle ID 数据迁移。
 
-iOS 工程使用自动签名，本轮 `1.0.0`（build `1`）已签名归档、上传并实际提交成功，页面显示“正在等待审核”。Release `ENABLE_TESTABILITY=NO`，Debug 保持 `YES`；共享隐私清单会同时打包进应用及嵌入的 Core framework，声明自身 UserDefaults 的 `CA92.1` 用途。当前为手动发布，尚未审核通过或上线；后台无签名编译产物不能替代已提交的签名构建。
+iOS 工程使用自动签名。新标识的 `1.0.0`（build `2`）归档因本机 Xcode 账户凭据失效及缺少新标识开发描述文件失败，需恢复团队账户后继续；尚未完成上传和重新提审，未上线。Release `ENABLE_TESTABILITY=NO`，Debug 保持 `YES`；共享隐私清单会同时打包进应用及嵌入的 Core framework，声明自身 UserDefaults 的 `CA92.1` 用途。后台无签名编译产物不能替代商店签名构建。
 
 ## 后台构建与模型测试
 
@@ -64,12 +64,12 @@ node native/ios/scripts/GenerateMacIcons.cjs
 - PNG为2000×1400白底，包含底稿、不含网格/辅助线；经家长确认后调用系统分享。原生全屏画板避免两个页面争用同一PKCanvasView。
 - 学习记录使用UserDefaults，兼容v1数字存档；拼音按lesson-1…14、字母按A…Z记录。与网页/Android/Mac独立；删除应用会移除本地记录，撤销栈不跨重启保留。
 
-## App Store 准备
+## App Store 迁移
 
-iPhone/iPad 与 Mac 的 `1.0.0`（build `1`）均已在 [App Store Connect 统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 实际提交成功，两端页面均显示“正在等待审核”，均选择手动发布、尚未上线。iOS 审核提交 ID 为 `7c3e17f1-1197-4576-a6c7-febe2e305494`。两端 build `1`、版本元数据和审核联系资料已保存，私人联系资料仅保留在 Apple 后台。
+当前 `com.feiwenchao.kid-sprout` / `1.0.0 (2)` 的 [App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建，正在迁移资料准备重新提交。新 iOS `1.0.0` 元数据、审核联系资料与手动发布已保存，其余设置继续迁移。iOS 签名归档受上述账户/描述文件问题阻断，尚未完成新构建上传或提审。Mac build `2` 的 development 签名归档成功，但导出上传因缺少 Xcode 账户令牌失败；两端均等待本机 Xcode 重新登录，尚未上传成功或重新提审。
 
-后台定价免费，供应范围为全部 175 个国家/地区；中国大陆（CHN）显示“App 发布时供应”。App ICP 栏仍为空，自动校验未阻断提交，不表示备案豁免或已批准中国大陆上线。
+旧 [统一记录 `6836726939`“萌呀启蒙旧标识存档”](https://appstoreconnect.apple.com/apps/6836726939/distribution) 曾用 `com.feiwenchao.mengya` 的 `1.0.0 (1)` 完成两端提交并等待审核；迁移时已执行撤回，旧两端均显示“被开发者拒绝”，原 iOS 提交 `7c3e17f1-1197-4576-a6c7-febe2e305494` 和 Mac 提交均已撤回。旧记录的元数据、私人审核联系资料、免费定价、全部 175 个国家/地区（含 CHN）和手动发布设置不视为已迁移到新记录。
 
-商店资料与提交记录见 [Apple 发布记录](../app-store/README.md)，中文名称、副标题、描述、关键词与审核备注见 [简体中文元数据](../app-store/metadata.zh-Hans.md)。[隐私政策](https://kid.feiwenchao.com/privacy.html) 与 [支持页面](https://kid.feiwenchao.com/support.html) 已公开发布并确认 HTTP `200`；App Privacy 已按用户确认发布“不收集数据”。
+商店资料与迁移记录见 [Apple 发布记录](../app-store/README.md)，中文名称、副标题、描述、关键词与审核备注见 [简体中文元数据](../app-store/metadata.zh-Hans.md)。[隐私政策](https://kid.feiwenchao.com/privacy.html) 与 [支持页面](https://kid.feiwenchao.com/support.html) 已公开发布并确认 HTTP `200`；旧记录的 App Privacy 已按用户确认发布“不收集数据”。旧 App ICP 栏为空且自动校验未阻断原提交，不表示备案豁免或中国大陆上线已获批准。
 
-新商店素材在 [专用 iPhone 目录](../app-store/screenshots/iphone/) 有 2 张原始 JPG、[专用 iPad 目录](../app-store/screenshots/ipad/) 有 1 张。中屏 iPhone `1206×2622` 与 iPad `2064×2752` 已分别成功上传到后台，各显示 `1/10`；大屏 iPhone 图仍保留在目录。来源与范围见 [截图记录](../app-store/screenshots/README.md)，不以历史截图代替最终验收。测试证据与未验证项见 [验证记录](../VALIDATION.md)。
+[专用 iPhone 目录](../app-store/screenshots/iphone/) 有 2 张原始 JPG，[专用 iPad 目录](../app-store/screenshots/ipad/) 有 1 张。它们实际来自旧标识 `com.feiwenchao.mengya` / `1.0.0 (1)`；中屏 iPhone `1206×2622` 与 iPad `2064×2752` 曾在旧后台各保存 1 张（`1/10`），大屏 iPhone 图保留本地。界面本轮未改，可复用，但不冒称 build `2` 新采集图。来源与范围见 [截图记录](../app-store/screenshots/README.md)，测试证据与未验证项见 [验证记录](../VALIDATION.md)。

@@ -1,6 +1,8 @@
 # App Store 原生截图
 
-采集日期：2026-11-19。当前专用素材包括 iPhone 2 张、iPad 1 张和 Mac 1 张，Bundle ID 均为 `com.feiwenchao.mengya`，版本 `1.0.0`（build `1`）。移动端来自原生 `Release` 模拟器构建；Mac 来自实际签名归档 app 的后台窗口捕获。截图展示真实应用首页，不是设计稿或网页。素材已经查看，中屏 iPhone、iPad 和 Mac 图已分别在后台保存 1 张（各 `1/10`）并用于本次提交；大屏 iPhone 图保留本地。
+采集日期：2026-11-19。现有专用素材包括 iPhone 2 张、iPad 1 张和 Mac 1 张，Bundle ID 均为 `com.feiwenchao.mengya`，版本 `1.0.0`（build `1`）。移动端来自原生 `Release` 模拟器构建；Mac 来自实际签名归档 app 的后台窗口捕获。截图展示真实应用首页，不是设计稿或网页。素材已经查看，中屏 iPhone、iPad 和 Mac 图曾分别在旧记录 `6836726939` 保存 1 张（各 `1/10`）并用于旧 build `1` 提交；大屏 iPhone 图保留本地。
+
+当前工程已迁移为 `com.feiwenchao.kid-sprout` / `1.0.0 (2)`，旧记录两端均已撤回。以上素材的真实来源仍是 `com.feiwenchao.mengya` / `1.0.0 (1)`，不能改写为新标识截图。本轮只改标识及构建号，界面未变，可在新记录复用；新记录是否已上传保存另以[发布记录](../README.md)为准。
 
 ## iPhone / iPad 原始 JPG
 
@@ -10,7 +12,7 @@
 | [iphone/02-home-iphone17-pro.jpg](iphone/02-home-iphone17-pro.jpg) | iPhone 17 Pro / iOS 26.5 | 1206 × 2622 | iPhone with Dynamic Island，medium display |
 | [ipad/01-home-ipad-pro13-m5.jpg](ipad/01-home-ipad-pro13-m5.jpg) | iPad Pro 13-inch (M5) / iOS 26.5 | 2064 × 2752 | iPad 13-inch |
 
-后台已保存中屏 iPhone `1206×2622` 和 iPad `2064×2752` 各 1 张，各显示 `1/10`；大屏 iPhone `1320×2868` 仅保留本地素材。
+旧后台曾保存中屏 iPhone `1206×2622` 和 iPad `2064×2752` 各 1 张，各显示 `1/10`；大屏 iPhone `1320×2868` 仅保留本地素材。
 
 尺寸与格式依据 [Apple 官方截图规格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/)。三张均为 JPG、无透明通道，已通过 `sips` 读取实际尺寸和 `hasAlpha: no`。没有缩放、裁剪、拼接、覆盖文字、设备边框或其他图像后处理。
 
@@ -28,7 +30,7 @@
 | --- | --- | --- |
 | [macos/01-explore.png](macos/01-explore.png) | `Mengya-macOS-1.0.0-1.xcarchive` 内实际应用的后台窗口捕获 | 1440 × 900，RGB PNG，`hasAlpha: no` |
 
-Mac 商店截图已上传并保存，后台显示 `1/10`，用于本次提交。
+Mac 商店截图曾上传并保存到旧记录，后台显示 `1/10`，用于旧 build `1` 提交。
 
 Mac 源图去掉顶部 31px 系统标题栏后，将剩余应用内容等比例缩放、居中适配至 1440×900。没有重绘、替换或改变应用内容，没有覆盖宣传文字或设备边框。该图由主任务使用 `view_image` 查看通过；本轮又通过 `sips` 确认尺寸、RGB 色彩空间与无透明通道。
 
@@ -36,4 +38,6 @@ Mac 源图去掉顶部 31px 系统标题栏后，将剩余应用内容等比例�
 
 ## 验证范围
 
-两端 `1.0.0 (1)` 已实际提交至 [统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution)，iOS 与 macOS 均显示“正在等待审核”；均为手动发布，未上线。iOS 审核提交 ID 为 `7c3e17f1-1197-4576-a6c7-febe2e305494`，Mac 为 `529d3f28-7a86-4807-9f30-3e85a58cbf53`。截图查看仅证明首页的当前显示，不代表全课程、交互或真机体验已完成 UI 验收。历史 `native/ios/screenshots/` 与 `native/macos/screenshots/` 不属于这次专用素材。完整上传、警告与测试记录见 [原生验证记录](../../VALIDATION.md)。
+旧 `com.feiwenchao.mengya` / `1.0.0 (1)` 两端曾实际提交至 [旧统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 并等待审核，均为手动发布，未上线。iOS 历史提交 ID 为 `7c3e17f1-1197-4576-a6c7-febe2e305494`，Mac 为 `529d3f28-7a86-4807-9f30-3e85a58cbf53`。迁移时两端原提交均已撤回，旧版本显示“被开发者拒绝”，记录更名“萌呀启蒙旧标识存档”并保留。新标识 build `2` 两端均因 Xcode 账户问题等待重新登录，尚未上传成功或重新提审，不沿用旧记录的等待审核结论。
+
+截图查看仅证明旧 build `1` 首页的实际显示，不代表新构建已完成 UI 验收，也不代表全课程、交互或真机体验已完成验收。历史 `native/ios/screenshots/` 与 `native/macos/screenshots/` 不属于这次专用素材。完整迁移、历史上传、警告与测试记录见 [原生验证记录](../../VALIDATION.md)。

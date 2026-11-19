@@ -47,6 +47,8 @@ npm run native:test:mac-drawing
 
 移动端卸载/清除应用数据会移除本地记录；Mac移除`.app`后数据仍保留。点读音色/离线可用性取决于系统语音，静音时可用图文和游戏提示。邮件和作品导出需先经过家长算术验证，再由系统邮件/分享/保存面板继续，不会自动发送邮件或作品。
 
-本地测试包在Git忽略的`native/artifacts/`，旧测试包不等同于商店交付物。Apple 两端主应用统一使用 `com.feiwenchao.mengya`，`1.0.0`（build `1`）均已在 [App Store Connect 统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 实际提交成功，iOS 与 macOS 均显示“正在等待审核”。两端均为手动发布，尚未审核通过、尚未上线。iOS 自动签名，Mac Release 自动签名、Debug 保持本地 ad hoc；Android 交付物仍为 debug 签名。
+本地测试包在Git忽略的`native/artifacts/`，旧测试包不等同于商店交付物。Apple 两端主应用已按用户要求由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，当前版本 `1.0.0`（build `2`）。新标识已在 Apple Developer 注册，Mac 签名归档成功；iOS 归档因本机 Xcode 账户凭据失效及新标识缺少开发描述文件受阻，需恢复账户后继续。Mac 归档为 development 签名，其导出上传因缺少 Xcode 账户令牌失败；两端均等待本机 Xcode 重新登录，尚未上传成功或重新提审，尚未上线。iOS 自动签名，Mac Release 自动签名、Debug 保持本地 ad hoc；Android 交付物仍为 debug 签名。
 
-iPhone/iPad 与 Mac 均计划首发，且须包含中国大陆。后台定价已设免费，供应范围已设全部 175 个国家/地区，中国大陆（CHN）明确显示“App 发布时供应”。两端 build `1`、版本元数据、审核联系资料和截图均已保存；中屏 iPhone、iPad 与 Mac 截图后台各为 `1/10`。隐私/支持页已公开发布，App Privacy 已按用户确认发布“不收集数据”。App ICP 栏仍为空，自动校验未阻断提交，但不代表备案豁免或已批准中国大陆上线。审核提交 ID 与后续状态见 [Apple 发布记录](app-store/README.md)，检查证据与边界见 [验证记录](VALIDATION.md)；历史截图不能代替最终发布版本验收。
+旧 [App Store Connect 记录 `6836726939`“萌呀启蒙旧标识存档”](https://appstoreconnect.apple.com/apps/6836726939/distribution) 曾以 `com.feiwenchao.mengya` 的 `1.0.0 (1)` 完成两端上传和提审；为迁移标识已执行撤回，旧两端均显示“被开发者拒绝”，原提交已撤回。该记录的“正在等待审核”截图是迁移前的历史凭据，不能代表当前状态。[新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建，iOS 版本元数据、审核联系资料和手动发布已保存；旧记录的免费、全部 175 个国家/地区（含中国大陆）、手动发布、元数据、隐私和截图设置不视为已自动迁移。
+
+隐私/支持页已公开发布；旧记录的 App Privacy 已按用户确认发布“不收集数据”。旧 App ICP 栏为空且自动校验未阻断原提交，不代表备案豁免或已批准中国大陆上线。现有商店截图来自旧标识 `1.0.0 (1)`，本次只改应用标识、构建号，界面未变，可复用素材但不冒称新包截图。当前迁移及历史提交证据见 [Apple 发布记录](app-store/README.md)，验证范围见 [验证记录](VALIDATION.md)。
