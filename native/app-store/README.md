@@ -1,6 +1,6 @@
 # 萌呀启蒙 · Apple 商店发布记录
 
-本目录记录 iPhone/iPad 与 Mac 的发布迁移和历史提审证据。更新日期：2026-11-19。按用户要求，两端主应用 Bundle ID 已由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本 `1.0.0`、build `2`。新标识已在 Apple Developer 注册，[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建；iOS 与 Mac 新归档均完成，构建已上传并处理完成。iOS 审核提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323`、macOS 审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 均显示“等待审核”，版本为手动发布，尚未上线。
+本目录记录 iPhone/iPad 与 Mac 的发布迁移和历史提审证据。更新日期：2026-11-20。按用户要求，两端主应用 Bundle ID 已由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本 `1.0.0`、build `2`。新标识已在 Apple Developer 注册，[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建；iOS 与 Mac 新归档均完成，构建已上传并处理完成。iOS 审核提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323`、macOS 审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 在 2026-11-19 提交后均显示“等待审核”。2026-11-20，Mac 因 Guideline 2.1 要求补充资料被拒，iOS 仍等待审核；版本为手动发布，尚未上线。
 
 旧记录 `6836726939` 已更名“萌呀启蒙旧标识存档”并保留。其两端 build `1` 曾提交成功并等待审核，现原提交均已撤回，两端显示“被开发者拒绝”。旧记录的等待审核截图仅为历史凭据，不代表当前状态。
 
@@ -18,7 +18,7 @@
 | 开发团队 | `5A9Z4D7HV3`（wenchao fei） |
 | 定价与业务 | 免费，无账号、广告、打赏、内购或订阅 |
 | 供应范围 / 发布方式 | 全球 175 个国家/地区（含中国大陆）；手动发布 |
-| 当前上传 / 审核状态 | iOS/macOS build `2` 已上传并处理完成；两端提交均显示“等待审核”，尚未上线 |
+| 当前上传 / 审核状态 | build `2` 已上传并处理完成；2026-11-20 Mac 被拒、待补充资料，iOS 等待审核；尚未上线 |
 | 隐私政策 URL | [https://kid.feiwenchao.com/privacy.html](https://kid.feiwenchao.com/privacy.html) |
 | 支持 URL | [https://kid.feiwenchao.com/support.html](https://kid.feiwenchao.com/support.html) |
 | 公开支持邮箱 | `hi@feiwenchao.com` |
@@ -26,6 +26,12 @@
 隐私政策和支持页面已公开发布，此前公网 HTTPS 检查均返回 HTTP `200`；源码分别在 `public/privacy.html` 和 `public/support.html`。中文商店文案见 [metadata.zh-Hans.md](metadata.zh-Hans.md)。私人审核联系资料只保存在 Apple 后台，不写入仓库。
 
 更换标识会使用独立的应用容器，本轮没有实现跨 Bundle ID 的学习记录或画稿迁移。另一款产品使用的 `com.feiwenchao.kidsprout` 不得用于本应用构建。
+
+## 2026-11-20 Mac 补充资料要求
+
+Apple 要求实体 Mac 在最新版系统上从启动开始的功能录屏，以及用途／目标用户、操作方法、外部依赖、地区差异、受监管服务／第三方内容六项说明；须回复 Apple 并同样添加到审核 Notes。该消息没有指出具体崩溃或代码缺陷。本轮仅查看后台、核对代码并准备本地草稿，没有录屏、回复 Apple 或重新提交。
+
+英文回复与录屏路线见 [Mac 审核补充材料](review-response-2026-11-20.md)。录屏与本次实体设备 QA 仍待完成。
 
 ## 本轮 Bundle ID 迁移证据
 
@@ -43,7 +49,7 @@
 | App Privacy | 隐私政策已发布；已发布“不收集数据”答复 |
 | 价格与供应范围 | 免费；全球 175 个国家/地区，含中国大陆 |
 | iOS 审核提交 | `a198cc45-3460-4ce3-adb9-f9ab97e63323`；提交后显示“等待审核” |
-| macOS 审核提交 | `d20238f9-2c11-4871-9bde-bf90db8d18fc`；提交后显示“等待审核” |
+| macOS 审核提交 | `d20238f9-2c11-4871-9bde-bf90db8d18fc`；2026-11-20 显示“已拒绝／问题未解决”，Guideline 2.1 需要信息 |
 | 旧 Mac 提交撤回 | 已撤回，旧版本显示“被开发者拒绝”；原提交 `529d3f28-7a86-4807-9f30-3e85a58cbf53` |
 | 旧 iOS 提交撤回 | 已撤回，旧版本显示“被开发者拒绝”；原提交 `7c3e17f1-1197-4576-a6c7-febe2e305494` |
 | 素材复用 | 界面未改，可复用旧标识 `1.0.0 (1)` 首页截图；不是 build 2 新采集图 |

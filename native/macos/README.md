@@ -27,7 +27,7 @@ xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
 
 产物在`/tmp/kid-sprout-macos-release/Build/Products/Release/KidSproutMac.app`。上述命令显式关闭签名，仅用于后台编译验证，不能作为商店上传物或跨机器分发包。仅编译测试时改用 `-configuration Debug` 和 `build-for-testing`；Release 已关闭 testability。`xcodebuild test` 会启动宿主 App 与 UI 测试、操作当前桌面，应在专用机器/CI运行。上述后台构建命令不启动 Xcode 或 App；发布素材的后台窗口截图另见 [专用截图记录](../app-store/screenshots/README.md)。
 
-历史本地交付包为 `native/artifacts/萌呀启蒙-macOS.zip`，不能视作商店版本；artifacts 目录已被 Git 忽略，其他电脑需重新构建。当前工程 Debug 保持本地 ad hoc，Release 使用团队 `5A9Z4D7HV3` 自动签名，当前已改为 `com.feiwenchao.kid-sprout` / `1.0.0`（build `2`），新标识签名归档成功：`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`（日志 `/tmp/kidsprout-macos-archive-2.log`）。归档实际为 development 签名，标识/版本/build 2、arm64/x86_64 双架构和严格 codesign 校验通过；商店导出上传日志为 `/tmp/kidsprout-macos-export-2b.log`，构建已处理并关联版本。macOS 审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 当前显示“等待审核”，版本为手动发布，尚未上线。通用构建目标包含 Apple 芯片和 Intel 架构，Intel 未实机验收。
+历史本地交付包为 `native/artifacts/萌呀启蒙-macOS.zip`，不能视作商店版本；artifacts 目录已被 Git 忽略，其他电脑需重新构建。当前工程 Debug 保持本地 ad hoc，Release 使用团队 `5A9Z4D7HV3` 自动签名，当前已改为 `com.feiwenchao.kid-sprout` / `1.0.0`（build `2`），新标识签名归档成功：`native/artifacts/app-store/KidSprout-macOS-1.0.0-2.xcarchive`（日志 `/tmp/kidsprout-macos-archive-2.log`）。归档实际为 development 签名，标识/版本/build 2、arm64/x86_64 双架构和严格 codesign 校验通过；商店导出上传日志为 `/tmp/kidsprout-macos-export-2b.log`，构建已处理并关联版本。macOS 审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 在 2026-11-20 因需要补充资料被拒，版本为手动发布，尚未上线。通用构建目标包含 Apple 芯片和 Intel 架构，Intel 未实机验收。
 
 `native:test:mac-drawing`将实际画板模型及测试复制到临时SwiftPM包，直接运行XCTest，结束后清理临时文件；不编译或启动App入口，也不操作鼠标、键盘或窗口。
 
@@ -43,7 +43,9 @@ xcodebuild -project native/ios/KidSprout.xcodeproj -scheme KidSproutMac \
 
 ## Mac App Store 迁移
 
-当前 `com.feiwenchao.kid-sprout` / `1.0.0 (2)` 的 [App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。Mac build `2` 已完成归档、导出上传、处理和版本关联，审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 当前显示“等待审核”；iOS build `2` 也已提交审核，提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323` 当前显示“等待审核”。版本为手动发布，尚未上线。
+2026-11-20，Apple 按 Guideline 2.1 要求实体 Mac 最新版系统的启动与典型流程录屏，以及用途、访问方法、外部依赖、地区差异和内容来源等说明。英文草稿与录屏路线见 [Mac 审核补充材料](../app-store/review-response-2026-11-20.md)。本轮尚未录屏、回复 Apple 或重新提交。
+
+当前 `com.feiwenchao.kid-sprout` / `1.0.0 (2)` 的 [App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。Mac build `2` 已完成归档、导出上传、处理和版本关联，审核提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 在 2026-11-20 因需要补充资料被拒；iOS build `2` 也已提交审核，提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323` 当前显示“等待审核”。版本为手动发布，尚未上线。
 
 旧 [统一记录 `6836726939`“萌呀启蒙旧标识存档”](https://appstoreconnect.apple.com/apps/6836726939/distribution) 曾以 `com.feiwenchao.mengya` / `1.0.0 (1)` 完成两端提交并等待审核。迁移时已执行撤回；旧两端均显示“被开发者拒绝”，Mac 提交 `529d3f28-7a86-4807-9f30-3e85a58cbf53` 和 iOS 原提交均已撤回。旧记录的元数据、审核联系资料、免费定价、全部 175 个国家/地区（含 CHN）和手动发布设置不能代表新记录已配置。
 

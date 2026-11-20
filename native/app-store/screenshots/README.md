@@ -36,8 +36,12 @@ Mac 源图去掉顶部 31px 系统标题栏后，将剩余应用内容等比例�
 
 移动端三张图是直接采集的原始 JPG，Mac 图有上述明确记录的适配处理，二者不能混写为“全部未经后处理”。每个平台的尺寸与槽位要求仍按 [Apple 官方截图规格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/) 和当前 App Store Connect 上传界面核对。
 
+## 本次录屏要求
+
+2026-11-20 的 Mac Guideline 2.1 消息要求最新版系统实体 Mac 上从启动开始的典型流程录屏。上述静态截图不能替代该视频，当前没有完成该录屏；步骤与补充回复草稿见 [Mac 审核补充材料](../review-response-2026-11-20.md)。
+
 ## 验证范围
 
-旧 `com.feiwenchao.mengya` / `1.0.0 (1)` 两端曾实际提交至 [旧统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 并等待审核，均为手动发布，未上线。iOS 历史提交 ID 为 `7c3e17f1-1197-4576-a6c7-febe2e305494`，Mac 为 `529d3f28-7a86-4807-9f30-3e85a58cbf53`。迁移时两端原提交均已撤回，旧版本显示“被开发者拒绝”，记录更名“萌呀启蒙旧标识存档”并保留。新标识 build `2` 已完成上传并提交审核：iOS 提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323`、macOS 提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc`，当前均显示“等待审核”。
+旧 `com.feiwenchao.mengya` / `1.0.0 (1)` 两端曾实际提交至 [旧统一记录 `6836726939`](https://appstoreconnect.apple.com/apps/6836726939/distribution) 并等待审核，均为手动发布，未上线。iOS 历史提交 ID 为 `7c3e17f1-1197-4576-a6c7-febe2e305494`，Mac 为 `529d3f28-7a86-4807-9f30-3e85a58cbf53`。迁移时两端原提交均已撤回，旧版本显示“被开发者拒绝”，记录更名“萌呀启蒙旧标识存档”并保留。新标识 build `2` 已完成上传并提交审核：iOS 提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323`、macOS 提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc`，2026-11-19 提交后均显示“等待审核”；2026-11-20 Mac 因需要补充信息被拒，iOS 仍等待审核。
 
 截图查看仅证明旧 build `1` 首页的实际显示，不代表新构建已完成 UI 验收，也不代表全课程、交互或真机体验已完成验收。历史 `native/ios/screenshots/` 与 `native/macos/screenshots/` 不属于这次专用素材。完整迁移、历史上传、警告与测试记录见 [原生验证记录](../../VALIDATION.md)。

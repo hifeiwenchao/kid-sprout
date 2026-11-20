@@ -66,7 +66,7 @@ node native/ios/scripts/GenerateMacIcons.cjs
 
 ## App Store 迁移
 
-当前 `com.feiwenchao.kid-sprout` / `1.0.0 (2)` 的 [App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。iOS build `2` 已上传、处理并关联版本，审核提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323` 当前显示“等待审核”；Mac build `2` 也已上传并提交审核，提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 当前显示“等待审核”。版本为手动发布，尚未上线。
+当前 `com.feiwenchao.kid-sprout` / `1.0.0 (2)` 的 [App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。iOS build `2` 已上传、处理并关联版本，审核提交 `a198cc45-3460-4ce3-adb9-f9ab97e63323` 当前显示“等待审核”；Mac build `2` 也已上传并提交审核，提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 在 2026-11-20 因 Guideline 2.1 需要补充资料被拒；iOS 仍等待审核。版本为手动发布，尚未上线。
 
 旧 [统一记录 `6836726939`“萌呀启蒙旧标识存档”](https://appstoreconnect.apple.com/apps/6836726939/distribution) 曾用 `com.feiwenchao.mengya` 的 `1.0.0 (1)` 完成两端提交并等待审核；迁移时已执行撤回，旧两端均显示“被开发者拒绝”，原 iOS 提交 `7c3e17f1-1197-4576-a6c7-febe2e305494` 和 Mac 提交均已撤回。旧记录的元数据、私人审核联系资料、免费定价、全部 175 个国家/地区（含 CHN）和手动发布设置不会自动迁移；新记录的对应设置已重新保存并完成审核提交。
 

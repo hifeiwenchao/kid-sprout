@@ -1,8 +1,12 @@
 # 原生验证记录
 
-## 当前：Apple Bundle ID 迁移（2026-11-19）
+## 当前：Mac 审核补充资料（2026-11-20）
 
-Apple iPhone/iPad 与 Mac 主应用按用户要求由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本仍为 `1.0.0`，构建号递增为 `2`。工程及生成器已同步，新标识已在 Apple Developer 注册。[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。iOS 与 Mac build `2` 均完成签名归档、上传和 App Store Connect 处理，并分别提交审核；当前两端均显示“等待审核”，版本为手动发布，尚未上线。
+Mac `1.0.0 (2)` 提交 `d20238f9-2c11-4871-9bde-bf90db8d18fc` 在 07:25 收到 Guideline 2.1 “Information Needed” 拒审消息。Apple 需要实体 Mac 最新版系统的启动与功能录屏，以及六项说明并同步审核 Notes；消息未列出具体崩溃或失效功能。审核列表中 iOS 提交仍为“等待审核”。本轮只读查看后台与核对代码；尚未录屏、回复 Apple 或重新提交。准备材料见 [Mac 审核补充材料](app-store/review-response-2026-11-20.md)。
+
+## Apple Bundle ID 迁移（2026-11-19）
+
+Apple iPhone/iPad 与 Mac 主应用按用户要求由 `com.feiwenchao.mengya` 改为 `com.feiwenchao.kid-sprout`，版本仍为 `1.0.0`，构建号递增为 `2`。工程及生成器已同步，新标识已在 Apple Developer 注册。[App Store Connect 新统一记录 `6836774748`](https://appstoreconnect.apple.com/apps/6836774748/distribution) 已创建。iOS 与 Mac build `2` 均完成签名归档、上传和 App Store Connect 处理，并分别提交审核；2026-11-19 提交后两端均显示“等待审核”。2026-11-20 Mac 被拒并要求补充资料，iOS 仍等待审核；版本为手动发布，尚未上线。
 
 | 检查 | 迁移实际状态 / 证据 |
 | --- | --- |
@@ -16,7 +20,7 @@ Apple iPhone/iPad 与 Mac 主应用按用户要求由 `com.feiwenchao.mengya` �
 | App Privacy | 隐私政策已发布；已发布“不收集数据”答复 |
 | 价格与供应范围 | 免费；全球 175 个国家/地区，含中国大陆 |
 | iOS 审核提交 | `a198cc45-3460-4ce3-adb9-f9ab97e63323`；提交后显示“等待审核” |
-| macOS 审核提交 | `d20238f9-2c11-4871-9bde-bf90db8d18fc`；提交后显示“等待审核” |
+| macOS 审核提交 | `d20238f9-2c11-4871-9bde-bf90db8d18fc`；提交后等待审核，2026-11-20 因需要补充信息被拒 |
 | 旧 Mac 审核提交 | 原提交 `529d3f28-7a86-4807-9f30-3e85a58cbf53` 已撤回，旧版本显示“被开发者拒绝” |
 | 旧 iOS 审核提交 | 原提交 `7c3e17f1-1197-4576-a6c7-febe2e305494` 已撤回，旧版本显示“被开发者拒绝” |
 | 商店截图 | 保留旧 `com.feiwenchao.mengya` / `1.0.0 (1)` 的真实首页素材；界面未改，可复用但不是 build 2 重新采集 |
