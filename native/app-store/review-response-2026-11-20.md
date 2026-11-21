@@ -1,6 +1,6 @@
 # Mac 审核补充材料 · 2026-11-20
 
-状态：本地草稿，尚未回复 Apple、保存新审核备注或重新提交。须先补齐实体 Mac 录屏，再使用下面的英文回复。
+状态：本地草稿，实体 Mac 录屏已完成；尚未回复 Apple、保存新审核备注或重新提交。
 
 ## Apple 实际要求
 
@@ -27,11 +27,11 @@ Apple 要求录屏从启动应用开始并覆盖典型使用流程，没有指�
 
 不需要演示注册、登录、账号删除、付费解锁或社区举报／拉黑：本应用没有这些在线功能。画板作品是本地用户创作，需展示本地保存；应用没有公开上传或其他用户内容列表。
 
-视频与测试记录放在 Git 忽略的 `native/artifacts/app-store/`。记录实际机型、系统、版本、测试结果与视频文件名；有未测项目就保留为未测。当前用户要求自动化不影响桌面，本轮没有启动 App、模拟器或录制桌面。
+本次实体 Mac 录屏已完成：Mac 型号标识 `Mac17,2`（arm64），macOS `26.5 (25F71)`，应用 `1.0.0 (2)`，录制日期 2026-11-21，时长 315 秒。有效视频为 `native/artifacts/app-store/kidsprout-macos-build2-review.mp4`，使用应用窗口录制，覆盖启动首页、数字课程与计数、拼音课程与例字点读、字母课程与单词点读、游戏筛选与答题重试、画板工具与临摹、家长算术验证和关于作者。视频与测试记录放在 Git 忽略的 `native/artifacts/app-store/`。本次录制中保存 PNG 按钮显示“暂时无法打开保存窗口”，因此没有把系统保存面板或实际 PNG 文件声称为已展示；提交 Apple 前应决定是否先修复并递增 build。
 
 ## 英文回复与 Notes 草稿
 
-以下文本可同时用作回复和 Notes 补充。先将第 1 项方括号替换为真实录屏位置及设备信息；确认文件已附上或 Apple 可免登录访问链接后再发送。不要把方括号、未完成的 QA 或并不存在的附件提交给 Apple。保留原有审核联系方式与隐私政策信息。
+以下文本可同时用作回复和 Notes 补充。发送前将视频作为 Apple 后台可访问的附件或链接提供，并保留实际设备信息。不要把不存在的附件提交给 Apple。保留原有审核联系方式与隐私政策信息。
 
 ```text
 Hello App Review,
@@ -39,7 +39,7 @@ Hello App Review,
 Thank you for your feedback under Guideline 2.1. This information concerns 萌呀启蒙, macOS version 1.0.0 (2), bundle ID com.feiwenchao.kid-sprout.
 
 1. Physical-device recording
-[REPLACE BEFORE SENDING: Attach the recording or provide its accessible URL, then state the actual Mac model/chip, macOS version/build, app version/build and testing date. Confirm only the flows actually tested. The recording must begin with launching the app and show the main user flow.]
+Recording: kidsprout-macos-build2-review.mp4. Tested on a physical Mac (model identifier Mac17,2, arm64) running macOS 26.5 (build 25F71), app version 1.0.0 (2), on 2026-11-21. The recording begins with launching the app and shows the Explore home, numbers, pinyin, alphabet, games, drawing, parent verification and About the Author. The Save PNG button was also tested; in this build it displayed “暂时无法打开保存窗口”, so no system save panel is claimed as demonstrated.
 
 2. Purpose and audience
 This is a free parent-accompanied early-learning app for children, including the selected Kids age group of 6–8. It helps families practise number recognition (0–10), introductory Mandarin pinyin and English letters through short lessons, 60 games, visual memory scenes and drawing. Parents can choose suitable activities at the child's pace. It does not offer formal schooling, tutoring bookings or certified educational services.
@@ -75,7 +75,7 @@ Thank you for reviewing the app.
 
 ## 核对与提交边界
 
-- 第 2–5 项已按当前代码核对；第 1 项录屏与实体设备 QA 尚未完成。
+- 第 1 项实体设备录屏与 QA 已完成；第 2–5 项已按当前代码核对。保存 PNG 的系统面板仍未通过本次 build 验证。
 - 第 6 项只描述可核对的内容，不无条件声称“全部文本原创”或已有第三方授权书。仓库含常见数字儿歌短句，来源／授权没有单独记录；若需进一步作版权保证，先核实来源或替换相关文本，不能编造证明文件。
 - 补齐视频后，将完整六项说明放入 Mac 的审核备注，并在此 Mac 提交中回复 Apple，再按后台流程处理重新提交。仅回复空泛说明或重复上传同一个包，不能替代 Apple 要求的材料。
 - 本次消息没有指定必须换构建；资料补齐后以后台允许的处理方式继续。若实体测试发现问题并修改程序，再递增 build、归档、上传和关联新构建。
