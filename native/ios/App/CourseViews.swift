@@ -21,7 +21,7 @@ private struct CourseHeading: View {
     var color: Color = Sprout.green
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(eyebrow).font(.caption.weight(.semibold)).tracking(1.2).foregroundStyle(color)
+            Text(eyebrow).font(.caption.weight(.medium)).tracking(0.7).foregroundStyle(Sprout.muted)
             Text(title).font(.system(.title, design: .rounded, weight: .bold)).foregroundStyle(Sprout.ink)
             Text(subtitle).font(.subheadline).foregroundStyle(Sprout.muted).lineSpacing(5)
         }
@@ -37,11 +37,27 @@ private struct CourseSheet<Content: View>: View {
         NavigationStack {
             Page { content() }
                 .navigationTitle(title)
-                .toolbar { ToolbarItem(placement: .confirmationAction) { Button("完成") { dismiss() } } }
+                .toolbar { ToolbarItem(placement: .confirmationAction) { Button("完成") { dismiss() }.frame(minWidth: 44, minHeight: 44) } }
         }
         #if os(macOS)
-        .frame(minWidth: 560, idealWidth: 760, minHeight: 600, idealHeight: 850)
+        .frame(minWidth: 560, idealWidth: 920, maxWidth: 1120, minHeight: 540, idealHeight: 780)
+        #else
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
         #endif
+    }
+}
+
+private struct CoursePractice<Content: View>: View {
+    let title: String
+    @ViewBuilder let content: () -> Content
+    var body: some View {
+        DisclosureGroup { content().padding(.top, 16) } label: {
+            Text(title).font(.headline).frame(minHeight: 44)
+        }
+        .padding(18).tint(Sprout.green)
+        .background(Sprout.panel, in: RoundedRectangle(cornerRadius: 18))
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(Sprout.line))
     }
 }
 
@@ -158,7 +174,14 @@ private struct NumberLessonView: View {
         CourseSheet(title: "认识数字 \(value)") {
             if let lesson {
                 CourseHeading(eyebrow: "认识一位新朋友", title: "你好，我是数字\(lesson.name)！", subtitle: value == 0 ? "一个也没有，可以用 0 表示。" : "\(lesson.name)\(lesson.unit)\(lesson.fruit)，一起数一数")
-                MemorySceneView(subject: .numbers, symbol: String(value))
+                Text(String(value))
+                    .font(.system(size: 112, weight: .bold, design: .rounded))
+                    .foregroundStyle(Sprout.green)
+                    .frame(maxWidth: .infinity, minHeight: 140)
+                    .background(Sprout.mint, in: RoundedRectangle(cornerRadius: 22))
+                    .accessibilityLabel("数字 \(value)，\(lesson.name)")
+                    .accessibilityIdentifier("numberLessonSymbol")
+                Button { readNumber(lesson) } label: { Label("再听一遍", systemImage: "speaker.wave.2").frame(minHeight: 44) }.buttonStyle(.bordered)
                 if value == 0 { zeroBasket }
                 else {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 68), spacing: 10)], spacing: 12) {
@@ -181,8 +204,8 @@ private struct NumberLessonView: View {
                         .font(.subheadline).foregroundStyle(Sprout.muted).accessibilityIdentifier("countFeedback")
                     Button("重新数一数") { visited = [] }.buttonStyle(.bordered)
                 }
-                LessonTracingView(group: "numbers", symbol: String(value)).id(value)
-                Button { readNumber(lesson) } label: { Label("再听一遍", systemImage: "speaker.wave.2").frame(minHeight: 44) }.buttonStyle(.bordered)
+                CoursePractice(title: "记忆小剧场 · 看图记一记") { MemorySceneView(subject: .numbers, symbol: String(value)) }.id("memory-\(value)")
+                CoursePractice(title: "小手写一写 · 临摹数字") { LessonTracingView(group: "numbers", symbol: String(value)).id(value) }.id("tracing-\(value)")
                 if value == 0, let game = model.activities?.games.first(where: { $0.id == "numbers-zero-shelves" }) {
                     Button("找一找空书架 →") { launch(game) }.buttonStyle(.borderedProminent).tint(Sprout.green)
                 }
@@ -382,6 +405,7 @@ private struct TonePath: Shape {
 
 private struct PinyinLessonView: View {
     @EnvironmentObject private var model: AppModel
+    @Environment(\.dynamicTypeSize) private var typeSize
     @State private var lessonID: String
     @State private var symbol = ""
     @State private var finished = false
@@ -404,8 +428,8 @@ private struct PinyinLessonView: View {
                         }
                     }
                 }
-                MemorySceneView(subject: .pinyin, symbol: symbol)
                 if let item { pinyinDetail(item) }
+                CoursePractice(title: "记忆小剧场 · 看口型记拼音") { MemorySceneView(subject: .pinyin, symbol: symbol) }.id("memory-\(symbol)")
                 if !lesson.readSyllables.isEmpty {
                     Panel {
                         Text("整体认读小伙伴").font(.headline).foregroundStyle(Sprout.purple)
@@ -434,7 +458,8 @@ private struct PinyinLessonView: View {
     }
     private func pinyinDetail(_ item: PinyinItem) -> some View {
         Panel {
-            HStack(alignment: .center, spacing: 22) {
+            let layout = typeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16)) : AnyLayout(HStackLayout(alignment: .center, spacing: 22))
+            layout {
                 VStack(spacing: 6) { Text(item.symbol).font(.system(size: 68, weight: .bold, design: .rounded)); Text(item.kind == "initial" ? "声母" : "韵母").font(.caption) }.foregroundStyle(Sprout.purple).frame(minWidth: 95).padding(12).background(Sprout.purpleWash, in: RoundedRectangle(cornerRadius: 18))
                 VStack(alignment: .leading, spacing: 9) {
                     Text("口型小提示").font(.caption).foregroundStyle(Sprout.purple)
@@ -609,7 +634,6 @@ private struct AlphabetLessonView: View {
         CourseSheet(title: "字母朋友 \(letterID)") {
             if let letter {
                 CourseHeading(eyebrow: "认识一位字母朋友 · \(index + 1) / 26", title: "你好，我是 \(letter.uppercase) \(letter.lowercase)", subtitle: "大写和小写，都是同一位字母朋友", color: Sprout.gold)
-                MemorySceneView(subject: .alphabet, symbol: letter.uppercase + letter.lowercase)
                 HStack(spacing: 18) { letterTile(letter.uppercase, label: "大写朋友", color: Sprout.gold); letterTile(letter.lowercase, label: "小写朋友", color: Sprout.green) }
                 Label(letter.hint, systemImage: "lightbulb").font(.subheadline).foregroundStyle(Sprout.muted)
                 Button {
@@ -626,7 +650,8 @@ private struct AlphabetLessonView: View {
                     } label: { Label(model.progress.soundEnabled ? "听英文单词" : "开启声音听单词", systemImage: "speaker.wave.2").frame(minHeight: 44) }.buttonStyle(.bordered).accessibilityLabel("\(model.progress.soundEnabled ? "听英文单词" : "开启声音听单词") \(letter.word)")
                 }.padding(17).background(Sprout.goldWash, in: RoundedRectangle(cornerRadius: 18))
                 Text(model.progress.soundEnabled ? "听到的是字母的名字。点单词旁的小喇叭，还能听英文单词。" : "声音已关闭，仍然可以看卡片学习。想听英文，点“开启声音听字母名”。").font(.caption).foregroundStyle(Sprout.muted)
-                LessonTracingView(group: "alphabet", symbol: letter.uppercase + letter.lowercase).id(letter.id)
+                CoursePractice(title: "记忆小剧场 · 看图记字母") { MemorySceneView(subject: .alphabet, symbol: letter.uppercase + letter.lowercase) }.id("memory-\(letter.id)")
+                CoursePractice(title: "小手写一写 · 大小写一起练") { LessonTracingView(group: "alphabet", symbol: letter.uppercase + letter.lowercase).id(letter.id) }.id("tracing-\(letter.id)")
                 HStack {
                     Button("上一位朋友") { if index > 0 { letterID = letters[index - 1].id } }.buttonStyle(.bordered).disabled(index == 0).frame(minHeight: 44)
                     Spacer()

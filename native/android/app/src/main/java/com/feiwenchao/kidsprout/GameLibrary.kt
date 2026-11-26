@@ -16,7 +16,13 @@ import androidx.compose.ui.unit.sp
     var subject by remember{mutableStateOf("all")};var category by remember{mutableStateOf("all")};var query by remember{mutableStateOf("")}
     val games=vm.activities.filter(subject,category,query)
     LazyColumn(Modifier.fillMaxSize(),contentPadding=PaddingValues(22.dp),verticalArrangement=Arrangement.spacedBy(18.dp)){
-        item{PageTitle("PLAY & DISCOVER","游戏大厅","60 个小游戏，把好奇变成快乐。选一个喜欢的，慢慢试一试。")}
+        item{PageTitle("按自己的节奏玩","游戏大厅","60 个小游戏，按学科和小目标慢慢探索。不计时，不比较。")}
+        val recent=if(category=="all" && query.isBlank())vm.recentGameIds.mapNotNull{id->games.find{it.id==id}} else emptyList()
+        if(recent.isNotEmpty())item{Panel(tint=MaterialTheme.colorScheme.secondaryContainer){SectionTitle("最近玩过","接着上次的小挑战，再试一试");GameGrid(recent){vm.startGame(it)}}}
+        if(subject=="all" && category=="all" && query.isBlank())item{
+            val recommended=listOf("numbers-count","pinyin-listen","alphabet-match").mapNotNull{id->vm.activities.games.find{it.id==id}}
+            Panel{SectionTitle("先从这三个开始","数一数、听一听，再给字母找朋友");GameGrid(recommended){vm.startGame(it)}}
+        }
         item{FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(7.dp)){
             (mapOf("all" to "全部学科")+subjectNames).forEach{(value,label)->FilterChip(subject==value,{subject=value},label={Text("$label ${if(value=="all")60 else 20}")})}
         }}
@@ -30,7 +36,15 @@ import androidx.compose.ui.unit.sp
         item{Text("找到 ${games.size} 个小游戏",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)}
         if(games.isEmpty())item{Panel{Text("🌱 还没找到这个小游戏",style=MaterialTheme.typography.titleLarge);Text("换一个关键词，或者试试其他学科和练习目标。")
             PrimaryButton("清除筛选",{subject="all";category="all";query=""})}}
-        else item{GameGrid(games){vm.startGame(it)}}
+        else if(category=="all" && query.isBlank()) {
+            val subjects=if(subject=="all")subjectNames.keys.toList() else listOf(subject)
+            subjects.forEach{group->
+                item(key="subject-$group"){SectionTitle(subjectNames[group].orEmpty(),"20 个游戏 · 选择一个练习目标")}
+                categoryNames.forEach{(goal,label)->val groupGames=games.filter{it.subject==group && it.category==goal}
+                    if(groupGames.isNotEmpty())item(key="$group-$goal"){Column(verticalArrangement=Arrangement.spacedBy(12.dp)){Text("$label · ${groupGames.size} 个",style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold);GameGrid(groupGames){vm.startGame(it)}}}
+                }
+            }
+        } else item{GameGrid(games){vm.startGame(it)}}
     }
 }
 @Composable fun SubjectGames(vm:AppState,subject:String){Column(verticalArrangement=Arrangement.spacedBy(16.dp)){

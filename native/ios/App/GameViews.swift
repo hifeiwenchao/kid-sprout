@@ -19,14 +19,14 @@ struct GameCard: View {
                     else { Text(game.symbol).font(.system(size: game.symbol.count > 3 ? 19 : 30)) }
                 }.frame(width: 58, height: 62).background(game.subject.wash, in: RoundedRectangle(cornerRadius: 16))
                 VStack(alignment: .leading, spacing: 7) {
-                    Text("\(game.subject.title) · \(game.skill)").font(.system(size: 10)).foregroundStyle(game.subject.accent)
+                    Text("\(game.subject.title) · \(game.skill)").font(.caption).foregroundStyle(Sprout.muted)
                     Text(game.title).font(.headline).foregroundStyle(Sprout.ink)
                     Text(game.description).font(.caption).lineSpacing(4).foregroundStyle(Sprout.muted).fixedSize(horizontal: false, vertical: true)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Image(systemName: "arrow.up.right").font(.caption).foregroundStyle(Sprout.muted)
             }.padding(compact ? 16 : 20).frame(maxWidth: .infinity, minHeight: compact ? 100 : 125, alignment: .leading)
                 .background(Sprout.panel, in: RoundedRectangle(cornerRadius: 18)).overlay(RoundedRectangle(cornerRadius: 18).stroke(Sprout.line))
-        }.buttonStyle(.plain).accessibilityIdentifier("game-\(game.id)")
+        }.buttonStyle(SproutCardButton()).accessibilityIdentifier("game-\(game.id)")
             .sheet(item: $presentedGame, onDismiss: { model.stopSpeaking() }) { GamePlayerView(game: $0).environmentObject(model) }
     }
     private var cardAsset: String? {
@@ -43,6 +43,9 @@ struct GameLibraryView: View {
     @State private var query = ""
     private var currentSubject: NativeSubject? { subject ?? NativeSubject(rawValue: selectedSubject) }
     private var filtered: [NativeGame] { model.activities?.filtered(subject: currentSubject, category: category, query: query) ?? [] }
+    private var browsing: Bool { category == "all" && query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    private var recent: [NativeGame] { model.recentGameIDs.compactMap { id in model.activities?.games.first { $0.id == id } } }
+    private var recommended: [NativeGame] { ["numbers-count", "pinyin-listen", "alphabet-match"].compactMap { id in model.activities?.games.first { $0.id == id } } }
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             if let subject { SectionHeader(eyebrow: "LEARN THROUGH PLAY", title: "\(subject.title) · 玩一会，也学一点", detail: "20 个小游戏，按小小目标慢慢探索。") }
@@ -55,12 +58,38 @@ struct GameLibraryView: View {
             ViewThatFits(in: .horizontal) { HStack(spacing: 16) { search.frame(minWidth: 170); categoryPicker.frame(minWidth: 160, maxWidth: 230) }; VStack(alignment: .leading, spacing: 14) { search; categoryPicker } }
                 .padding(17).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 17))
             Text("\(filtered.count) 个小游戏，选一个开始吧").font(.caption).foregroundStyle(Sprout.muted).accessibilityIdentifier("gameFilterStatus")
+            if subject == nil && selectedSubject == "all" && browsing && !recent.isEmpty {
+                VStack(alignment: .leading, spacing: 13) {
+                    Label("最近玩过", systemImage: "clock.arrow.circlepath").font(.headline)
+                    Text("想再试一次？从这里接着玩。")
+                        .font(.caption).foregroundStyle(Sprout.muted)
+                    cards(recent)
+                }.padding(18).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 18))
+            }
+            if subject == nil && selectedSubject == "all" && browsing && !recommended.isEmpty {
+                VStack(alignment: .leading, spacing: 13) {
+                    Label("先从这三个开始", systemImage: "sparkles").font(.headline)
+                    Text("数一数、听一听、配一配，选个喜欢的试一试。")
+                        .font(.caption).foregroundStyle(Sprout.muted)
+                    cards(recommended)
+                }
+            }
             if filtered.isEmpty {
                 Panel { Image(systemName: "leaf").font(.largeTitle).foregroundStyle(Sprout.green).frame(maxWidth: .infinity); Text("小伙伴还没找到").font(.title3.bold()).frame(maxWidth: .infinity); Text("换个词，或试试其他练习目标吧。").font(.subheadline).foregroundStyle(Sprout.muted).frame(maxWidth: .infinity); Button("显示全部游戏") { query = ""; category = "all"; selectedSubject = "all" }.buttonStyle(BigButton()) }
-            } else if subject != nil && category == "all" && query.isEmpty {
-                ForEach(Array(gameCategories.dropFirst()), id: \.0) { item in
-                    let games = filtered.filter { $0.category == item.0 }
-                    if !games.isEmpty { VStack(alignment: .leading, spacing: 13) { HStack { Text(item.1).font(.headline); Text("\(games.count) 个游戏").font(.caption).foregroundStyle(Sprout.muted) }; cards(games) } }
+            } else if browsing {
+                ForEach(NativeSubject.allCases.filter { currentSubject == nil || $0 == currentSubject }) { group in
+                    VStack(alignment: .leading, spacing: 20) {
+                        if currentSubject == nil { SectionHeader(title: group.title, detail: "20 个小游戏 · 按练习目标选一选") }
+                        ForEach(Array(gameCategories.dropFirst()), id: \.0) { item in
+                            let games = filtered.filter { $0.subject == group && $0.category == item.0 }
+                            if !games.isEmpty {
+                                VStack(alignment: .leading, spacing: 13) {
+                                    HStack { Text(item.1).font(.headline); Text("\(games.count) 个游戏").font(.caption).foregroundStyle(Sprout.muted) }
+                                    cards(games)
+                                }
+                            }
+                        }
+                    }
                 }
             } else { cards(filtered) }
         }
@@ -68,7 +97,7 @@ struct GameLibraryView: View {
     private var search: some View { VStack(alignment: .leading, spacing: 8) { Text("找一找小游戏").font(.caption); HStack { Image(systemName: "magnifyingglass").foregroundStyle(Sprout.muted); TextField("游戏名、练习目标…", text: $query).textFieldStyle(.plain).accessibilityIdentifier("gameSearch"); if !query.isEmpty { Button { query = "" } label: { Image(systemName: "xmark.circle.fill") }.buttonStyle(.plain).accessibilityLabel("清除搜索") } }.padding(12).background(Sprout.panel, in: RoundedRectangle(cornerRadius: 11)) } }
     private var categoryPicker: some View { VStack(alignment: .leading, spacing: 8) { Text("今天想练什么").font(.caption); Picker("练习目标", selection: $category) { ForEach(gameCategories, id: \.0) { Text($0.1).tag($0.0) } }.labelsHidden().pickerStyle(.menu).frame(maxWidth: .infinity, minHeight: 44).background(Sprout.panel, in: RoundedRectangle(cornerRadius: 11)).accessibilityIdentifier("gameCategory") } }
     private func cards(_ games: [NativeGame]) -> some View { LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 14)], spacing: 14) { ForEach(games) { GameCard(game: $0) } } }
-    private func filterButton(_ label: String, value: String, selected: Binding<String>) -> some View { Button { selected.wrappedValue = value } label: { Text(label).font(.subheadline).padding(.horizontal, 15).frame(minHeight: 44).foregroundStyle(selected.wrappedValue == value ? Sprout.green : Sprout.muted).background(selected.wrappedValue == value ? Sprout.mint : Sprout.panel, in: RoundedRectangle(cornerRadius: 12)).overlay(RoundedRectangle(cornerRadius: 12).stroke(Sprout.line)) }.buttonStyle(.plain) }
+    private func filterButton(_ label: String, value: String, selected: Binding<String>) -> some View { Button { selected.wrappedValue = value } label: { Text(label).font(.subheadline.weight(selected.wrappedValue == value ? .semibold : .regular)).padding(.horizontal, 15).frame(minHeight: 44).foregroundStyle(selected.wrappedValue == value ? Sprout.green : Sprout.muted).background(selected.wrappedValue == value ? Sprout.mint : Sprout.panel, in: RoundedRectangle(cornerRadius: 12)).overlay(RoundedRectangle(cornerRadius: 12).stroke(selected.wrappedValue == value ? Sprout.green : Sprout.line, lineWidth: selected.wrappedValue == value ? 2 : 1)) }.buttonStyle(SproutCardButton()).accessibilityAddTraits(selected.wrappedValue == value ? .isSelected : []) }
 }
 
 @MainActor private final class NativeDrum: ObservableObject {
@@ -153,7 +182,7 @@ struct GamePlayerView: View {
         #if os(macOS)
         .frame(minWidth: 560, idealWidth: 720, minHeight: 580, idealHeight: 820)
         #endif
-        .onAppear { startRound() }
+        .onAppear { model.recordGameVisit(game); startRound() }
         .onDisappear { mismatchTask?.cancel(); drum.stop(); model.stopSpeaking() }
         .onChange(of: model.progress.soundEnabled) { _, enabled in if !enabled { drum.stop() } }
         .onChange(of: drum.finished) { _, finished in if finished { heardDrum = true } }

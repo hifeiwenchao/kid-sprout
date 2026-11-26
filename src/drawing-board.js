@@ -39,6 +39,13 @@ export function createDrawingBoard(root, { toast = () => {} } = {}) {
   const stage = root.querySelector('#drawing-stage');
   const status = root.querySelector('#drawing-status');
   const sizeInput = root.querySelector('#drawing-size');
+  const toolsToggle = root.querySelector('#drawing-tools-toggle');
+  toolsToggle.addEventListener('click', () => {
+    const expanded = toolsToggle.getAttribute('aria-expanded') !== 'true';
+    root.classList.toggle('drawing-tools-expanded', expanded);
+    toolsToggle.setAttribute('aria-expanded', String(expanded));
+    toolsToggle.textContent = expanded ? '颜色与粗细 · 收起' : '颜色与粗细 · 展开';
+  });
   const customColor = root.querySelector('#drawing-custom-color');
   const clearConfirm = root.querySelector('#drawing-clear-confirm');
   const undoButton = root.querySelector('#drawing-undo');

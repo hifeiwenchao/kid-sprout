@@ -64,10 +64,10 @@ export function createPinyinCourse(env) {
     env.openModal(`
       <span class="modal-kicker">拼音小路 · 第 ${lesson.number} / 14 课</span><h2 id="dialog-title">你好，${lesson.title}</h2><p class="modal-subtitle">先看口型，再跟着大人读一读</p>
       <div class="pinyin-symbol-tabs" role="group" aria-label="本课拼音">${lesson.symbols.map((symbol, index) => `<button class="pinyin-symbol-tab ${index === 0 ? 'pinyin-selected' : ''}" data-pinyin-symbol="${symbol}" aria-pressed="${index === 0}">${symbol}</button>`).join('')}</div>
-      <div data-pinyin-memory></div>
       <div class="pinyin-detail" data-pinyin-detail></div>
       ${lesson.readSyllables.length ? `<div class="pinyin-whole-syllables"><h3>整体认读小伙伴</h3><p>整个音节直接读，和声母短音分开体会。</p><div>${lesson.readSyllables.map(syllable => `<span>${syllable}</span>`).join('')}</div></div>` : ''}
       <details class="pinyin-spelling-practice" open><summary>${lesson.number < 3 ? '给韵母戴上四声小帽子' : '和大人一起拼一拼'}</summary><div>${lesson.spellings.map(spelling => `<p>${spelling}</p>`).join('')}</div><p class="pinyin-rule">${lesson.rule}</p></details>
+      <div data-pinyin-memory></div>
       <p class="pinyin-reference-note">例字读音参考 · ${env.isSoundEnabled?.() ? '浏览器中文语音' : '声音已关闭，仍可看提示学习'}</p>
       <p class="game-feedback pinyin-lesson-feedback" data-pinyin-lesson-feedback role="status">慢慢读，不着急。学会一课就收下一片小叶子。</p>
       <div class="pinyin-lesson-actions"><button class="button pinyin-secondary" data-pinyin-prev ${lesson.number === 1 ? 'disabled' : ''}>上一课</button><button class="button primary" data-pinyin-finish>完成这一课 ✓</button></div>

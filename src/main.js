@@ -8,13 +8,13 @@ import { createLittleDrum } from './games/little-drum.js';
 import { createFruitCounter } from './games/fruit-counter.js';
 import './games/new-game-cards.css';
 import { renderLearningHub } from './learning-hub.js';
-import { filterGames } from './game-catalog.js';
-import { renderSubjectGames } from './game-cards.js';
+import { GAME_CATALOG, filterGames } from './game-catalog.js';
+import { renderGameCard, renderSubjectGames } from './game-cards.js';
 import { NUMBER_EXTRA_GAMES, buildNumberExtraRounds } from './games/number-extras.js';
 import { PINYIN_EXTRA_GAMES, buildPinyinExtraRounds } from './courses/pinyin-extras.js';
 import { ALPHABET_EXTRA_GAMES, buildAlphabetExtraRounds } from './courses/alphabet-extras.js';
 import { playActivity } from './games/activity-player.js';
-import { restoreLearningProgress, serializeLearningProgress, viewFromHash } from './hub-state.js';
+import { restoreLearningProgress, serializeLearningProgress, viewFromHash, restoreRecentGames, rememberGame } from './hub-state.js';
 import { renderPinyinPage, createPinyinCourse, PINYIN_PROGRESS_IDS } from './courses/pinyin.js';
 import { renderAlphabetPage, createAlphabetCourse } from './courses/alphabet.js';
 import { ALPHABET_PROGRESS_IDS } from './courses/alphabet-data.js';
@@ -215,7 +215,7 @@ function showZero() {
   const wasNew = !state.learned.has(0);
   state.learned.add(0);
   updateProgress();
-  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字零！</h2>${renderMemoryScene(getNumberMemoryScene(0))}<p class="modal-subtitle">一个也没有，可以用 0 表示。</p><div class="zero-basket-scene"><div id="zero-basket-picture">${emptyBasket()}</div><strong id="zero-basket-count">0 个苹果</strong><p id="zero-basket-explanation" role="status">${zeroBasketExample(false).explanation}</p><button type="button" id="zero-basket-toggle" class="button secondary">${zeroBasketExample(false).action}</button></div>${renderLessonTracing({ groupId: 'numbers', character: '0' })}<div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="repeat">${icon('sound', 17)}再听一遍</button><button type="button" class="button primary" id="zero-practice">找一找空书架${icon('arrow', 17)}</button></div><div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="next">认识数字 1${icon('arrow', 17)}</button></div><p class="modal-footnote">数字排排队：0 在 1 的前面。试试放入苹果，再把它拿走。</p>`, 'number-modal zero-modal');
+  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字零！</h2><div class="lesson-number-value" aria-label="数字 0">0</div><p class="modal-subtitle">一个也没有，可以用 0 表示。</p><div class="zero-basket-scene"><div id="zero-basket-picture">${emptyBasket()}</div><strong id="zero-basket-count">0 个苹果</strong><p id="zero-basket-explanation" role="status">${zeroBasketExample(false).explanation}</p><button type="button" id="zero-basket-toggle" class="button secondary">${zeroBasketExample(false).action}</button></div>${renderMemoryScene(getNumberMemoryScene(0))}${renderLessonTracing({ groupId: 'numbers', character: '0' })}<div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="repeat">${icon('sound', 17)}再听一遍</button><button type="button" class="button primary" id="zero-practice">找一找空书架${icon('arrow', 17)}</button></div><div class="zero-lesson-actions"><button type="button" class="button secondary" data-modal-action="next">认识数字 1${icon('arrow', 17)}</button></div><p class="modal-footnote">数字排排队：0 在 1 的前面。试试放入苹果，再把它拿走。</p>`, 'number-modal zero-modal');
   const tracing = createLessonTracing(dialogContent.querySelector('[data-lesson-tracing]'), { groupId: 'numbers', character: '0' });
   const memory = createMemoryScene(dialogContent.querySelector('[data-memory-scene]'));
   cleanupActivity = () => { tracing.destroy(); memory.destroy(); };
@@ -244,13 +244,20 @@ function showNumber(n) {
   if (n === 0) { showZero(); return; }
   const wasNew = !state.learned.has(n);
   state.learned.add(n); updateProgress();
-  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字${names[n - 1]}！</h2>${renderMemoryScene(getNumberMemoryScene(n))}<p class="modal-subtitle">${names[n - 1]}${units[n - 1]}${fruits[n - 1]}，一起数一数</p><div class="modal-fruits">${Array.from({length:n}, (_, i) => `<button class="count-fruit" data-count="${i + 1}" aria-label="第 ${i + 1} ${units[n - 1]}${fruits[n - 1]}">${fruitIcon(n - 1)}<small>${i + 1}</small></button>`).join('')}</div>${renderLessonTracing({ groupId: 'numbers', character: String(n) })}<div class="modal-actions"><button class="button secondary" data-modal-action="repeat">${icon('sound',18)}再听一遍</button><button class="button primary" data-modal-action="next">${n === 10 ? '和数字一起玩' : '下一个朋友'}${icon('arrow',18)}</button></div><p class="modal-footnote">试着点一点每${units[n - 1]}${fruits[n - 1]}吧</p>`, 'number-modal');
+  openModal(`<span class="modal-kicker">认识一位新朋友</span><h2 id="dialog-title">你好，我是数字${names[n - 1]}！</h2><div class="lesson-number-value" aria-label="数字 ${n}">${n}</div><p class="modal-subtitle">${names[n - 1]}${units[n - 1]}${fruits[n - 1]}，一起数一数</p><div class="modal-fruits">${Array.from({length:n}, (_, i) => `<button class="count-fruit" data-count="${i + 1}" aria-pressed="false" aria-label="第 ${i + 1} ${units[n - 1]}${fruits[n - 1]}">${fruitIcon(n - 1)}<small>${i + 1}</small></button>`).join('')}</div><p class="game-feedback" data-lesson-count-feedback role="status">点一点水果，一个一个数。</p>${renderMemoryScene(getNumberMemoryScene(n))}${renderLessonTracing({ groupId: 'numbers', character: String(n) })}<div class="modal-actions"><button class="button secondary" data-modal-action="repeat">${icon('sound',18)}再听一遍</button><button class="button primary" data-modal-action="next">${n === 10 ? '和数字一起玩' : '下一个朋友'}${icon('arrow',18)}</button></div><p class="modal-footnote">试着点一点每${units[n - 1]}${fruits[n - 1]}吧</p>`, 'number-modal');
   const tracing = createLessonTracing(dialogContent.querySelector('[data-lesson-tracing]'), { groupId: 'numbers', character: String(n) });
   const memory = createMemoryScene(dialogContent.querySelector('[data-memory-scene]'));
   cleanupActivity = () => { tracing.destroy(); memory.destroy(); };
   speak(`${names[n - 1]}，数字${names[n - 1]}。${names[n - 1]}${units[n - 1]}${fruits[n - 1]}`);
   if (wasNew && state.learned.size === NUMBER_VALUES.length) celebrate();
-  dialogContent.querySelectorAll('[data-count]').forEach(button => button.addEventListener('click', () => { button.classList.add('counted'); speak(names[Number(button.dataset.count) - 1]); }));
+  const countFruit = createFruitCounter();
+  dialogContent.querySelectorAll('[data-count]').forEach(button => button.addEventListener('click', () => {
+    const count = countFruit(button.dataset.count);
+    button.classList.add('counted');
+    button.setAttribute('aria-pressed', 'true');
+    dialogContent.querySelector('[data-lesson-count-feedback]').textContent = `已经数过 ${count} ${units[n - 1]}${fruits[n - 1]}`;
+    speak(names[count - 1]);
+  }));
   dialogContent.querySelector('[data-modal-action="repeat"]').onclick = () => speak(`数字${names[n - 1]}，${names[n - 1]}${units[n - 1]}${fruits[n - 1]}`);
   dialogContent.querySelector('[data-modal-action="next"]').onclick = () => n < 10 ? showNumber(n + 1) : startGame('count');
 }
@@ -476,8 +483,25 @@ document.querySelectorAll('[data-continue]').forEach(button => button.onclick = 
   if (subject === 'pinyin') pinyinCourse.openLesson();
   if (subject === 'alphabet') alphabetCourse.openLesson();
 });
-document.querySelectorAll('[data-play]').forEach(button => button.onclick = () => {
+const gameIds = GAME_CATALOG.map(game => `${game.subject}:${game.type}`);
+let recentRaw;
+try { recentRaw = localStorage.getItem('sprout-recent-games'); } catch {}
+let recentGames = restoreRecentGames(recentRaw, gameIds);
+function renderRecentGames() {
+  const list = document.querySelector('#recent-games-list');
+  const focusedID = list.contains(document.activeElement) ? document.activeElement.dataset.play : null;
+  list.innerHTML = recentGames.map(id => GAME_CATALOG.find(game => `${game.subject}:${game.type}` === id)).map(game => renderGameCard(game, icon)).join('');
+  document.querySelector('#recent-games').hidden = recentGames.length === 0;
+  if (focusedID) list.querySelector(`[data-play="${focusedID}"]`)?.focus({ preventScroll: true });
+}
+renderRecentGames();
+document.querySelector('#app').addEventListener('click', event => {
+  const button = event.target.closest('[data-play]');
+  if (!button || !gameIds.includes(button.dataset.play)) return;
   const [subject, type] = button.dataset.play.split(':');
+  recentGames = rememberGame(recentGames, button.dataset.play, gameIds);
+  try { localStorage.setItem('sprout-recent-games', JSON.stringify(recentGames)); } catch {}
+  renderRecentGames();
   const builders = { numbers: buildNumberExtraRounds, pinyin: buildPinyinExtraRounds, alphabet: buildAlphabetExtraRounds };
   const extraGames = { numbers: NUMBER_EXTRA_GAMES, pinyin: PINYIN_EXTRA_GAMES, alphabet: ALPHABET_EXTRA_GAMES };
   const extra = extraGames[subject]?.find(game => game.type === type);
@@ -489,7 +513,14 @@ document.querySelectorAll('[data-play]').forEach(button => button.onclick = () =
 let gameSubject = 'all';
 function updateGameFilters() {
   const filtered = new Set(filterGames({ subject: gameSubject, category: document.querySelector('#game-goal').value, query: document.querySelector('#game-search').value }).map(game => `${game.subject}:${game.type}`));
-  document.querySelectorAll('#games [data-play]').forEach(button => { button.hidden = !filtered.has(button.dataset.play); });
+  document.querySelectorAll('#game-library [data-play]').forEach(button => { button.hidden = !filtered.has(button.dataset.play); });
+  document.querySelectorAll('[data-library-category]').forEach(group => { group.hidden = !group.querySelector('[data-play]:not([hidden])'); });
+  document.querySelectorAll('[data-library-subject]').forEach(group => {
+    const count = group.querySelectorAll('[data-play]:not([hidden])').length;
+    group.hidden = count === 0;
+    group.querySelector('[data-library-count]').textContent = `${count} 个游戏`;
+  });
+  document.querySelector('#game-discovery').hidden = gameSubject !== 'all' || document.querySelector('#game-goal').value !== 'all' || document.querySelector('#game-search').value.trim() !== '';
   document.querySelectorAll('[data-game-filter]').forEach(button => {
     const selected = button.dataset.gameFilter === gameSubject;
     button.classList.toggle('selected', selected);
@@ -510,4 +541,5 @@ document.querySelector('#game-filter-clear').onclick = () => {
 };
 document.querySelector('#sound-toggle').onclick = () => { state.sound=!state.sound; if (!state.sound) stopActivity(); updateProgress(); toast(state.sound?'声音已开启，听听新朋友的声音吧':'声音已关闭'); };
 updateProgress();
+updateGameFilters();
 showView(viewFromHash(location.hash), false);

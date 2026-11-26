@@ -105,11 +105,11 @@ export function createAlphabetCourse(env) {
     openModal(`
       <span class="modal-kicker">英文字母 · 第 ${index + 1} / 26 位朋友</span>
       <h2 id="dialog-title">你好，我是字母 <span lang="en">${letter.id}</span></h2>
-      <p class="modal-subtitle">一个大写，一个小写，都是我哦</p>
-      ${renderMemoryScene(memoryScene)}
+      <p class="modal-subtitle">一个大写，一个小写，都是我哦</p><div class="alphabet-case-pair" aria-label="大写 ${letter.uppercase}，小写 ${letter.lowercase}"><span lang="en">${letter.uppercase}</span><span lang="en">${letter.lowercase}</span></div>
       <button class="alphabet-speak-button" id="alphabet-letter-speak">${icon('sound', 19)}${soundOn ? '听字母名' : '开启声音听字母名'} <b lang="en">${letter.id}</b></button>
       <div class="alphabet-word-friend"><span class="alphabet-word-picture" aria-hidden="true">${letter.emoji}</span><div><span>我的单词朋友</span><strong lang="en">${letter.word}</strong><span>${letter.translation}</span></div><button id="alphabet-word-speak" aria-label="${soundOn ? `听英文单词 ${letter.word}` : '声音已关闭，点此查看听音提示'}">${icon(soundOn ? 'sound' : 'mute', 22)}</button></div>
       <p class="alphabet-speech-note" id="alphabet-speech-status" role="status">${soundOn ? '听到的是字母的名字。点单词旁的小喇叭，还能听英文单词。' : '声音已关闭，仍然可以看卡片学习。想听英文，点“开启声音听字母名”。'}</p>
+      ${renderMemoryScene(memoryScene)}
       ${renderLessonTracing(tracingOptions)}
       <div class="alphabet-lesson-actions"><button class="button secondary" id="alphabet-previous" ${index === 0 ? 'disabled' : ''}>上一位朋友</button><button class="button primary" id="alphabet-next">${index === 25 ? '和字母一起玩' : `认识 ${ALPHABET[index + 1].id}`} ${icon('arrow', 18)}</button></div>
     `, 'alphabet-modal alphabet-lesson-modal');

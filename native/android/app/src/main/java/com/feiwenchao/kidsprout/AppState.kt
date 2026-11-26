@@ -62,6 +62,8 @@ class AppState(application:Application):AndroidViewModel(application) {
     private var drumCompletion:((Boolean)->Unit)?=null
     val curriculum=Curriculum.decode(application.assets.open("curriculum.json").bufferedReader().use{it.readText()})
     val activities=ActivityLibrary.decode(application.assets.open("activities.json").bufferedReader().use{it.readText()})
+    private val allowedGameIds=activities.games.map{it.id}.toSet()
+    var recentGameIds by mutableStateOf(RecentGames.restore(prefs.getString("recent-games",null),allowedGameIds));private set
     private val savedDrawing=runCatching{DrawingCodec.decodeDocument(String(draftFile.readFully(),Charsets.UTF_8))}.getOrDefault(DrawingDocument())
     val drawing=DrawingHistory(savedDrawing.strokes,savedDrawing.template,savedDrawing.paperWidth,savedDrawing.paperHeight)
     init {
@@ -125,7 +127,12 @@ class AppState(application:Application):AndroidViewModel(application) {
             }.onFailure{main.post{if(generation==audioGeneration){message="声音暂时不可用，可以打开圆点提示继续数。";drumCompletion=null;onFinished(false)}}}
         }
     }
-    fun startGame(game:NativeGame){stopSpeech();selectedGame=game;session=ActivitySession(game.sets.random());gameRevision++;page=Page.GAMES}
+    fun startGame(game:NativeGame){
+        if(game.id !in allowedGameIds)return
+        recentGameIds=RecentGames.record(recentGameIds,game.id,allowedGameIds)
+        prefs.edit{putString("recent-games",recentGameIds.joinToString("|"))}
+        stopSpeech();selectedGame=game;session=ActivitySession(game.sets.random());gameRevision++;page=Page.GAMES
+    }
     fun submit(values:List<String>):Boolean {val ok=session?.submit(values)==true;gameRevision++;return ok}
     fun completeInteraction(){session?.completeInteraction();gameRevision++}
     fun nextRound(){val s=session?:return;if(s.advance() && s.claimReward()){progress=progress.copy(stars=(progress.stars+1).coerceAtMost(1_000_000));saveProgress()};gameRevision++}

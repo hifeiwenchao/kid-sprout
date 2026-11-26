@@ -2,6 +2,13 @@ import XCTest
 @testable import KidSproutCore
 
 final class ActivityTests: XCTestCase {
+    func testRecentGamesAreKnownUniqueNewestFirstAndLimitedToThree() {
+        let allowed = ["a", "b", "c", "d"]
+        XCTAssertEqual(RecentActivityHistory.normalized(["gone", "b", "b", "a", "d", "c"], allowedIDs: allowed), ["b", "a", "d"])
+        XCTAssertEqual(RecentActivityHistory.recording("c", in: ["b", "a", "c"], allowedIDs: allowed), ["c", "b", "a"])
+        XCTAssertEqual(RecentActivityHistory.recording("gone", in: ["b", "a"], allowedIDs: allowed), ["b", "a"])
+        XCTAssertEqual(RecentActivityHistory.normalized([], allowedIDs: allowed), [])
+    }
     private func data(_ name: String) throws -> Data {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         return try Data(contentsOf: root.appendingPathComponent("shared/\(name).json"))

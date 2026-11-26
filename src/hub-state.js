@@ -15,3 +15,14 @@ export function viewFromHash(hash) {
   const view = hash.replace(/^#/, '');
   return ['home', 'numbers', 'pinyin', 'alphabet', 'drawing', 'games'].includes(view) ? view : 'home';
 }
+
+export function restoreRecentGames(raw, allowedIds) {
+  let saved;
+  try { saved = JSON.parse(raw); } catch {}
+  if (!Array.isArray(saved)) return [];
+  return [...new Set(saved.filter(id => allowedIds.includes(id)))].slice(0, 3);
+}
+
+export function rememberGame(recent, id, allowedIds) {
+  return restoreRecentGames(JSON.stringify(allowedIds.includes(id) ? [id, ...recent] : recent), allowedIds);
+}

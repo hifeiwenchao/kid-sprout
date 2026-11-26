@@ -309,3 +309,60 @@ body.drawing-fullscreen-open { overflow: hidden; }
 @media (max-width: 580px), (max-height: 600px) {
   .drawing-is-fullscreen .drawing-tracing-picker { position: fixed; top: auto; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); width: min(360px, calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))); max-height: 45dvh; }
 }
+
+/* Larger touch targets and a compact toolbox above the paper on tablets. */
+.drawing-heading p, .drawing-tool-group legend, .drawing-paper-label,
+.drawing-custom-color, #drawing-status, #drawing-tracing-hint { color: #627359; font-size: 13px; line-height: 1.7; }
+.drawing-pen-options button { min-height: 64px; font-size: 12px; color: #627359; }
+.drawing-color-options button { min-width: 44px; height: 44px; }
+.drawing-color-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.drawing-tracing-groups button, .drawing-tracing-chooser summary,
+.drawing-tracing-picker button, .drawing-paper-actions button { min-height: 44px; color: #596e4d; font-size: 13px; }
+.drawing-tracing-stepper button { width: 44px; height: 44px; }
+.drawing-tracing-selection { color: #627359; font-size: 12px; }
+.drawing-color-options button[aria-pressed="true"] { border-width: 2px; box-shadow: 0 0 0 2px #fffef9 inset; }
+.drawing-tracing-groups button[aria-pressed="true"], .drawing-pen-options button[aria-pressed="true"] { border: 2px solid #6f8a58; font-weight: 700; }
+.drawing-paper-actions button { min-width: 44px; }
+.drawing-paper-actions { flex-wrap: wrap; }
+.drawing-clear-confirm button { min-height: 44px; }
+.drawing-page button:not(:disabled):active { filter: brightness(.94); }
+.drawing-home-copy>span { color: #6f6a51; font-size: 13px; line-height: 1.7; }
+.drawing-home-copy small { color: #7b704f; font-size: 10px; }
+@media (min-width: 901px) {
+  .drawing-workspace { grid-template-columns: 232px minmax(0, 1fr); }
+  .drawing-tools { position: sticky; top: 20px; max-height: calc(100dvh - 40px); overflow-y: auto; }
+}
+@media (max-width: 900px) {
+  .drawing-tools { grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: 14px 18px; padding: 16px; }
+  .drawing-size { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; }
+  .drawing-size legend { float: left; width: auto; margin: 0; min-width: 105px; }
+  .drawing-size-control { flex: 1; min-width: 0; min-height: 44px; }
+  .drawing-preview { display: none; }
+  .drawing-pen-options button { min-height: 44px; font-size: 12px; }
+  .drawing-color-options { grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); gap: 2px; }
+  .drawing-custom-color { margin-top: 4px; min-height: 44px; }
+}
+@media (max-width: 580px) {
+  .drawing-tools { grid-template-columns: minmax(0, 1fr); padding: 14px; gap: 12px; }
+  .drawing-pens { margin-bottom: 0; }
+  .drawing-pen-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .drawing-size { grid-column: auto; }
+  .drawing-paper-toolbar { flex-wrap: wrap; gap: 5px; }
+  .drawing-paper-actions { margin-left: auto; }
+  .drawing-heading-actions button { font-size: 12px; }
+  .drawing-heading p, .drawing-tool-group legend, #drawing-status, #drawing-tracing-hint { font-size: 12px; }
+  .drawing-home-copy strong { font-size: 15px; }
+  .drawing-home-copy>span { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drawing-page *, .drawing-home-entry { transition: none !important; }
+  .drawing-save:hover, .drawing-home-entry:hover { transform: none; }
+}
+
+.drawing-tools-toggle { display: none; }
+.drawing-advanced-tools { display: contents; }
+@media (max-width: 580px) {
+  .drawing-tools-toggle { display: block; width: 100%; min-height: 44px; border: 1px solid #dce4d1; border-radius: 10px; padding: 10px; background: #f1f5e9; color: #456d4b; font-size: 13px; text-align: left; }
+  .drawing-advanced-tools { display: none; }
+  .drawing-tools-expanded .drawing-advanced-tools { display: contents; }
+}

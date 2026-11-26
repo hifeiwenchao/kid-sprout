@@ -36,6 +36,7 @@ struct KidSproutApp: App {
     @Published var progress: LearningProgress { didSet { repository.save(progress) } }
     @Published var activeGame: NativeGame?
     @Published var resumeSubject: NativeSubject?
+    @Published private(set) var recentGameIDs: [String] = []
     let curriculum: Curriculum?
     let activities: ActivityLibrary?
     private let repository = ProgressRepository()
@@ -47,6 +48,7 @@ struct KidSproutApp: App {
         curriculum = Bundle.main.url(forResource: "curriculum", withExtension: "json").flatMap { try? Data(contentsOf: $0) }.flatMap { try? Curriculum.decode($0) }
         activities = Bundle.main.url(forResource: "activities", withExtension: "json").flatMap { try? Data(contentsOf: $0) }.flatMap { try? ActivityLibrary.decode($0) }
         super.init()
+        recentGameIDs = RecentActivityHistory.normalized(UserDefaults.standard.stringArray(forKey: "sprout-recent-games-v1") ?? [], allowedIDs: activities?.games.map(\.id) ?? [])
         speaker.delegate = self
         let format = DateFormatter(); format.locale = Locale(identifier: "en_US_POSIX"); format.dateFormat = "yyyy-MM-dd"
         progress.visitDates.insert(format.string(from: Date()))
@@ -75,6 +77,10 @@ struct KidSproutApp: App {
     func markLetter(_ id: String) { progress.learnedLetters.insert(id); progress.lastLetter = id }
     func reward() { progress.stars += 1; progress.gamesCompleted += 1 }
     func play(_ game: NativeGame) { stopSpeaking(); activeGame = game }
+    func recordGameVisit(_ game: NativeGame) {
+        recentGameIDs = RecentActivityHistory.recording(game.id, in: recentGameIDs, allowedIDs: activities?.games.map(\.id) ?? [])
+        UserDefaults.standard.set(recentGameIDs, forKey: "sprout-recent-games-v1")
+    }
 }
 
 enum Area: String, CaseIterable, Identifiable {
@@ -131,7 +137,7 @@ struct RootView: View {
                         Text(destination.title).font(.subheadline.weight(area == destination ? .semibold : .regular)); Spacer(minLength: 0)
                         if area == destination { Circle().fill(Sprout.green).frame(width: 5, height: 5) }
                     }.padding(.horizontal, 12).frame(minHeight: 48).background(area == destination ? Sprout.mint : .clear, in: RoundedRectangle(cornerRadius: 13))
-                }.buttonStyle(.plain).accessibilityIdentifier("nav-\(destination.rawValue)")
+                }.buttonStyle(SproutCardButton()).accessibilityIdentifier("nav-\(destination.rawValue)").accessibilityAddTraits(area == destination ? .isSelected : [])
             }
             Spacer(minLength: 10)
             VStack(alignment: .leading, spacing: 12) {
@@ -139,8 +145,8 @@ struct RootView: View {
                 Text("认识了 \(model.progress.learnedNumbers.count + model.progress.learnedPinyin.count + model.progress.learnedLetters.count) 位新朋友").font(.caption2).foregroundStyle(Sprout.muted)
                 ProgressView(value: Double(model.progress.learnedNumbers.count + model.progress.learnedPinyin.count + model.progress.learnedLetters.count), total: 51).tint(Sprout.green)
             }.padding(16).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 17))
-            Button { showParents = true } label: { Label("给爸爸妈妈的话", systemImage: "heart").font(.caption).frame(minHeight: 36) }.buttonStyle(.plain)
-            Button { showAuthor = true } label: { Label("关于作者", systemImage: "person.crop.circle").font(.caption).frame(minHeight: 36) }.buttonStyle(.plain)
+            Button { showParents = true } label: { Label("给爸爸妈妈的话", systemImage: "heart").font(.subheadline).frame(minHeight: 44) }.buttonStyle(SproutCardButton())
+            Button { showAuthor = true } label: { Label("关于作者", systemImage: "person.crop.circle").font(.subheadline).frame(minHeight: 44) }.buttonStyle(SproutCardButton())
             Text("愿每一份好奇，都被温柔看见。").font(.system(size: 9)).foregroundStyle(Sprout.muted)
         }.padding(16)
         }.background(Sprout.panel)
@@ -150,17 +156,17 @@ struct RootView: View {
             Text(wide ? "萌呀启蒙  /  \(area.title)" : area.title).font(.caption).foregroundStyle(Sprout.muted).lineLimit(1)
             Spacer(minLength: 0)
             if wide { Label("第 \(model.progress.visitDates.count) 天打卡", systemImage: "flame").font(.caption2).foregroundStyle(Sprout.gold).padding(8).background(Sprout.goldWash, in: Capsule()) }
-            Button { model.progress.soundEnabled.toggle(); if !model.progress.soundEnabled { model.stopSpeaking() } } label: { Image(systemName: model.progress.soundEnabled ? "speaker.wave.2" : "speaker.slash").frame(width: 40, height: 44) }.buttonStyle(.plain).accessibilityLabel(model.progress.soundEnabled ? "关闭声音" : "开启声音")
-            Button { showAchievements = true } label: { Image(systemName: "medal").frame(width: 36, height: 44) }.buttonStyle(.plain).accessibilityLabel("我的成就")
+            Button { model.progress.soundEnabled.toggle(); if !model.progress.soundEnabled { model.stopSpeaking() } } label: { Image(systemName: model.progress.soundEnabled ? "speaker.wave.2" : "speaker.slash").frame(width: 44, height: 44) }.buttonStyle(SproutCardButton()).accessibilityLabel(model.progress.soundEnabled ? "关闭声音" : "开启声音")
+            Button { showAchievements = true } label: { Image(systemName: "medal").frame(width: 44, height: 44) }.buttonStyle(SproutCardButton()).accessibilityLabel("我的成就")
             if !wide { Menu { Button("给爸爸妈妈的话") { showParents = true }; Button("关于作者") { showAuthor = true } } label: { Image(systemName: "ellipsis.circle").frame(width: 44, height: 44) }.accessibilityLabel("更多").accessibilityIdentifier("nav-more") }
         }.padding(.horizontal, 22).padding(.vertical, 5).background(Sprout.background).overlay(alignment: .bottom) { Rectangle().fill(Sprout.line).frame(height: 1) }
     }
     private var bottomNavigation: some View {
         HStack(spacing: 0) { ForEach(Area.learning) { destination in
             Button { area = destination } label: {
-                VStack(spacing: 5) { Image(systemName: destination.symbol).font(.system(size: 19)); Text(destination.shortTitle).font(.system(size: 10)) }
+                VStack(spacing: 5) { Image(systemName: destination.symbol).font(.system(size: 19)); Text(destination.shortTitle).font(.caption2) }
                     .frame(maxWidth: .infinity, minHeight: 56).background(area == destination ? Sprout.mint : .clear, in: RoundedRectangle(cornerRadius: 11))
-            }.buttonStyle(.plain).foregroundStyle(area == destination ? Sprout.green : Sprout.muted).accessibilityLabel(destination.title).accessibilityIdentifier("nav-\(destination.rawValue)")
+            }.buttonStyle(SproutCardButton()).foregroundStyle(area == destination ? Sprout.green : Sprout.muted).accessibilityLabel(destination.title).accessibilityIdentifier("nav-\(destination.rawValue)").accessibilityAddTraits(area == destination ? .isSelected : [])
         } }.padding(.horizontal, 7).padding(.top, 5).background(Sprout.panel).overlay(alignment: .top) { Rectangle().fill(Sprout.line).frame(height: 1) }
     }
     @ViewBuilder private var content: some View {
@@ -182,6 +188,7 @@ struct ExploreView: View {
     var body: some View {
         Page {
             SectionHeader(eyebrow: "HELLO, LITTLE EXPLORER", title: "嗨，小小探险家 ☀", detail: "今天的小发现，会长成明天的大本领。")
+            continuing
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 8) { heroCopy.frame(minWidth: 270); heroArt.frame(minWidth: 240, maxWidth: 400) }
                 VStack(alignment: .leading, spacing: 12) { heroCopy; heroArt.frame(height: 210) }
@@ -191,7 +198,7 @@ struct ExploreView: View {
             Button { navigate(.drawing) } label: {
                 HStack(spacing: 18) { Image(systemName: "pencil.and.scribble").font(.system(size: 35)); VStack(alignment: .leading, spacing: 6) { Text("小小画板").font(.title3.bold()); Text("让想象力，跟着小手自由生长。").font(.caption) }; Spacer(); Image(systemName: "arrow.right") }.padding(23).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 19))
             }.buttonStyle(.plain).foregroundStyle(Sprout.green)
-            ViewThatFits(in: .horizontal) { HStack(alignment: .top, spacing: 22) { continuing.frame(minWidth: 260); featured.frame(minWidth: 300) }; VStack(spacing: 24) { continuing; featured } }
+            featured
             Text("每天 5–10 分钟 · 陪伴，是最好的启蒙").font(.caption).foregroundStyle(Sprout.muted).frame(maxWidth: .infinity).padding(.vertical, 12)
         }
     }
@@ -200,7 +207,7 @@ struct ExploreView: View {
             Text("✦ 好奇的小脑袋，欢迎来到").font(.caption).foregroundStyle(Sprout.gold)
             Text("小小的你，\n有大大的探索力。").font(.system(size: 34, weight: .bold, design: .rounded)).fixedSize(horizontal: false, vertical: true)
             Text("认数字、学拼音、读字母。\n把每一个「我会啦」，装进成长的小口袋。").font(.subheadline).lineSpacing(6)
-            Button { navigate(.numbers) } label: { Label("开始今天的探索", systemImage: "arrow.right").padding(.horizontal, 18).frame(minHeight: 46).background(Sprout.green, in: RoundedRectangle(cornerRadius: 12)).foregroundStyle(Sprout.background) }.buttonStyle(.plain).accessibilityIdentifier("continueLearning")
+            Button { navigate(.numbers) } label: { Label("开始今天的探索", systemImage: "arrow.right").padding(.horizontal, 18).frame(minHeight: 48).background(Sprout.green, in: RoundedRectangle(cornerRadius: 12)).foregroundStyle(Sprout.background) }.buttonStyle(SproutCardButton()).accessibilityIdentifier("continueLearning")
         }.frame(maxWidth: .infinity, alignment: .leading)
     }
     private var heroArt: some View {
@@ -209,7 +216,7 @@ struct ExploreView: View {
     private func subjectCard(_ subject: NativeSubject) -> some View {
         Button { navigate(Area(rawValue: subject.rawValue)!) } label: {
             VStack(alignment: .leading, spacing: 13) {
-                HStack { Text(subject == .numbers ? "01 / NUMBER GARDEN" : subject == .pinyin ? "02 / PINYIN WORLD" : "03 / ALPHABET FOREST").font(.system(size: 9)).tracking(1); Spacer(); Image(systemName: "arrow.up.right") }
+                HStack { Text(subject == .numbers ? "01 / 数字启蒙" : subject == .pinyin ? "02 / 中文启蒙" : "03 / 英语启蒙").font(.caption); Spacer(); Image(systemName: "arrow.up.right") }
                 Text(subject == .numbers ? "1 2 3" : subject == .pinyin ? "a o e" : "A a").font(.system(size: 57, weight: .bold, design: subject == .pinyin ? .serif : .rounded)).frame(maxWidth: .infinity).padding(.vertical, 8)
                 Text(subject.title).font(.title2.bold())
                 Text(subject == .numbers ? "从 0 到 10，和数字交朋友" : subject == .pinyin ? "跟着课次小路，慢慢学会拼读" : "从 Aa 到 Zz，打开字母的奇妙森林").font(.caption).lineSpacing(4)
@@ -217,14 +224,16 @@ struct ExploreView: View {
                 HStack { Text("\(learned(subject)) / \(total(subject)) 位新朋友"); Spacer(); Text("20 个小游戏") }.font(.caption2)
                 ProgressView(value: Double(learned(subject)), total: Double(total(subject))).tint(subject.accent)
             }.padding(21).background(subject.wash, in: RoundedRectangle(cornerRadius: 21)).overlay(RoundedRectangle(cornerRadius: 21).stroke(subject.accent.opacity(0.18)))
-        }.buttonStyle(.plain).foregroundStyle(subject.accent)
+        }.buttonStyle(SproutCardButton()).foregroundStyle(subject.accent)
     }
     private var continuing: some View {
         Panel {
-            SectionHeader(eyebrow: "ONE LITTLE STEP", title: "一点点，就很了不起", detail: "选一位朋友，留下今天的小进步。")
+            SectionHeader(title: "继续学习", detail: "从上次的小发现，接着出发。")
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 16)], spacing: 12) {
             ForEach(NativeSubject.allCases) { subject in Button { model.resumeSubject = subject; navigate(Area(rawValue: subject.rawValue)!) } label: {
                 HStack(spacing: 13) { Text(subject.monogram).font(.title3.bold()).frame(width: 44, height: 46).background(subject.wash, in: RoundedRectangle(cornerRadius: 12)).foregroundStyle(subject.accent); VStack(alignment: .leading, spacing: 5) { Text(subject.title).font(.subheadline.bold()); Text(continueLabel(subject)).font(.caption).foregroundStyle(Sprout.muted) }; Spacer(); Image(systemName: "arrow.right").foregroundStyle(Sprout.muted) }.frame(minHeight: 60)
-            }.buttonStyle(.plain) }
+            }.buttonStyle(SproutCardButton()) }
+            }
         }
     }
     private var featured: some View {

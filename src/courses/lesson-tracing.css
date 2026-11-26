@@ -22,3 +22,16 @@
   .lesson-tracing-actions { justify-content: center; gap: 5px; }
   .lesson-tracing-actions button { padding: 9px 10px; font-size: 10px; }
 }
+
+/* Keep practice legible while leaving room for the course controls. */
+.lesson-tracing { max-width: 640px; margin-inline: auto; }
+.lesson-tracing-heading>span, .lesson-tracing-status { color: #64735f; font-size: 13px; }
+.lesson-tracing-heading h3 { font-size: 16px; }
+.lesson-tracing-actions button { min-height: 44px; padding: 10px 14px; font-size: 13px; color: #496840; }
+.lesson-tracing-actions [data-lesson-finish] { color: #fff; background: #527548; }
+.lesson-tracing-actions button:not(:disabled):active { filter: brightness(.94); }
+@media (max-width: 580px) {
+  .lesson-tracing-heading { flex-wrap: wrap; gap: 6px; }
+  .lesson-tracing-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lesson-tracing-actions [data-lesson-finish] { grid-column: 1 / -1; }
+}

@@ -94,3 +94,151 @@ dialog { width: 610px; }dialog h2 { font-size: 26px; }.modal-subtitle { font-siz
 .author-email:hover { background: #e7efdd; }
 .author-email:focus-visible { outline: 3px solid #93ad7b; outline-offset: 3px; }
 @media (max-width: 580px) { .author-modal { padding: 32px 24px 24px; }.author-modal .modal-kicker { font-size: 10px; }.author-copy { font-size: 13px; } }
+
+/* Shared reading hierarchy and controls for the learning spaces. */
+:root { --muted: #64735f; }
+.hub-sidebar { overflow-y: auto; overscroll-behavior: contain; }
+.hub-sidebar .nav-caption, .hub-breadcrumb, .hub-welcome p,
+.hub-date-note, .hub-date-note b, .hub-heading-note,
+.hub-continue>p, .continue-row small, .hub-filter-status { color: #64735f; }
+.hub-sidebar .nav-item { color: #5b715d; }
+.hub-sidebar .nav-item.active { font-weight: 700; box-shadow: 3px 0 #52785c inset; }
+.hub-eyebrow { color: #6e7867; font-size: 10px; letter-spacing: 1.2px; font-weight: 600; }
+.hub-welcome p, .hub-hero-copy p, .subject-card p,
+.hub-page-heading p, .hub-continue>p { font-size: 14px; line-height: 1.8; }
+.hub-hero-copy p { color: #74613d; }
+.subject-card p { color: #61705d; }
+.subject-card-top, .subject-card-footer { font-size: 12px; }
+.subject-card h3 { font-size: 24px; letter-spacing: 0; }
+.subject-card-footer { color: #546a4f; }
+.hub-hero { min-height: 270px; }
+.hub-welcome { margin-bottom: 20px; }
+.hub-topbar .sound-toggle, .hub-achievements { min-width: 44px; min-height: 44px; }
+.hub-text-link, .footer-filing { min-height: 44px; font-size: 13px; }
+.hub-footer { color: #64735f; font-size: 12px; }
+.hub-footer-message { flex-wrap: wrap; }
+.hub-game-copy small { font-size: 11px; color: #596e50; line-height: 1.6; }
+.hub-game-copy>span { font-size: 13px; line-height: 1.7; color: #64735f; }
+.hub-game-copy strong { font-size: 17px; line-height: 1.5; }
+.hub-games-grid .hub-game-card { min-height: 174px; }
+.game-filters button.selected { border: 2px solid #52785c; padding: 9px 16px; font-weight: 700; }
+.game-search input, .game-goal select { min-height: 48px; font-size: 14px; }
+.hub-filter-status { font-size: 13px; line-height: 1.7; }
+.hub-main button:focus-visible, .hub-main a:focus-visible,
+dialog button:focus-visible, dialog summary:focus-visible {
+  outline: 3px solid #8b6328; outline-offset: 4px;
+}
+.hub-main button:not(:disabled):active, .hub-main a:active,
+dialog button:not(:disabled):active { filter: brightness(.94); }
+.hub-game-card:active, .subject-card:active { transform: translateY(1px); }
+
+/* Continue learning stays close to the three subject entrances. */
+.hub-quick-continue { margin-top: 20px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 18px; padding: 20px 22px; }
+.hub-quick-continue>.hub-eyebrow, .hub-quick-continue>h2,
+.hub-quick-continue>p { grid-column: 1 / -1; }
+.hub-quick-continue>h2 { margin: 0; font-size: 22px; }
+.hub-quick-continue>p { margin: 0; }
+.hub-quick-continue .continue-row { min-height: 76px; padding: 12px; border: 1px solid #e1e7d7; background: #f9faf4; }
+.hub-quick-continue .continue-row strong { font-size: 15px; }
+.hub-quick-continue .continue-row small { font-size: 12px; line-height: 1.6; }
+.hub-quick-continue .continue-row>span:nth-child(2) { min-width: 0; }
+.hub-quick-continue .continue-icon { width: 44px; height: 48px; }
+.hub-lower-grid { grid-template-columns: 1fr; }
+.hub-lower-grid .hub-featured-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.hub-lower-grid .hub-featured-list .hub-game-card { align-items: flex-start; }
+
+/* Game discovery is separate from the complete subject/goal library. */
+.game-discovery { margin: 22px 0 30px; }
+.game-discovery>section+section { margin-top: 24px; }
+.game-discovery h2, .game-subject-group>h2 { margin: 0 0 14px; font-size: 22px; }
+.game-discovery p { font-size: 13px; line-height: 1.8; color: #64735f; }
+.game-discovery .hub-games-grid .hub-game-card { min-height: 132px; }
+.game-subject-group { margin-top: 32px; padding-top: 24px; border-top: 1px solid #dfe6d7; scroll-margin-top: 24px; }
+.game-subject-group>h2 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; color: #405b45; }
+.game-subject-group>h2 small { color: #64735f; font-size: 13px; font-weight: 400; }
+.game-goal-group { margin-top: 22px; }
+.game-goal-group>h3 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; margin: 0 0 12px; font-size: 16px; }
+.game-goal-group>h3 small { color: #64735f; font-size: 12px; font-weight: 400; }
+
+/* Course dialogs use the available screen without changing reading order. */
+dialog.number-modal, dialog.alphabet-lesson-modal, dialog.pinyin-lesson-modal { width: min(860px, calc(100vw - 40px)); padding: 20px 30px 28px; }
+dialog .modal-close { position: sticky; display: grid; float: right; top: 0; right: auto; margin: 0 -12px 0 4px; width: 44px; height: 44px; background: #edf2e5; color: #3e6247; z-index: 8; }
+dialog #dialog-content { clear: both; }
+dialog h2 { line-height: 1.5; }
+dialog .modal-kicker { color: #64735f; font-size: 12px; }
+dialog .modal-subtitle, dialog .modal-footnote { color: #64735f; font-size: 14px; line-height: 1.8; }
+dialog .game-feedback { font-size: 14px; line-height: 1.8; }
+dialog .modal-actions, dialog .alphabet-lesson-actions, dialog .pinyin-lesson-actions { gap: 12px; padding-block: 8px; }
+dialog .button, dialog .alphabet-speak-button, dialog .pinyin-example .button { min-height: 48px; font-size: 14px; }
+dialog .alphabet-word-friend { max-width: 480px; }
+dialog .alphabet-word-friend>button { width: 48px; height: 48px; }
+dialog .alphabet-letter-hint, dialog .alphabet-speech-note,
+dialog .pinyin-reference-note, dialog .pinyin-whole-syllables p,
+dialog .pinyin-spelling-practice .pinyin-rule { color: #6a6258; font-size: 13px; line-height: 1.8; }
+dialog .pinyin-example>span, dialog .pinyin-o-note { color: #71647c; font-size: 13px; }
+dialog .pinyin-spelling-practice summary { min-height: 44px; align-content: center; font-size: 14px; }
+dialog .pinyin-symbol-tab.pinyin-selected { background: #75608c; border-color: #75608c; box-shadow: 0 0 0 2px #e4d9ef; }
+dialog .alphabet-group-picker button[aria-pressed="true"] { border-width: 2px; }
+.lesson-number-value { display: grid; place-items: center; width: 128px; min-height: 132px; margin: 16px auto; border: 1px solid #dce5ce; border-radius: 22px; background: #f0f5e5; color: #496d43; font: 900 84px/1.2 'Nunito', Arial, sans-serif; }
+.alphabet-case-pair { display: flex; justify-content: center; align-items: baseline; gap: 24px; padding: 12px; margin: 14px auto; max-width: 340px; border: 1px solid #e8d8ba; border-radius: 20px; background: #fbf2df; color: #8d5d31; font: 800 84px/1.2 'Nunito', Arial, sans-serif; }
+.alphabet-case-pair span:last-child { color: #707b45; font-size: 68px; }
+.alphabet-lesson-modal .alphabet-speech-note, .alphabet-lesson-modal .alphabet-letter-hint { color: #806b4e; font-size: 13px; }
+.alphabet-lesson-modal .alphabet-word-friend>div>span { color: #806b4e; font-size: 12px; }
+.alphabet-lesson-modal .alphabet-speak-button, .alphabet-lesson-modal .alphabet-word-friend>button { min-height: 44px; min-width: 44px; color: #81572d; }
+.pinyin-lesson-modal .pinyin-reference-note, .pinyin-lesson-modal .pinyin-rule { color: #766780; font-size: 13px; }
+
+@media (min-width: 1400px) {
+  .hub-main { max-width: none; padding-inline: clamp(32px, 3vw, 64px); margin-left: 232px; }
+  .hub-main>.subject-view, .hub-topbar, .hub-footer { max-width: 1440px; margin-left: auto; margin-right: auto; }
+  .hub-hero { min-height: 300px; }
+  .subject-card { padding: 24px 28px 20px; }
+  .subject-art { height: 110px; }
+  .hub-games-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+}
+@media (min-width: 801px) and (max-width: 1100px) {
+  .hub-quick-continue { grid-template-columns: 1fr; }
+  .hub-quick-continue .continue-row { min-height: 68px; }
+  .hub-lower-grid .hub-featured-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 800px) {
+  .hub-sidebar { overflow: visible; }
+  .hub-lower-grid .hub-featured-list { grid-template-columns: 1fr; }
+  .hub-quick-continue { grid-template-columns: 1fr; gap: 10px; }
+  .hub-quick-continue .continue-row { min-height: 68px; }
+  .hub-welcome p, .hub-hero-copy p, .subject-card p, .hub-page-heading p, .hub-continue>p { font-size: 13px; }
+}
+@media (max-width: 580px) {
+  .hub-main { padding-inline: 16px; }
+  .hub-topbar .header-actions { gap: 4px; }
+  .hub-topbar .sound-toggle { width: 44px; height: 44px; }
+  .hub-topbar .streak { font-size: 11px; }
+  .hub-breadcrumb { font-size: 11px; }
+  .hub-sidebar .nav-item { font-size: 11px; }
+  .hub-welcome h1 { font-size: 25px; }
+  .hub-hero { min-height: 270px; grid-template-columns: 68% 32%; }
+  .hub-hero-copy { padding: 22px 0 22px 18px; }
+  .hub-hero h2 { font-size: clamp(26px, 7vw, 32px); }
+  .hub-hero-tag { font-size: 10px; }
+  .hub-hero .button { font-size: 13px; min-height: 48px; }
+  .subject-card { grid-template-columns: minmax(0, 1fr) 95px; column-gap: 8px; }
+  .subject-card p { font-size: 13px; }
+  .subject-card-top { font-size: 11px; }
+  .subject-card-footer { font-size: 11px; flex-wrap: wrap; }
+  .hub-game-copy small { font-size: 11px; }
+  .hub-game-copy>span { font-size: 13px; }
+  .hub-games-grid .hub-game-copy strong { font-size: 17px; }
+  .hub-games-grid .hub-game-card { min-height: 118px; }
+  .hub-quick-continue { padding: 18px 14px; }
+  .game-filters button { font-size: 12px; }
+  .game-discovery h2, .game-subject-group>h2 { font-size: 21px; }
+  .hub-footer .footer-parent { margin-left: 0; }
+  dialog.number-modal, dialog.alphabet-lesson-modal, dialog.pinyin-lesson-modal { width: calc(100vw - 20px); max-height: calc(100dvh - 20px); padding: 12px 18px 22px; }
+  dialog .modal-close { margin-right: -6px; }
+  dialog .modal-actions, dialog .alphabet-lesson-actions, dialog .pinyin-lesson-actions { gap: 8px; }
+  dialog .modal-actions .button, dialog .alphabet-lesson-actions .button, dialog .pinyin-lesson-actions .button { flex: 1 1 130px; }
+  dialog .alphabet-word-friend { padding: 15px; gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hub-main *, dialog, dialog * { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+  .hub-game-card:hover, .subject-card:hover, .hub-game-card:active, .subject-card:active { transform: none; }
+}

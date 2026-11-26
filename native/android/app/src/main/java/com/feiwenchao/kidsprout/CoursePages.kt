@@ -49,7 +49,7 @@ import androidx.compose.ui.window.DialogProperties
     var touched by remember(number){mutableStateOf<List<Int>>(emptyList())};var zeroApple by remember(number){mutableStateOf(false)}
     LazyColumn(verticalArrangement=Arrangement.spacedBy(18.dp)){
         item{Panel{
-            Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically){Text("$number",fontSize=86.sp,fontWeight=FontWeight.Bold,color=MaterialTheme.colorScheme.primary,modifier=Modifier.weight(1f));Text(lesson.name,fontSize=33.sp);SpeechButton(vm,"♫ 点读",lesson.name)}
+            FlowRow(Modifier.fillMaxWidth(),verticalArrangement=Arrangement.spacedBy(8.dp),itemVerticalAlignment=Alignment.CenterVertically){Text("$number",fontSize=86.sp,fontWeight=FontWeight.Bold,color=MaterialTheme.colorScheme.primary,modifier=Modifier.widthIn(min=100.dp));Text(lesson.name,fontSize=33.sp);SpeechButton(vm,"♫ 点读",lesson.name)}
             if(number==0){
                 Illustration("empty_basket",Modifier.fillMaxWidth().height(130.dp),"一个也没有的空篮子")
                 if(zeroApple)Illustration("number_motif_0",Modifier.align(Alignment.CenterHorizontally).size(65.dp),"一个苹果")
@@ -104,16 +104,6 @@ import androidx.compose.ui.window.DialogProperties
     val lesson=data.lessons.first{selected in it.symbols}
     LazyColumn(verticalArrangement=Arrangement.spacedBy(18.dp)){
         item{Panel{
-            Text("第 ${lesson.unit} 单元 · 第 ${lesson.number} 课",style=MaterialTheme.typography.labelLarge)
-            Text(lesson.title,fontSize=30.sp,fontWeight=FontWeight.Bold)
-            FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)){lesson.symbols.forEach{s->FilterChip(selected==s,{vm.selectPinyin(s)},label={Text(s,fontSize=29.sp)})}}
-            if(lesson.readSyllables.isNotEmpty()){Text("整体认读音节",fontWeight=FontWeight.Bold);Text(lesson.readSyllables.joinToString("   "),fontSize=24.sp);Text("这些音节作为整体认读，请听家长或老师示范。",style=MaterialTheme.typography.bodySmall)}
-            Text(lesson.rule,lineHeight=26.sp)
-            lesson.spellings.forEach{Text(it,fontSize=19.sp,lineHeight=29.sp)}
-            PrimaryButton(if(lesson.id in vm.progress.learnedPinyin)"这一课已经学过啦 ✓" else "我学完这一课啦",{vm.markPinyin(lesson.id)})
-            LessonNavigation(lesson.number>1,lesson.number<14,{vm.selectPinyin(data.lessons[lesson.number-2].symbols.first())},{vm.selectPinyin(data.lessons[lesson.number].symbols.first())})
-        }}
-        item{Panel{
             Text(selected,fontSize=82.sp,fontWeight=FontWeight.Bold,color=MaterialTheme.colorScheme.primary)
             Text(if(pinyin.kind=="initial")"声母" else "韵母",style=MaterialTheme.typography.labelLarge)
             Text("口型小提示",fontWeight=FontWeight.Bold);Text(pinyin.hint,lineHeight=26.sp)
@@ -121,6 +111,17 @@ import androidx.compose.ui.window.DialogProperties
             if(pinyin.symbol!="o")SpeechButton(vm,"♫ 听例字读音参考",pinyin.speech)
             pinyin.referenceNote?.let{Text(it,lineHeight=25.sp,color=MaterialTheme.colorScheme.primary)}
             Text("合成语音是例字读音参考，不等同于标准拼音音素录音。声母轻短音请家长示范。",style=MaterialTheme.typography.bodySmall,lineHeight=23.sp)
+        }}
+        item{Panel{
+            Text("第 ${lesson.unit} 单元 · 第 ${lesson.number} 课",style=MaterialTheme.typography.labelLarge)
+            Text(lesson.title,fontSize=30.sp,fontWeight=FontWeight.Bold)
+            FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)){lesson.symbols.forEach{s->FilterChip(selected==s,{vm.selectPinyin(s)},label={Text(s,fontSize=29.sp)})}}
+            if(lesson.readSyllables.isNotEmpty()){Text("整体认读音节",fontWeight=FontWeight.Bold);Text(lesson.readSyllables.joinToString("   "),fontSize=24.sp);Text("这些音节作为整体认读，请听家长或老师示范。",style=MaterialTheme.typography.bodySmall)}
+            Text("拼读小提示",fontWeight=FontWeight.Bold)
+            Text(lesson.rule,lineHeight=26.sp)
+            lesson.spellings.forEach{Text(it,fontSize=19.sp,lineHeight=29.sp)}
+            PrimaryButton(if(lesson.id in vm.progress.learnedPinyin)"这一课已经学过啦 ✓" else "我学完这一课啦",{vm.markPinyin(lesson.id)})
+            LessonNavigation(lesson.number>1,lesson.number<14,{vm.selectPinyin(data.lessons[lesson.number-2].symbols.first())},{vm.selectPinyin(data.lessons[lesson.number].symbols.first())})
         }}
         item{MemorySceneView(vm,"pinyin",selected)}
     }
@@ -139,7 +140,7 @@ import androidx.compose.ui.window.DialogProperties
     if(vm.lessonDialog=="alphabet")LessonDialog("字母小课堂",{vm.stopSpeech();vm.lessonDialog=null}){AlphabetDetails(vm)}
 }
 @Composable private fun LetterCatalog(vm:AppState,letters:List<LetterLesson>){BoxWithConstraints{
-    val columns=if(maxWidth>=700.dp)6 else if(maxWidth>=500.dp)4 else 3
+    val columns=if(maxWidth>=700.dp)6 else if(maxWidth>=500.dp)4 else if(maxWidth>=360.dp)3 else 2
     Column(verticalArrangement=Arrangement.spacedBy(10.dp)){
         letters.chunked(columns).forEach{row->Row(horizontalArrangement=Arrangement.spacedBy(10.dp)){
             row.forEach{l->OutlinedCard(onClick={vm.selectLetter(l.id);vm.lessonDialog="alphabet"},modifier=Modifier.weight(1f),shape=RoundedCornerShape(17.dp),colors=CardDefaults.outlinedCardColors(containerColor=MaterialTheme.colorScheme.surface)){
@@ -171,9 +172,9 @@ import androidx.compose.ui.window.DialogProperties
 }
 @Composable private fun LessonDialog(title:String,dismiss:()->Unit,content:@Composable ()->Unit){
     Dialog(onDismissRequest=dismiss,properties=DialogProperties(usePlatformDefaultWidth=false)){
-        Surface(Modifier.fillMaxWidth(.95f).widthIn(max=860.dp).fillMaxHeight(.93f),shape=RoundedCornerShape(24.dp),color=MaterialTheme.colorScheme.background){
-            Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
-                Row(verticalAlignment=Alignment.CenterVertically){Text(title,Modifier.weight(1f),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold);TextButton(onClick=dismiss){Text("关闭 ×")}}
+        Surface(Modifier.widthIn(max=980.dp).fillMaxWidth(.96f).fillMaxHeight(.95f).imePadding(),shape=RoundedCornerShape(24.dp),color=MaterialTheme.colorScheme.background){
+            Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
+                Row(verticalAlignment=Alignment.CenterVertically){Text(title,Modifier.weight(1f),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold);TextButton(onClick=dismiss,modifier=Modifier.heightIn(min=48.dp)){Text("完成 ✓")}}
                 Box(Modifier.weight(1f)){content()}
             }
         }

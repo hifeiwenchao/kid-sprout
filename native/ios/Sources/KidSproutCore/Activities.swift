@@ -1,5 +1,17 @@
 import Foundation
 
+/// Most recently opened games, independent of lesson completion and rewards.
+public enum RecentActivityHistory {
+    public static func normalized(_ ids: [String], allowedIDs: [String]) -> [String] {
+        let allowed = Set(allowedIDs)
+        var seen = Set<String>()
+        return Array(ids.filter { allowed.contains($0) && seen.insert($0).inserted }.prefix(3))
+    }
+    public static func recording(_ id: String, in ids: [String], allowedIDs: [String]) -> [String] {
+        normalized([id] + ids, allowedIDs: allowedIDs)
+    }
+}
+
 public struct ActivityChoice: Codable, Equatable, Identifiable, Sendable {
     public let value: String
     public let label: String

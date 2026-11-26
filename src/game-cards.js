@@ -13,3 +13,13 @@ export function renderSubjectGames(subject, icon) {
 export function renderGameFilters() {
   return `<div class="game-library-toolbar"><label class="game-search"><span>找个想玩的游戏</span><input id="game-search" type="search" placeholder="试试：声调、排序、单词…" autocomplete="off" /></label><label class="game-goal"><span>今天想练什么？</span><select id="game-goal"><option value="all">全部练习目标</option>${Object.entries(GAME_CATEGORIES).map(([key, label]) => `<option value="${key}">${label}</option>`).join('')}</select></label></div><div class="game-filters" role="group" aria-label="按学科筛选游戏"><button class="selected" data-game-filter="all" aria-pressed="true">全部游戏 <span>${GAME_CATALOG.length}</span></button>${Object.entries(SUBJECT_NAMES).map(([subject, label]) => `<button data-game-filter="${subject}" aria-pressed="false">${label} <span>${GAME_CATALOG.filter(game => game.subject === subject).length}</span></button>`).join('')}</div>`;
 }
+
+export function renderGameLibrary(icon) {
+  return Object.entries(SUBJECT_NAMES).map(([subject, name]) => {
+    const games = GAME_CATALOG.filter(game => game.subject === subject);
+    return `<section class="game-subject-group subject-${subject}" data-library-subject="${subject}" aria-labelledby="library-${subject}"><div class="hub-section-heading"><h2 id="library-${subject}">${name}</h2><span data-library-count>${games.length} 个游戏</span></div>${Object.entries(GAME_CATEGORIES).map(([category, label]) => {
+      const group = games.filter(game => game.category === category);
+      return group.length ? `<section class="game-goal-group" data-library-category="${category}" aria-labelledby="library-${subject}-${category}"><h3 id="library-${subject}-${category}">${label}</h3><div class="hub-games-grid">${group.map(game => renderGameCard(game, icon)).join('')}</div></section>` : '';
+    }).join('')}</section>`;
+  }).join('');
+}

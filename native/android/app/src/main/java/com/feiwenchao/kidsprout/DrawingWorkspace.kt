@@ -31,6 +31,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,11 +43,12 @@ private val colorNames=listOf("森林绿","嫩芽绿","阳光黄","橘子橙","�
     var color by remember{mutableLongStateOf(drawingPalette[0])};var width by remember{mutableFloatStateOf(.008f)}
     var tool by remember{mutableStateOf("画笔")};var grid by remember{mutableStateOf(false)}
     var clear by remember{mutableStateOf(false)};var custom by remember{mutableStateOf(false)}
+    var showCompactTools by remember{mutableStateOf(false)}
     val revision=vm.drawingRevision
     val template=vm.curriculum.tracingTemplates.find{it.id==vm.drawing.template}
     BoxWithConstraints(Modifier.fillMaxSize()){
         val toolColumnWidth=minOf(260.dp,maxWidth*.36f)
-        val sideTools=maxWidth>740.dp || maxHeight<440.dp
+        val sideTools=maxWidth>740.dp || (maxWidth>=600.dp && maxHeight<440.dp)
         val tools:@Composable ()->Unit={
             Panel{
                 Text("我的小工具箱 ✦",style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
@@ -54,7 +56,7 @@ private val colorNames=listOf("森林绿","嫩芽绿","阳光黄","橘子橙","�
                 FlowRow(horizontalArrangement=Arrangement.spacedBy(5.dp)){listOf("画笔","荧光笔","橡皮擦").forEach{t->FilterChip(tool==t,{tool=t},label={Text(t)})}}
                 Text("给想象一点颜色",style=MaterialTheme.typography.labelLarge)
                 FlowRow(horizontalArrangement=Arrangement.spacedBy(3.dp),verticalArrangement=Arrangement.spacedBy(3.dp)){
-                    drawingPalette.forEachIndexed{index,c->Box(Modifier.size(44.dp).clip(CircleShape).clickable{color=c;if(tool=="橡皮擦")tool="画笔"}.semantics{contentDescription="${colorNames[index]}${if(color==c)"，已选中" else ""}"},contentAlignment=Alignment.Center){Box(Modifier.size(31.dp).background(Color(c),CircleShape).then(if(color==c)Modifier.border(3.dp,MaterialTheme.colorScheme.onSurface,CircleShape) else Modifier))}}
+                    drawingPalette.forEachIndexed{index,c->Box(Modifier.size(48.dp).clip(CircleShape).clickable{color=c;if(tool=="橡皮擦")tool="画笔"}.semantics{contentDescription="${colorNames[index]}画笔";selected=color==c},contentAlignment=Alignment.Center){Box(Modifier.size(31.dp).background(Color(c),CircleShape).then(if(color==c)Modifier.border(3.dp,MaterialTheme.colorScheme.onSurface,CircleShape) else Modifier))}}
                 }
                 OutlinedButton(onClick={custom=true}){Text("＋ 自选颜色")}
                 Text("画笔粗细",style=MaterialTheme.typography.labelLarge)
@@ -63,8 +65,8 @@ private val colorNames=listOf("森林绿","嫩芽绿","阳光黄","橘子橙","�
             }
         }
         val paper:@Composable ()->Unit={
-            Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp),verticalAlignment=Alignment.CenterVertically){
-                Text("小小画板 ✧",Modifier.weight(1f),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
+            FlowRow(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(6.dp),itemVerticalAlignment=Alignment.CenterVertically){
+                Text("小小画板 ✧",style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
                 OutlinedButton(toggleFullscreen){Text(if(fullscreen)"退出全屏" else "全屏")}
                 PrimaryButton("保存我的画",save)
             }
@@ -76,8 +78,9 @@ private val colorNames=listOf("森林绿","嫩芽绿","阳光黄","橘子橙","�
             }
             if(template!=null){
                 val group=vm.curriculum.tracingTemplates.filter{it.group==template.group};val current=group.indexOf(template)
-                FlowRow(horizontalArrangement=Arrangement.spacedBy(6.dp),verticalArrangement=Arrangement.spacedBy(4.dp)){
-                    group.forEach{t->FilterChip(t.id==template.id,{vm.editDrawing{selectTemplate(t.id)}},label={Text(t.label)})}
+                var chooseCharacter by remember{mutableStateOf(false)}
+                Box{OutlinedButton(onClick={chooseCharacter=true},modifier=Modifier.heightIn(min=48.dp)){Text("选择字符 · ${template.label} ▾")}
+                    DropdownMenu(expanded=chooseCharacter,onDismissRequest={chooseCharacter=false}){group.forEach{t->DropdownMenuItem(text={Text("${t.label}${if(t.id==template.id)" ✓" else ""}")},onClick={vm.editDrawing{selectTemplate(t.id)};chooseCharacter=false})}}
                 }
                 Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)){
                     OutlinedButton(onClick={vm.editDrawing{selectTemplate(group[current-1].id)}},enabled=current>0){Text("‹")}
@@ -100,7 +103,16 @@ private val colorNames=listOf("森林绿","嫩芽绿","阳光黄","橘子橙","�
         if(sideTools) Row(Modifier.fillMaxSize().padding(16.dp),horizontalArrangement=Arrangement.spacedBy(16.dp)){
             Column(Modifier.width(toolColumnWidth).fillMaxHeight().verticalScroll(rememberScrollState())){tools()}
             Column(Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){paper()}
-        }else Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){tools();paper()}
+        }else Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
+            Panel(tint=MaterialTheme.colorScheme.secondaryContainer){
+                FlowRow(horizontalArrangement=Arrangement.spacedBy(6.dp),verticalArrangement=Arrangement.spacedBy(5.dp)){
+                    listOf("画笔","荧光笔","橡皮擦").forEach{t->FilterChip(tool==t,{tool=t},label={Text(t)})}
+                    OutlinedButton(onClick={showCompactTools=!showCompactTools},modifier=Modifier.heightIn(min=48.dp)){Text(if(showCompactTools)"收起颜色与粗细" else "颜色与粗细 ▾")}
+                }
+            }
+            if(showCompactTools)tools()
+            paper()
+        }
     }
     if(clear)AlertDialog(onDismissRequest={clear=false},title={Text("换一张空白画纸？")},text={Text("底稿会保留；清空后可以撤销，找回刚才的画。")},confirmButton={TextButton(onClick={vm.editDrawing{clear()};clear=false}){Text("清空画纸")}},dismissButton={TextButton(onClick={clear=false}){Text("再画一会儿")}})
     if(custom)ColorChooser(color,{color=it;custom=false;if(tool=="橡皮擦")tool="画笔"},{custom=false})

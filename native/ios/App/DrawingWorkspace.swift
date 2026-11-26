@@ -67,15 +67,15 @@ struct DrawingToolbox: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("给想象一点颜色").font(.caption.weight(.semibold)).foregroundStyle(Sprout.muted)
                 Text(colorIndex >= 0 && colorIndex < 12 ? DrawingPalette.names[colorIndex] : "我的专属颜色").font(.caption2).foregroundStyle(Sprout.orange)
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 7), count: 6), spacing: 9) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 44), spacing: 7)], spacing: 9) {
                     ForEach(DrawingPalette.hex.indices, id: \.self) { index in
                         Button {
                             colorIndex = index
                             if selectedTool == .eraser { selectedTool = .pen }
                         } label: {
-                            Circle().fill(DrawingPalette.color(DrawingPalette.hex[index])).frame(width: 24, height: 24).padding(4)
+                            Circle().fill(DrawingPalette.color(DrawingPalette.hex[index])).frame(width: 28, height: 28).padding(8)
                                 .overlay(Circle().stroke(colorIndex == index ? Sprout.green : .clear, lineWidth: 2))
-                        }.buttonStyle(.plain).accessibilityLabel("\(DrawingPalette.names[index])画笔").accessibilityIdentifier("color\(index)").accessibilityAddTraits(colorIndex == index ? .isSelected : [])
+                        }.buttonStyle(SproutCardButton()).accessibilityLabel("\(DrawingPalette.names[index])画笔").accessibilityIdentifier("color\(index)").accessibilityAddTraits(colorIndex == index ? .isSelected : [])
                     }
                 }
                 ColorPicker("调一个自己的颜色", selection: $customColor, supportsOpacity: false).font(.caption).accessibilityIdentifier("customDrawingColor")
@@ -111,16 +111,16 @@ struct DrawingTracingPicker: View {
             HStack(spacing: 6) {
                 ForEach([("free", "自由画画"), ("numbers", "数字 0–10"), ("alphabet", "字母 Aa–Zz")], id: \.0) { item in
                     Button { select(item.0 == "free" ? nil : templates.first { $0.group == item.0 }?.id) } label: {
-                        Text(item.1).font(.caption.weight(.semibold)).padding(.horizontal, 10).frame(minHeight: 38).frame(maxWidth: .infinity)
+                        Text(item.1).font(.caption.weight(.semibold)).padding(.horizontal, 10).frame(minHeight: 44).frame(maxWidth: .infinity)
                             .foregroundStyle(group == item.0 ? Sprout.green : Sprout.muted).background(group == item.0 ? Sprout.mint : .clear, in: RoundedRectangle(cornerRadius: 10))
-                    }.buttonStyle(.plain).accessibilityIdentifier("tracingGroup\(item.0)")
+                    }.buttonStyle(SproutCardButton()).accessibilityIdentifier("tracingGroup\(item.0)").accessibilityAddTraits(group == item.0 ? .isSelected : [])
                 }
             }
             if let current {
                 HStack {
-                    Button { select(choices[index - 1].id) } label: { Image(systemName: "chevron.left").frame(width: 38, height: 38) }.disabled(index == 0).accessibilityLabel("上一个临摹字符")
+                    Button { select(choices[index - 1].id) } label: { Image(systemName: "chevron.left").frame(width: 44, height: 44) }.disabled(index == 0).accessibilityLabel("上一个临摹字符")
                     VStack(spacing: 2) { Text("正在临摹").font(.caption2).foregroundStyle(Sprout.muted); Text(current.label).font(.title3.bold()) }
-                    Button { select(choices[index + 1].id) } label: { Image(systemName: "chevron.right").frame(width: 38, height: 38) }.disabled(index >= choices.count - 1).accessibilityLabel("下一个临摹字符")
+                    Button { select(choices[index + 1].id) } label: { Image(systemName: "chevron.right").frame(width: 44, height: 44) }.disabled(index >= choices.count - 1).accessibilityLabel("下一个临摹字符")
                     Spacer(minLength: 0)
                     Menu("选择字符") { ForEach(choices) { template in Button(template.label) { select(template.id) } } }.font(.caption).accessibilityIdentifier("tracingCharacter")
                 }
@@ -152,11 +152,20 @@ struct DrawingWorkspaceLayout<Tools: View, Paper: View>: View {
     let tools: Tools
     let paper: Paper
     @State private var availableWidth: CGFloat = 0
+    @State private var showsTools = false
     init(@ViewBuilder tools: () -> Tools, @ViewBuilder paper: () -> Paper) { self.tools = tools(); self.paper = paper() }
     var body: some View {
         Group {
             if availableWidth >= 650 { wide }
-            else { VStack(alignment: .leading, spacing: 20) { tools; paper } }
+            else {
+                VStack(alignment: .leading, spacing: 16) {
+                    DisclosureGroup(isExpanded: $showsTools) { tools.padding(.top, 12) } label: {
+                        Label("画笔、颜色和粗细", systemImage: "slider.horizontal.3").font(.headline).frame(minHeight: 44)
+                    }
+                    .padding(14).background(Sprout.panel, in: RoundedRectangle(cornerRadius: 14))
+                    paper
+                }
+            }
         }.onGeometryChange(for: CGFloat.self) { $0.size.width } action: { availableWidth = $0 }
     }
     private var wide: some View { HStack(alignment: .top, spacing: 23) { tools.frame(width: 224); paper.frame(maxWidth: .infinity) } }

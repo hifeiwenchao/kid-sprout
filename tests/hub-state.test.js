@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { restoreLearningProgress, serializeLearningProgress, viewFromHash } from '../src/hub-state.js';
+import { restoreLearningProgress, serializeLearningProgress, viewFromHash, restoreRecentGames, rememberGame } from '../src/hub-state.js';
 
 const allowed = { pinyin: ['lesson-1', 'lesson-2'], alphabet: ['A', 'B'] };
 
@@ -29,4 +29,19 @@ test('bad individual fields do not erase another subject and saved progress roun
 test('hash navigation resolves known subject views and safely defaults unknown paths', () => {
   for (const view of ['home', 'numbers', 'pinyin', 'alphabet', 'drawing', 'games']) assert.equal(viewFromHash('#' + view), view);
   for (const hash of ['', '#missing', '#%bad', '#__proto__']) assert.equal(viewFromHash(hash), 'home');
+});
+
+test('recent games tolerate corrupt storage and remove obsolete and duplicate games', () => {
+  const ids = ['numbers:count', 'pinyin:listen', 'alphabet:match', 'numbers:train'];
+  for (const raw of [null, 'bad', '{}', 'null', 'false']) assert.deepEqual(restoreRecentGames(raw, ids), []);
+  assert.deepEqual(restoreRecentGames(JSON.stringify(['gone', 'numbers:count', null, 'numbers:count', 'pinyin:listen', 'alphabet:match', 'numbers:train']), ids), ids.slice(0, 3));
+});
+
+test('opening a game moves it to the front and retains only three valid recent entries', () => {
+  const ids = ['numbers:count', 'pinyin:listen', 'alphabet:match', 'numbers:train'];
+  const prior = ids.slice(0, 3);
+  assert.deepEqual(rememberGame(prior, 'alphabet:match', ids), ['alphabet:match', 'numbers:count', 'pinyin:listen']);
+  assert.deepEqual(rememberGame(prior, 'numbers:train', ids), ['numbers:train', 'numbers:count', 'pinyin:listen']);
+  assert.deepEqual(rememberGame(prior, 'unknown', ids), prior);
+  assert.deepEqual(prior, ids.slice(0, 3));
 });

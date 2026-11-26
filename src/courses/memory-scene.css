@@ -21,3 +21,22 @@
 @keyframes memory-travel { 0%, 10% { offset-distance: 0%; } 90%, 100% { offset-distance: 100%; } }
 @media (max-width: 580px) { .memory-scene { padding: 10px 12px 13px; border-radius: 15px; } .memory-scene h3 { font-size: 13px; } .memory-scene>p { font-size: 10px; } }
 @media (prefers-reduced-motion: reduce) { .memory-scene *, .memory-scene *::before, .memory-scene *::after { animation: none !important; transition: none !important; } }
+
+/* Auxiliary animation stays compact so recognition and point-reading lead. */
+.memory-scene { max-width: 640px; margin-inline: auto; }
+.memory-scene-heading { color: #79633a; font-size: 12px; }
+.memory-scene-heading>button { min-height: 44px; font-size: 12px; color: #79633a; }
+.memory-scene-art { max-width: 300px; }
+.memory-scene-art>svg { max-height: 155px; }
+.memory-scene>p { color: #796a49; font-size: 13px; }
+.memory-motion-note { color: #7c7054; font-size: 12px; }
+.lesson-extra { margin: 20px 0; padding: 12px 16px; border: 1px solid #e2e7d8; border-radius: 16px; background: #f8f9f2; text-align: left; }
+.lesson-extra>summary { min-height: 44px; align-content: center; color: #526b48; font-size: 14px; font-weight: 600; cursor: pointer; }
+.lesson-extra>.memory-scene, .lesson-extra>.lesson-tracing { margin-block: 10px; }
+@media (max-width: 580px) {
+  .memory-scene-art>svg { max-height: 135px; }
+  .memory-scene-heading { font-size: 12px; }
+  .memory-scene>p { font-size: 13px; }
+  .memory-scene h3 { font-size: 15px; }
+  .lesson-extra { padding-inline: 10px; }
+}

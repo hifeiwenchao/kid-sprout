@@ -20,6 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,7 +51,7 @@ class MainActivity:ComponentActivity(){
                     Text("KID SPROUT · 快乐长大",style=MaterialTheme.typography.labelSmall)
                     Spacer(Modifier.height(12.dp));Text("学习地图",style=MaterialTheme.typography.labelMedium)
                     destinations.forEach{destination ->
-                        Surface(onClick={vm.page=destination},shape=RoundedCornerShape(12.dp),color=if(vm.page==destination)MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface){
+                        Surface(onClick={vm.page=destination},modifier=Modifier.semantics{selected=vm.page==destination},shape=RoundedCornerShape(12.dp),color=if(vm.page==destination)MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface){
                             Row(Modifier.fillMaxWidth().padding(14.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)){
                                 Text(destination.symbol,Modifier.width(28.dp),fontSize=23.sp,color=MaterialTheme.colorScheme.primary);Text(destination.label,fontWeight=if(vm.page==destination)FontWeight.Bold else FontWeight.Normal)
                             }
@@ -66,7 +69,7 @@ class MainActivity:ComponentActivity(){
                         IconButton(onClick={vm.page=Page.PARENTS}){Icon(Icons.Default.FamilyRestroom,"家长说明")}
                     }
                     Box(Modifier.weight(1f).fillMaxWidth(),contentAlignment=Alignment.TopCenter){
-                        Box(Modifier.widthIn(max=1200.dp).fillMaxSize()){
+                        Box(Modifier.widthIn(max=1360.dp).fillMaxSize()){
                             when(vm.page){
                                 Page.HOME->HomePage(vm)
                                 Page.NUMBERS->NumbersPage(vm)
@@ -82,7 +85,7 @@ class MainActivity:ComponentActivity(){
                         Row(Modifier.fillMaxWidth().heightIn(min=68.dp)){
                             destinations.forEach{destination ->
                                 val selected=vm.page==destination
-                                Column(Modifier.weight(1f).clickable{vm.page=destination}.padding(vertical=9.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(3.dp)){
+                                Column(Modifier.weight(1f).semantics{this.selected=selected}.clickable(role=Role.Tab){vm.page=destination}.heightIn(min=64.dp).background(if(selected)MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface,RoundedCornerShape(12.dp)).padding(vertical=9.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(3.dp)){
                                     Text(destination.symbol,fontSize=22.sp,color=MaterialTheme.colorScheme.primary)
                                     Text(when(destination){Page.HOME->"探索";Page.NUMBERS->"数字";Page.PINYIN->"拼音";Page.ALPHABET->"字母";Page.DRAWING->"画板";else->"游戏"},fontSize=11.sp,fontWeight=if(selected)FontWeight.Bold else FontWeight.Normal)
                                 }

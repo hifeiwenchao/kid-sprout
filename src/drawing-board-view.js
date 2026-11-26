@@ -45,10 +45,13 @@ export function renderDrawingBoard({ icon } = {}) {
           <button type="button" data-drawing-tool="marker" aria-pressed="false">${drawingIcon('marker', 22)}<span>荧光笔</span></button>
           <button type="button" data-drawing-tool="eraser" aria-pressed="false">${drawingIcon('eraser', 22)}<span>橡皮擦</span></button>
         </div></fieldset>
+        <button type="button" id="drawing-tools-toggle" class="drawing-tools-toggle" aria-expanded="false" aria-controls="drawing-advanced-tools">颜色与粗细 · 展开</button>
+        <div id="drawing-advanced-tools" class="drawing-advanced-tools">
         <fieldset class="drawing-tool-group drawing-colors"><legend>给想象一点颜色 <span id="drawing-color-name">森林绿</span></legend><div class="drawing-color-options">
           ${DRAWING_COLORS.map((color, index) => `<button type="button" data-drawing-color="${color.value}" data-color-name="${color.name}" aria-label="${color.name}" aria-pressed="${index === 0}" title="${color.name}" style="--swatch:${color.value}"><span aria-hidden="true"></span></button>`).join('')}
         </div><label class="drawing-custom-color" for="drawing-custom-color"><span class="drawing-color-wheel" aria-hidden="true">＋</span><span>调一个自己的颜色</span><input type="color" id="drawing-custom-color" value="${DRAWING_COLORS[0].value}" aria-label="选择自定义画笔颜色"/></label></fieldset>
         <fieldset class="drawing-tool-group drawing-size"><legend><label for="drawing-size">画笔粗细</label><output id="drawing-size-value" for="drawing-size">8</output></legend><div class="drawing-size-control"><span aria-hidden="true">细</span><input type="range" id="drawing-size" min="2" max="48" step="1" value="8" aria-label="画笔粗细"/><span aria-hidden="true">粗</span></div><div class="drawing-preview"><span id="drawing-brush-preview" style="width:8px;height:8px;background:${DRAWING_COLORS[0].value}"></span><span>试试大大小小的线条</span></div></fieldset>
+        </div>
         <div class="drawing-toolbox-note">${icon ? icon('heart', 14) : drawingIcon('spark', 14)}<span>每一笔，都是独一无二的你。</span></div>
       </aside>
       <div class="drawing-paper-area">
