@@ -2,7 +2,7 @@
 
 ## iOS 审核隐私补充资料（2026-11-26）
 
-实际查看 [iOS build 2 审核提交](https://appstoreconnect.apple.com/apps/6836774748/distribution/reviewsubmissions/details/a198cc45-3460-4ce3-adb9-f9ab97e63323)：状态“已拒绝”，2026-11-20 17:02 的消息要求逐项说明儿童类别 Guideline 1.3 的第三方统计、广告、共享及其他数据收集；未指出崩溃或功能故障。已核对对应归档的依赖与隐私清单及代码，未发现第三方统计/广告 SDK 或自动上传用户数据的应用代码。无需为这四问修改程序；[逐项回复及核对证据](app-store/ios-review-response-2026-11-26.md) 已准备，待用户授权发送给 Apple。本次未回复或重新提交。Mac 目前显示“正在等待审核”，本轮未修改其审核状态。
+实际查看 [iOS build 2 审核提交](https://appstoreconnect.apple.com/apps/6836774748/distribution/reviewsubmissions/details/a198cc45-3460-4ce3-adb9-f9ab97e63323)：2026-11-20 17:02 的拒审消息要求逐项说明儿童类别 Guideline 1.3 的第三方统计、广告、共享及其他数据收集；未指出崩溃或功能故障。已核对对应归档的依赖与隐私清单及代码，未发现第三方统计/广告 SDK 或自动上传用户数据的应用代码。用户确认后，2026-11-26 15:29 已发送[逐项回复](app-store/ios-review-response-2026-11-26.md) 并追加至审核备注，15:30 使用现有 `1.0.0 (2)` 重新提交；后台明确显示“等待审核”。没有上传新构建或修改手动发布设置。Mac 目前显示“正在等待审核”，本轮未修改其审核状态。
 
 ## 全端 UI 优化（2026-11-26）
 
