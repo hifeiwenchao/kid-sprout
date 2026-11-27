@@ -172,6 +172,6 @@ class AppState(application:Application):AndroidViewModel(application) {
             }
         }
     }
-    fun emailAuthor(){runCatching{getApplication<Application>().startActivity(Intent(Intent.ACTION_SENDTO,"mailto:hi@feiwenchao.com".toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))}.onFailure{message="设备未安装邮件应用，邮箱：hi@feiwenchao.com"}}
+    fun emailAuthor(){runCatching{getApplication<Application>().startActivity(Intent(Intent.ACTION_SENDTO,"mailto:service@feiwenchao.com".toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))}.onFailure{message="设备未安装邮件应用，邮箱：service@feiwenchao.com"}}
     override fun onCleared(){audioGeneration++;speechCompletions.clear();drumCompletion=null;speaker?.stop();speaker?.shutdown();runCatching{audioTrack?.release()};writer.shutdown();audioWriter.shutdown();super.onCleared()}
 }

@@ -87,13 +87,13 @@ struct ParentsView: View {
             Panel {
                 Text("关于作者").font(.title3.bold())
                 Text("欢迎提出建议，或告诉我使用中遇到的问题。")
-                Button { showGate = true } label: { Label { Text(verbatim: "hi@feiwenchao.com") } icon: { Image(systemName: "envelope.fill") }.frame(minHeight: 44) }.accessibilityIdentifier("authorEmail")
+                Button { showGate = true } label: { Label { Text(verbatim: "service@feiwenchao.com") } icon: { Image(systemName: "envelope.fill") }.frame(minHeight: 44) }.accessibilityIdentifier("authorEmail")
                 Text("点击后请家长确认，再打开系统邮件应用。").font(.footnote).foregroundStyle(.secondary)
             }
         }.navigationTitle("家长区")
-            .sheet(isPresented: $showGate, onDismiss: { if pendingMail { pendingMail = false; openURL(URL(string: "mailto:hi@feiwenchao.com")!) { accepted in mailUnavailable = !accepted } } }) { ParentGate { pendingMail = true; showGate = false } }
+            .sheet(isPresented: $showGate, onDismiss: { if pendingMail { pendingMail = false; openURL(URL(string: "mailto:service@feiwenchao.com")!) { accepted in mailUnavailable = !accepted } } }) { ParentGate { pendingMail = true; showGate = false } }
             .sheet(isPresented: $showPrivacy) { PrivacyPolicyView() }
-            .alert("暂时无法打开邮件", isPresented: $mailUnavailable) { Button("知道了", role: .cancel) {} } message: { Text("请先在设备上设置邮件应用，也可以手动发送邮件到 hi@feiwenchao.com。") }
+            .alert("暂时无法打开邮件", isPresented: $mailUnavailable) { Button("知道了", role: .cancel) {} } message: { Text("请先在设备上设置邮件应用，也可以手动发送邮件到 service@feiwenchao.com。") }
     }
     private var tips: [(String, String)] {
         [("每天一点点", "一次玩 5–10 分钟就好。低龄孩子先认数字、看看字母；拼音可以在准备好时一起慢慢学。"),
@@ -125,7 +125,7 @@ struct AuthorView: View {
                 Panel {
                     Text("我是一个 90 后程序员，也是一个孩子的爸爸。萌呀启蒙最初是我为自家娃做的小应用：希望把数字、拼音、字母和画画，变成一段轻松、有趣的亲子时光。").lineSpacing(7)
                     Text("如果它也陪伴了你的孩子，或你有任何建议、意见反馈，欢迎写信给我。每一个小想法，都可能让这里再长出一片新叶子。").lineSpacing(7)
-                    Button { showGate = true } label: { HStack { Image(systemName: "envelope"); Text(verbatim: "hi@feiwenchao.com"); Spacer(); Image(systemName: "arrow.up.right") }.font(.subheadline).padding(16).frame(minHeight: 50).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 13)) }.buttonStyle(.plain).foregroundStyle(Sprout.green).accessibilityIdentifier("authorEmail")
+                    Button { showGate = true } label: { HStack { Image(systemName: "envelope"); Text(verbatim: "service@feiwenchao.com"); Spacer(); Image(systemName: "arrow.up.right") }.font(.subheadline).padding(16).frame(minHeight: 50).background(Sprout.mint, in: RoundedRectangle(cornerRadius: 13)) }.buttonStyle(.plain).foregroundStyle(Sprout.green).accessibilityIdentifier("authorEmail")
                     Text("点击邮箱后，请家长确认，再由系统邮件应用继续。").font(.caption).foregroundStyle(Sprout.muted)
                 }
                 Button { showPrivacy = true } label: { Label("隐私政策", systemImage: "hand.raised.fill").frame(minHeight: 44) }
@@ -133,9 +133,9 @@ struct AuthorView: View {
                 Text("免费使用 · 没有广告、打赏或内购").font(.caption).foregroundStyle(Sprout.muted).frame(maxWidth: .infinity)
             }.navigationTitle("关于作者").toolbar { ToolbarItem(placement: .confirmationAction) { Button("完成") { dismiss() } } }
         }.frame(idealWidth: 570, idealHeight: 670)
-            .sheet(isPresented: $showGate, onDismiss: { if pendingMail { pendingMail = false; openURL(URL(string: "mailto:hi@feiwenchao.com")!) { unavailable = !$0 } } }) { ParentGate { pendingMail = true; showGate = false } }
+            .sheet(isPresented: $showGate, onDismiss: { if pendingMail { pendingMail = false; openURL(URL(string: "mailto:service@feiwenchao.com")!) { unavailable = !$0 } } }) { ParentGate { pendingMail = true; showGate = false } }
             .sheet(isPresented: $showPrivacy) { PrivacyPolicyView() }
-            .alert("暂时无法打开邮件", isPresented: $unavailable) { Button("知道了", role: .cancel) {} } message: { Text("请先设置系统邮件应用，也可以手动发邮件至 hi@feiwenchao.com。") }
+            .alert("暂时无法打开邮件", isPresented: $unavailable) { Button("知道了", role: .cancel) {} } message: { Text("请先设置系统邮件应用，也可以手动发邮件至 service@feiwenchao.com。") }
     }
 }
 
@@ -156,7 +156,7 @@ struct PrivacyPolicyView: View {
             "课程说明中可能提供教材资料来源链接。打开外部网站前会进行家长确认；这些网站由其运营者独立负责，请在访问前阅读相应的隐私政策。"
         ]),
         ("五、政策更新与联系我们", [
-            "如果本政策发生变化，我们会在公开隐私政策页面更新日期和内容，并同步本应用内的说明。对隐私或产品有任何问题，欢迎发送邮件至 hi@feiwenchao.com。"
+            "如果本政策发生变化，我们会在公开隐私政策页面更新日期和内容，并同步本应用内的说明。对隐私或产品有任何问题，欢迎发送邮件至 service@feiwenchao.com。"
         ])
     ]
     var body: some View {

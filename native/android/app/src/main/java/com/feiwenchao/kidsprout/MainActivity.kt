@@ -101,7 +101,7 @@ class MainActivity:ComponentActivity(){
     if(author)AlertDialog(onDismissRequest={author=false},title={Text("关于作者")},text={Column(verticalArrangement=Arrangement.spacedBy(14.dp)){
         Text("萌呀启蒙，最初是我为自家娃制作的小小学习空间。希望用温柔的画面和轻松的小游戏，让孩子在家长陪伴下保留好奇、快乐探索。")
         Text("欢迎提出建议，或反馈使用中遇到的问题。")
-        OutlinedButton(onClick={gate{vm.emailAuthor()}}){Text("hi@feiwenchao.com  ↗")}
+        OutlinedButton(onClick={gate{vm.emailAuthor()}}){Text("service@feiwenchao.com  ↗")}
     }},confirmButton={TextButton(onClick={author=false}){Text("回到学习")}})
     vm.message?.let{message ->AlertDialog(onDismissRequest={vm.message=null},title={Text("温馨提示")},text={Text(message)},confirmButton={TextButton(onClick={vm.message=null}){Text("知道了")}})}
 }

@@ -395,7 +395,7 @@ function showAuthor() {
       <p>我是一个 90 后程序猿，最初只是想为自家娃做一个有趣的启蒙小应用。</p>
       <p>希望这些轻松的小练习，也能陪伴更多孩子慢慢探索、快乐成长。如果你有任何建议或问题反馈，欢迎来信交流。</p>
     </div>
-    <a class="author-email" href="mailto:hi@feiwenchao.com">${icon('mail', 19)}<span>hi@feiwenchao.com</span>${icon('arrow', 17)}</a>
+    <a class="author-email" href="mailto:service@feiwenchao.com">${icon('mail', 19)}<span>service@feiwenchao.com</span>${icon('arrow', 17)}</a>
   `, 'author-modal');
 }
 
